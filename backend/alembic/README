@@ -1,0 +1,15 @@
+Alembic migrations for BookMyDoctor.
+
+Common commands (run from the backend/ directory, venv active):
+
+  # autogenerate a migration after changing app/models.py
+  alembic revision --autogenerate -m "describe change"
+
+  # apply migrations up to latest
+  alembic upgrade head
+
+  # roll back one step
+  alembic downgrade -1
+
+The DB URL comes from app.config.settings (DATABASE_URL env var); it is not
+hardcoded in alembic.ini.

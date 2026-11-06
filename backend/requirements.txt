@@ -1,0 +1,48 @@
+# --- BookMyDoctor / Doctor Mitra — production backend dependencies ---
+# Upgraded 2026-09-22 to clear 38 published vulnerabilities (pip-audit). The old
+# pins were fastapi 0.111.0 / starlette 0.37.2 / python-multipart 0.0.9 /
+# PyJWT 2.8.0. starlette and python-multipart are the code that parses uploaded
+# files — the same path patients use for lab reports — so they were the two that
+# mattered. fastapi carries starlette, which is why it moves too, and it in turn
+# requires a newer pydantic. All 202 tests pass on these versions unchanged.
+fastapi==0.141.1          # pulls starlette 1.6.0
+uvicorn[standard]==0.30.1
+pydantic==2.13.5          # required by fastapi 0.141
+pydantic-settings==2.3.4
+email-validator==2.1.1
+
+# Persistence
+SQLAlchemy==2.0.30
+alembic==1.13.1
+# DB drivers (used only when DATABASE_URL points at them; harmless otherwise)
+psycopg2-binary==2.9.9   # PostgreSQL
+PyMySQL==1.1.1           # MySQL 8 (deck's production target) — pure-python, zero build
+
+# Auth / security
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1  # 4.1+ drops __about__ which passlib 1.7.4 probes (harmless warning)
+PyJWT==2.14.0
+python-multipart==0.0.32
+
+# HTTP client for every outbound call: Razorpay, the voice STT/TTS proxy,
+# Google Maps and routing. It is imported at module level in six files, so a
+# missing httpx is not a degraded feature — the app will not start at all.
+# It was never listed here: until 2026-09-22 it arrived silently as a
+# dependency of fastapi 0.111. Newer FastAPI no longer pulls it, so a fresh
+# `pip install -r requirements.txt` would have produced a server that cannot
+# boot. Pinned explicitly so it can never disappear again.
+httpx==0.28.1
+
+# AWS integrations (SQS -> Lambda notification worker)
+boto3==1.34.131
+
+# Pharmacy stock sheets — the pharmacist uploads their own Excel (.xlsx)
+openpyxl==3.1.5
+
+# Prescription PDFs (letterhead + medicines + signature) — pure Python, no
+# system libraries, installs the same on Windows and the server.
+reportlab==4.2.5
+
+# Timezone database — zoneinfo has no system tzdb on Windows/slim containers,
+# and medicine reminders schedule doses in clinic-local (IST) wall-clock time.
+tzdata

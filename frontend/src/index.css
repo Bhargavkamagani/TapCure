@@ -1,0 +1,2057 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Delay "running late" toast — slide up + fade in from the corner. */
+@keyframes delayToastIn {
+  from { opacity: 0; transform: translateY(-16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.delay-toast { animation: delayToastIn 260ms cubic-bezier(0.16, 1, 0.3, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .delay-toast { animation: none; }
+}
+
+@layer components {
+  /* Shared compact input used in dashboard forms */
+  .field-input {
+    @apply w-full appearance-none rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-brand-navy outline-none transition-colors placeholder:text-slate-400 focus:border-brand-blue;
+  }
+}
+
+@layer base {
+  /* Brand palette as RGB channels (consumed by tailwind.config brand.*).
+     Defaults = original royal-blue brand — unchanged for every console. */
+  :root {
+    --brand-blue: 37 99 235;        /* #2563eb */
+    --brand-blueDark: 29 78 216;    /* #1d4ed8 */
+    --brand-blueLight: 239 246 255; /* #eff6ff */
+    --brand-teal: 13 148 136;       /* #0d9488 */
+    --brand-green: 22 163 74;       /* #16a34a */
+    --brand-greenLight: 236 253 245;/* #ecfdf5 */
+    --brand-navy: 15 39 66;         /* #0f2742 */
+  }
+
+  /* Patient auth modal re-skin — forest-green editorial look. Remaps the brand
+     tokens so the shared form controls turn green without touching them. */
+  .theme-patient {
+    --brand-blue: 34 64 47;         /* #22402f forest green — buttons/active */
+    --brand-blueDark: 22 48 31;     /* #16301f — hover */
+    --brand-blueLight: 230 242 232; /* #e6f2e8 — tinted surfaces */
+    --brand-navy: 26 54 38;         /* #1a3626 — headings/text */
+  }
+
+  /* Receptionist console re-skin (pilot) — "CareNow" teal/mint look. Applied via
+     the assistant shell only, so doctor/patient/hospital keep the default blue. */
+  .theme-reception {
+    --brand-blue: 13 148 136;       /* teal-600  — primary actions/links */
+    --brand-blueDark: 15 118 110;   /* teal-700  — hover */
+    --brand-blueLight: 240 253 250; /* teal-50   — tinted surfaces */
+    --brand-navy: 15 23 42;         /* slate-900 — near-black headings */
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply font-sans text-brand-navy antialiased;
+    margin: 0;
+  }
+
+  /* Prevent horizontal scroll across the whole page */
+  html {
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(15,118,110,0.45) rgba(236,253,245,0.45);
+    /* Global scale correction. The UI was calibrated on a 125%-scaled display,
+       so at a normal 100% display everything renders ~25% too large and
+       overflows. Tailwind sizes in rem, so lowering the root font size scales
+       the whole design proportionally back to its intended size. Tune 80%
+       (=1/1.25) up to ~85% to taste; remove once components are re-sized at
+       a true 100% baseline. */
+    font-size: 80%;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track {
+    background: rgba(236,253,245,0.45);
+  }
+
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    background-color: rgba(15,118,110,0.45);
+    border-radius: 9999px;
+    border: 3px solid rgba(236,253,245,0.65);
+  }
+
+  html::-webkit-scrollbar-thumb:hover,
+  body::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(15,118,110,0.65);
+  }
+}
+
+@layer utilities {
+  /* Scrollable but with no visible scrollbar (used by the sidebar nav). */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Thin custom scrollbar used only inside the sidebar if content overflows */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 5px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 9999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* Assistant dashboard quick actions: spotlight the active action while nearby
+   cards recede. Kept outside Tailwind layers so these transforms win over
+   utility styles without needing `!important`. */
+.quick-action-card {
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 400ms ease, filter 400ms ease, opacity 400ms ease,
+    box-shadow 400ms ease;
+  will-change: transform, filter;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .quick-actions-grid:hover > .quick-action-card:hover,
+  .quick-action-card:focus-visible {
+    z-index: 10;
+    transform: scale(1.08);
+    box-shadow: 0 14px 28px rgba(13, 148, 136, 0.24);
+  }
+
+  .quick-actions-grid:hover > .quick-action-card:not(:hover) {
+    filter: blur(6px);
+    opacity: 0.72;
+    transform: scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick-action-card {
+    transition: none;
+  }
+
+  .quick-actions-grid:hover > .quick-action-card:hover,
+  .quick-action-card:focus-visible,
+  .quick-actions-grid:hover > .quick-action-card:not(:hover) {
+    filter: none;
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+
+/* Generic version of the quick-actions spotlight above, for card grids whose
+   cards are wrapped in a framer-motion element (e.g. the doctor dashboard KPIs).
+   Selectors are DESCENDANT rather than child so the effect can be applied to an
+   inner plain div — motion writes an inline `transform` on its own element,
+   which would otherwise win over these rules. */
+.spotlight-grid .spotlight-card {
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 400ms ease, filter 400ms ease, opacity 400ms ease,
+    box-shadow 400ms ease;
+  will-change: transform, filter;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-grid:hover .spotlight-card:hover,
+  .spotlight-grid .spotlight-card:focus-within {
+    z-index: 10;
+    transform: scale(1.08);
+    box-shadow: 0 14px 28px rgba(13, 148, 136, 0.24);
+  }
+
+  .spotlight-grid:hover .spotlight-card:not(:hover) {
+    filter: blur(6px);
+    opacity: 0.72;
+    transform: scale(0.9);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spotlight-grid .spotlight-card {
+    transition: none;
+  }
+
+  .spotlight-grid:hover .spotlight-card:hover,
+  .spotlight-grid .spotlight-card:focus-within,
+  .spotlight-grid:hover .spotlight-card:not(:hover) {
+    filter: none;
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+
+/* ---- Patient Journey page reveal animations (plain CSS so never purged) ---- */
+@keyframes dm-fade-up {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes dm-pop-in {
+  0% { opacity: 0; transform: scale(0.5); }
+  60% { transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes dm-grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.dm-fade-up { animation: dm-fade-up 0.6s cubic-bezier(0.22, 0.68, 0.28, 1) both; }
+.dm-pop-in { animation: dm-pop-in 0.55s cubic-bezier(0.22, 0.68, 0.28, 1) both; }
+.dm-grow-x { transform-origin: left center; animation: dm-grow-x 0.5s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .dm-fade-up, .dm-pop-in, .dm-grow-x { animation: none; }
+}
+
+/* ---- Cute 3D brand wordmark (landing logo) ---- */
+.logo-3d {
+  font-family: 'Fredoka', 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+/* Bright face on top, darker shades stacked downward = puffy 3D extrusion. */
+.logo-3d-teal {
+  color: #14b8a6;
+  text-shadow:
+    0 1px 0 #0f9e90, 0 2px 0 #0d9488, 0 3px 0 #0b7d72,
+    0 4px 0 #0a6f66, 0 7px 9px rgba(15, 39, 66, 0.28);
+}
+.logo-3d-blue {
+  color: #3b82f6;
+  text-shadow:
+    0 1px 0 #2f6ef0, 0 2px 0 #2563eb, 0 3px 0 #1f54c9,
+    0 4px 0 #1c4cb8, 0 7px 9px rgba(15, 39, 66, 0.28);
+}
+.logo-tagline {
+  font-family: 'Fredoka', 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+}
+
+/* ---- Brand wordmark -------------------------------------------------------
+   The app's own language: the editorial serif used for every heading, lifted
+   with the same teal->green gradient `grad-text` gives emphasis elsewhere. The
+   gradient is repeated here rather than reusing .grad-text because that one is
+   scoped to .theme-editorial, and the wordmark also appears in the consoles. */
+.wordmark {
+  /* "Soft Rounded" lockup: Fredoka's rounded terminals at semibold, set FLAT —
+     no extrusion, no gradient. The two-colour split does the work, which is
+     what keeps it legible shrunk to 17px in a console rail. */
+  font-family: "Fredoka", "Inter", system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1;
+}
+.wordmark-tap { color: #0f2742; }   /* brand navy */
+.wordmark-cure { color: #0d9488; }  /* brand teal */
+
+/* Deep-teal console rails: navy disappears against that background, so the
+   same split runs white -> aqua instead. */
+.wordmark-onDark .wordmark-tap { color: #ffffff; }
+.wordmark-onDark .wordmark-cure { color: #5eead4; }
+
+/* Reception re-skin: a few shared components use literal Tailwind blues
+   (bg-blue-100, text-blue-700, …) rather than the brand token. Remap those to
+   teal — scoped to .theme-reception only, so other consoles are untouched.
+   `.theme-reception .x` (specificity 0,2,0) beats the utility class (0,1,0). */
+.theme-reception .bg-blue-50 { background-color: #f0fdfa; }
+.theme-reception .bg-blue-100 { background-color: #ccfbf1; }
+.theme-reception .bg-blue-200 { background-color: #99f6e4; }
+.theme-reception .text-blue-100 { color: #ccfbf1; }
+.theme-reception .text-blue-500 { color: #14b8a6; }
+.theme-reception .text-blue-600 { color: #0d9488; }
+.theme-reception .text-blue-700 { color: #0f766e; }
+.theme-reception .border-blue-100 { border-color: #99f6e4; }
+.theme-reception .border-blue-200 { border-color: #99f6e4; }
+.theme-reception .hover\:bg-blue-50:hover { background-color: #f0fdfa; }
+.theme-reception .hover\:bg-blue-100:hover { background-color: #ccfbf1; }
+
+/* ============================================================================
+   DARK MODE — Front Desk console only. Toggled by adding `.theme-dark` to the
+   assistant shell root (see AssistantLayout). Uses the same scoped-override
+   technique as the reception re-skin above: `.theme-dark .x` (0,2,0) beats the
+   raw utility class (0,1,0), so individual pages need no `dark:` variants.
+   ========================================================================== */
+.theme-reception.theme-dark {
+  /* Neutral-dark palette (gray surfaces). Primary stays the brand teal. */
+  --brand-blueLight: 45 45 45;     /* #2D2D2D — tinted chips, one step above surface */
+  --brand-greenLight: 22 45 34;    /* #162D22 — dark green chip surface */
+  --brand-navy: 255 255 255;       /* #FFFFFF — primary text / headings */
+  background-color: #121212;       /* page backdrop (overrides bg-teal-100/60) */
+  /* Native widgets — <select> popups, scrollbars, date/time pickers — are drawn
+     by the browser, not by our CSS. Without this they keep rendering on the
+     light scheme underneath the dark skin. */
+  color-scheme: dark;
+}
+
+/* Surface depth ramp (neutral grays):
+     L0 page + cards   → #121212   cards sit FLUSH with the page; a lighter
+                                   card slab read as a pale shade behind every
+                                   panel, which is what this ramp used to do
+     L1 inset panels   → #181818   rows/wells nested inside a card
+     L2 controls       → #1C1C1C   inputs, chips, buttons
+     borders           → #2A2A2A   the only thing separating a card from page */
+.theme-dark .bg-teal-100\/60 { background-color: #121212; }   /* L0 — page root */
+/* Wells nested INSIDE a card have to go one step lighter now, not darker. They
+   used to be #121212 against a #1e1e1e card, which read as an inset; with the
+   card itself at #121212 that same value would make them disappear. */
+.theme-dark .bg-slate-50,
+.theme-dark .bg-slate-50\/70,
+.theme-dark .bg-slate-50\/60 { background-color: #181818; }   /* L1 */
+.theme-dark .bg-white { background-color: #121212; }          /* L1 = page */
+.theme-dark .bg-slate-100 { background-color: #1c1c1c; }      /* L2 */
+.theme-dark .bg-teal-50\/50 { background-color: #181818; }
+
+/* Quick Actions colourful light-mode hover → quiet royal-blue wash in dark. */
+.theme-dark .quick-action-card:hover,
+.theme-dark .quick-action-card:focus-visible {
+  background-color: #121212;
+  background-image: linear-gradient(135deg, rgba(13, 148, 136, 0.28), rgba(15, 118, 110, 0.42));
+  --tw-ring-color: rgba(45, 212, 191, 0.35);
+}
+
+.theme-dark .quick-action-card:hover > span:first-child,
+.theme-dark .quick-action-card:focus-visible > span:first-child {
+  background-color: rgba(18, 18, 18, 0.55);
+  color: #5eead4;
+}
+
+.theme-dark .quick-action-card:hover > span:last-child,
+.theme-dark .quick-action-card:focus-visible > span:last-child {
+  color: #d4d4d8;
+}
+
+/* Text → white headings, neutral-gray scale, #A1A1AA secondary */
+.theme-dark .text-slate-900,
+.theme-dark .text-slate-800 { color: #ffffff; }   /* headings, stat numbers, names */
+.theme-dark .text-slate-700 { color: #e4e4e7; }
+.theme-dark .text-slate-600 { color: #d4d4d8; }
+.theme-dark .text-slate-500,
+.theme-dark .text-slate-400 { color: #a1a1aa; }   /* secondary text */
+
+/* NATIVE <select> AND ITS POPUP.
+   The dropdown list is painted by the browser from the SELECT's own
+   background-color, and <option> takes its colour from the select. In dark mode
+   `--brand-navy` is white, so a `bg-transparent` select drew WHITE text on the
+   browser's default WHITE list and the entries were invisible — the doctor
+   picker on Register Walk-in. (The gender/blood-group selects escaped it only
+   because they carry `bg-white`, which the ramp above repaints.) Pin both ends
+   so it can't depend on which utility a given select happens to use. */
+.theme-dark select,
+.theme-dark select option,
+.theme-dark select optgroup {
+  background-color: #121212;
+  color: #ffffff;
+}
+.theme-dark select:disabled,
+.theme-dark select option:disabled {
+  color: #a1a1aa;
+}
+
+/* THE DEFAULT BORDER COLOUR — this is the one that made cards glow.
+
+   Tailwind's preflight paints EVERY element with a fallback border colour:
+       *, ::before, ::after { border-width: 0; border-color: #e5e7eb }
+   `#e5e7eb` is near-white. Any element carrying a border width but no explicit
+   `border-<colour>` class silently inherits it, so on a near-black page each of
+   those drew a bright white outline. There are ~59 such spots across the
+   consoles, and no `.theme-dark .border-slate-*` rule can ever reach them —
+   they aren't using a border colour class at all. Overriding each one by hand
+   would also miss the next one anybody writes.
+
+   Both halves are wrapped in `:where()`, which contributes ZERO specificity, so
+   this rule scores (0,0,0) — exactly like the preflight rule it replaces. Later
+   in the file, so it beats preflight; weaker than any real utility, so an
+   explicit `border-red-100` still wins. Written any other way (e.g.
+   `.theme-dark *`) it would score (0,1,0) and flatten every coloured border in
+   dark mode. */
+:where(.theme-dark) :where(*, ::before, ::after) { border-color: #2a2a2a; }
+
+/* Borders → #2A2A2A. With cards flush to the page this outline is the ONLY
+   thing that shows where a card begins, so it stays visible but quiet. */
+.theme-dark .border-slate-50,
+.theme-dark .border-slate-100,
+.theme-dark .border-slate-200 { border-color: #2a2a2a; }
+.theme-dark .border-slate-300 { border-color: #333333; }
+.theme-dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]) { border-color: #2a2a2a; }
+
+/* TRANSLUCENT light surfaces.
+   The overrides above only catch OPAQUE utilities (`bg-white`, `bg-slate-100`).
+   Tailwind compiles every opacity variant to its own class — `bg-white\/80` is
+   not `bg-white` — so all of those fell straight through and painted a white
+   wash over the dark surface behind them: the pale shade that showed up behind
+   cards, headers and drawers in dark mode.
+
+   Cut-off at /40 on purpose. The low-alpha whites (/5 /10 /15 /20 /25 /30) sit
+   on the dark teal sidebars, where a faint white veil is exactly the intended
+   effect in BOTH themes; overriding those would flatten the sidebars. */
+.theme-dark .bg-white\/40,
+.theme-dark .bg-white\/50,
+.theme-dark .bg-white\/55,
+.theme-dark .bg-white\/60,
+.theme-dark .bg-white\/65,
+.theme-dark .bg-white\/70,
+.theme-dark .bg-white\/80,
+.theme-dark .bg-white\/90,
+.theme-dark .bg-white\/95 { background-color: rgba(18, 18, 18, 0.92); }
+.theme-dark .bg-slate-50\/80 { background-color: #181818; }
+.theme-dark .bg-slate-200\/70,
+.theme-dark .bg-slate-200\/80 { background-color: #232323; }
+
+/* Opaque-white outlines: a 1px white edge round a dark card reads as a glow. */
+.theme-dark .border-white { border-color: #2a2a2a; }
+.theme-dark .ring-white { --tw-ring-color: #2a2a2a; }
+.theme-dark .border-slate-200\/70 { border-color: #2a2a2a; }
+.theme-dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+.theme-dark .divide-slate-200\/70 > :not([hidden]) ~ :not([hidden]) { border-color: #2a2a2a; }
+
+/* Card outline rings (ring-1 ring-slate-100/200) → medium-gray edge */
+.theme-dark .ring-slate-100,
+.theme-dark .ring-slate-200,
+.theme-dark .ring-slate-200\/80 { --tw-ring-color: #2a2a2a; }
+.theme-dark .ring-teal-100,
+.theme-dark .ring-blue-100 { --tw-ring-color: rgba(45, 212, 191, 0.25); }
+.theme-dark .ring-green-100 { --tw-ring-color: rgba(34, 197, 94, 0.25); }
+.theme-dark .ring-orange-100 { --tw-ring-color: rgba(245, 158, 11, 0.25); }
+
+/* Status badge surfaces → translucent palette hues (error/warning/success/info).
+   Teal+blue accents map to the royal-blue primary. */
+.theme-dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.12); }
+.theme-dark .bg-red-100 { background-color: rgba(239, 68, 68, 0.18); }
+.theme-dark .bg-amber-50,
+.theme-dark .bg-amber-50\/70 { background-color: rgba(245, 158, 11, 0.12); }
+.theme-dark .bg-amber-100 { background-color: rgba(245, 158, 11, 0.18); }
+.theme-dark .bg-green-50 { background-color: rgba(34, 197, 94, 0.12); }
+.theme-dark .bg-green-100 { background-color: rgba(34, 197, 94, 0.18); }
+.theme-dark .bg-emerald-50,
+.theme-dark .bg-emerald-50\/60 { background-color: rgba(34, 197, 94, 0.12); }
+.theme-dark .bg-emerald-100 { background-color: rgba(34, 197, 94, 0.18); }
+.theme-dark .bg-orange-50 { background-color: rgba(245, 158, 11, 0.12); }
+.theme-dark .bg-orange-100 { background-color: rgba(245, 158, 11, 0.18); }
+.theme-dark .bg-rose-50 { background-color: rgba(244, 63, 94, 0.12); }
+.theme-dark .bg-rose-100 { background-color: rgba(244, 63, 94, 0.18); }
+.theme-dark .bg-blue-50 { background-color: rgba(45, 212, 191, 0.12); }
+.theme-dark .bg-blue-100 { background-color: rgba(45, 212, 191, 0.18); }
+.theme-dark .bg-teal-50 { background-color: rgba(45, 212, 191, 0.12); }
+.theme-dark .bg-teal-100 { background-color: rgba(45, 212, 191, 0.18); }
+.theme-dark .bg-purple-50 { background-color: rgba(192, 132, 252, 0.12); }
+.theme-dark .bg-purple-100 { background-color: rgba(192, 132, 252, 0.18); }
+
+/* Slash-opacity tint variants (StatCard tones, vitals flag cards). */
+.theme-dark .bg-blue-50\/50 { background-color: rgba(45, 212, 191, 0.12); }
+.theme-dark .bg-teal-50\/50 { background-color: rgba(45, 212, 191, 0.12); }
+.theme-dark .bg-green-50\/50,
+.theme-dark .bg-green-50\/40 { background-color: rgba(34, 197, 94, 0.12); }
+.theme-dark .bg-emerald-50\/60 { background-color: rgba(34, 197, 94, 0.12); }
+.theme-dark .bg-orange-50\/50 { background-color: rgba(245, 158, 11, 0.12); }
+.theme-dark .bg-purple-50\/50 { background-color: rgba(192, 132, 252, 0.12); }
+.theme-dark .bg-amber-50\/50,
+.theme-dark .bg-amber-50\/70 { background-color: rgba(245, 158, 11, 0.12); }
+.theme-dark .bg-red-50\/50 { background-color: rgba(239, 68, 68, 0.12); }
+.theme-dark .bg-red-100\/70 { background-color: rgba(239, 68, 68, 0.18); }
+
+/* -200 chip tints (critical vitals chip, "On Leave"/"Inactive" status badges) */
+.theme-dark .bg-red-200 { background-color: rgba(239, 68, 68, 0.24); }
+.theme-dark .bg-amber-200 { background-color: rgba(245, 158, 11, 0.24); }
+.theme-dark .bg-slate-200 { background-color: #232323; }
+/* Decorative glow blobs behind quick-action tiles */
+.theme-dark .bg-teal-200,
+.theme-dark .bg-blue-200 { background-color: rgba(45, 212, 191, 0.30); }
+.theme-dark .bg-green-200 { background-color: rgba(34, 197, 94, 0.30); }
+.theme-dark .bg-orange-200 { background-color: rgba(245, 158, 11, 0.30); }
+
+/* Status badge text → palette hues. Teal/blue accents → light-blue secondary. */
+.theme-dark .text-red-700,
+.theme-dark .text-red-600,
+.theme-dark .text-red-500 { color: #ef4444; }    /* error */
+.theme-dark .text-amber-700,
+.theme-dark .text-amber-600 { color: #f59e0b; }   /* warning */
+.theme-dark .text-orange-600,
+.theme-dark .text-orange-500 { color: #f59e0b; }
+.theme-dark .text-green-700,
+.theme-dark .text-green-600 { color: #22c55e; }   /* success */
+.theme-dark .text-emerald-600 { color: #22c55e; }
+.theme-dark .text-rose-500 { color: #fb7185; }
+.theme-dark .text-blue-700 { color: #2dd4bf; }
+.theme-dark .text-teal-700,
+.theme-dark .text-teal-600,
+.theme-dark .text-teal-500 { color: #2dd4bf; }
+.theme-dark .text-purple-600 { color: #c084fc; }
+
+/* Status badge borders */
+.theme-dark .border-red-100,
+.theme-dark .border-red-200,
+.theme-dark .border-red-300 { border-color: rgba(239, 68, 68, 0.30); }
+.theme-dark .border-amber-200,
+.theme-dark .border-amber-300 { border-color: rgba(245, 158, 11, 0.30); }
+.theme-dark .border-emerald-100,
+.theme-dark .border-emerald-200 { border-color: rgba(34, 197, 94, 0.30); }
+.theme-dark .border-rose-200 { border-color: rgba(244, 63, 94, 0.30); }
+/* Tinted StatCard outlines (border-*-100) → translucent so they don't glow */
+.theme-dark .border-teal-100,
+.theme-dark .border-blue-100 { border-color: rgba(45, 212, 191, 0.25); }
+.theme-dark .border-green-100 { border-color: rgba(34, 197, 94, 0.25); }
+.theme-dark .border-orange-100 { border-color: rgba(245, 158, 11, 0.25); }
+.theme-dark .border-purple-100 { border-color: rgba(192, 132, 252, 0.25); }
+.theme-dark .border-teal-200,
+.theme-dark .border-teal-300 { border-color: rgba(45, 212, 191, 0.30); }
+.theme-dark .border-green-200 { border-color: rgba(34, 197, 94, 0.30); }
+.theme-dark .border-orange-200,
+.theme-dark .border-orange-300 { border-color: rgba(245, 158, 11, 0.30); }
+
+/* Light gradient panels (e.g. the delay-modal header from-amber-50→to-orange-50)
+   → muted warm tint so they don't read as a bright bar on the dark modal. */
+.theme-dark .from-amber-50 {
+  --tw-gradient-from: rgba(120, 53, 15, 0.40) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgba(120, 53, 15, 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+.theme-dark .to-orange-50 { --tw-gradient-to: rgba(124, 45, 18, 0.30) var(--tw-gradient-to-position); }
+
+/* Decorative gradient cards (vitals stat tiles + panel headers use
+   `from-*-50 to-white`). Remap the stops so a subtle tint fades into the dark
+   card surface instead of a bright wash. `to-white` is listed last so it wins
+   the shared --tw-gradient-to that the from-* rules also set. */
+.theme-dark .from-blue-50 { --tw-gradient-from: rgba(45, 212, 191, 0.16) var(--tw-gradient-from-position); --tw-gradient-to: rgba(45, 212, 191, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.theme-dark .from-red-50 { --tw-gradient-from: rgba(239, 68, 68, 0.16) var(--tw-gradient-from-position); --tw-gradient-to: rgba(239, 68, 68, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.theme-dark .from-emerald-50 { --tw-gradient-from: rgba(34, 197, 94, 0.16) var(--tw-gradient-from-position); --tw-gradient-to: rgba(34, 197, 94, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.theme-dark .from-purple-50 { --tw-gradient-from: rgba(192, 132, 252, 0.16) var(--tw-gradient-from-position); --tw-gradient-to: rgba(192, 132, 252, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.theme-dark .from-rose-50 { --tw-gradient-from: rgba(244, 63, 94, 0.16) var(--tw-gradient-from-position); --tw-gradient-to: rgba(244, 63, 94, 0) var(--tw-gradient-to-position); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.theme-dark .to-white { --tw-gradient-to: #121212 var(--tw-gradient-to-position); }
+.theme-dark .from-teal-50\/60 {
+  --tw-gradient-from: rgba(45, 212, 191, 0.10) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgba(45, 212, 191, 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+/* Hover / focus backgrounds. These compile to a different selector than the
+   base utility (`.hover\:bg-x:hover`), so the surface overrides above don't
+   reach them — without these, hovering flashes the original near-white colour.
+   Neutral states lift subtly; tinted states become translucent. */
+.theme-dark .hover\:bg-slate-50:hover,
+.theme-dark .hover\:bg-slate-50\/70:hover,
+.theme-dark .hover\:bg-slate-50\/60:hover { background-color: rgba(255, 255, 255, 0.06); }
+.theme-dark .hover\:bg-slate-100:hover { background-color: rgba(255, 255, 255, 0.10); }
+.theme-dark .hover\:bg-white:hover { background-color: rgba(255, 255, 255, 0.08); }
+.theme-dark .focus\:bg-white:focus,
+.theme-dark .focus-within\:bg-white:focus-within { background-color: #1c1c1c; }
+.theme-dark .hover\:bg-red-50:hover { background-color: rgba(239, 68, 68, 0.18); }
+.theme-dark .hover\:bg-rose-50:hover { background-color: rgba(244, 63, 94, 0.18); }
+.theme-dark .hover\:bg-amber-50:hover { background-color: rgba(245, 158, 11, 0.18); }
+.theme-dark .hover\:bg-amber-200:hover { background-color: rgba(245, 158, 11, 0.30); }
+.theme-dark .hover\:bg-teal-50:hover,
+.theme-dark .hover\:bg-blue-50:hover { background-color: rgba(45, 212, 191, 0.18); }
+.theme-dark .hover\:bg-blue-100:hover { background-color: rgba(45, 212, 191, 0.24); }
+
+/* Solid CTA that sits on a coloured hero (Queue "Call Next / Complete"). The
+   global bg-white/​hover overrides would darken it into the teal banner and it
+   vanishes on hover — keep it a light pill with teal text instead. Placed after
+   the hover rules so it wins the same-specificity tie. */
+.theme-dark .hero-cta { background-color: #f8fafc; color: #0f766e; }
+.theme-dark .hero-cta:hover { background-color: #ffffff; }
+
+/* Console sidebar (patient rail is bg-white) → dark neutral grey in dark mode,
+   one step below the surface so it reads as a distinct rail. Placed after the
+   bg-white rule so it wins the same-specificity tie. */
+.theme-dark .console-sidebar { background-color: #1a1a1a; border-color: #2a2a2a; }
+
+/* Form inputs */
+.theme-dark .field-input {
+  background-color: #1c1c1c;
+  border-color: #2a2a2a;
+  color: #e4e4e7;
+}
+.theme-dark .field-input::placeholder { color: #71717a; }
+
+/* Animated sidebar collapse toggle (topbar): the concentric ring swaps colour
+   and the arrow glyph slides on hover. Adapted from the supplied design — themed
+   (teal accent) and sized to 44px so it fits the topbar. */
+.sidebar-toggle {
+  display: block;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  overflow: hidden;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: 0;
+}
+.sidebar-toggle::before,
+.sidebar-toggle::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  inset: 6px;
+}
+.sidebar-toggle::before {
+  border: 3px solid #e2e8f0;
+  transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+.sidebar-toggle::after {
+  border: 3px solid #5eead4;
+  transform: scale(1.3);
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.sidebar-toggle:hover::before,
+.sidebar-toggle:focus::before {
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+    transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.sidebar-toggle:hover::after,
+.sidebar-toggle:focus::after {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+    transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+}
+.sidebar-toggle-box {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.sidebar-toggle-elem {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: 14px;
+  transform: rotate(180deg);   /* arrow faces LEFT while sidebar is open */
+  fill: #475569;
+  transition: transform 0.3s ease;
+}
+/* Sidebar collapsed → arrow faces RIGHT (click to open) */
+.sidebar-toggle.is-collapsed .sidebar-toggle-elem { transform: rotate(0deg); }
+.sidebar-toggle-elem svg { display: block; width: 100%; height: 100%; }
+.sidebar-toggle:hover .sidebar-toggle-box,
+.sidebar-toggle:focus .sidebar-toggle-box {
+  transition: 0.4s;
+  transform: translateX(-44px);
+}
+/* Dark theme: light arrows, dark ring */
+.theme-dark .sidebar-toggle::before { border-color: #2a2a2a; }
+.theme-dark .sidebar-toggle-elem { fill: #e4e4e7; }
+
+/* "Book Now" sparkle button (UIverse-style): dark pill with a rotating dotted
+   glow, animated sparkle icon, and gradient text. Namespaced .sparkle-btn so it
+   can't collide; keyframes prefixed too. */
+.sparkle-btn {
+  --black-700: hsla(174 69% 18% / 1);   /* deep teal pill (brand) */
+  --border_radius: 9999px;
+  --transtion: 0.3s ease-in-out;
+  --offset: 2px;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transform-origin: center;
+  padding: 0.7rem 1.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--border_radius);
+  transform: scale(calc(1 + (var(--active, 0) * 0.1)));
+  transition: transform var(--transtion);
+}
+.sparkle-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: var(--black-700);
+  border-radius: var(--border_radius);
+  box-shadow: inset 0 0.5px hsl(0, 0%, 100%), inset 0 -1px 2px 0 hsl(0, 0%, 0%),
+    0px 4px 10px -4px hsla(0 0% 0% / calc(1 - var(--active, 0))),
+    0 0 0 calc(var(--active, 0) * 0.375rem) hsl(173 80% 40% / 0.75);
+  transition: all var(--transtion);
+  z-index: 0;
+}
+.sparkle-btn::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background-color: hsla(173 80% 42% / 0.85);
+  background-image: radial-gradient(at 51% 89%, hsla(160, 60%, 68%, 1) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsla(173, 58%, 45%, 1) 0px, transparent 50%),
+    radial-gradient(at 22% 91%, hsla(168, 55%, 52%, 1) 0px, transparent 50%);
+  background-position: top;
+  opacity: var(--active, 0);
+  border-radius: var(--border_radius);
+  transition: opacity var(--transtion);
+  z-index: 2;
+}
+.sparkle-btn:is(:hover, :focus-visible) { --active: 1; }
+.sparkle-btn:active { transform: scale(1); }
+.sparkle-btn .dots_border {
+  --size_border: 100%;              /* light: shine sweeps over the dark pill */
+  overflow: hidden;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--size_border);
+  height: var(--size_border);
+  background-color: transparent;
+  border-radius: var(--border_radius);
+  z-index: 1;
+}
+/* Dark surface: original rotating border glow (protrudes onto the dark page). */
+.theme-dark .sparkle-btn .dots_border { --size_border: calc(100% + 5px); z-index: -10; }
+.sparkle-btn .dots_border::before {
+  content: "";
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform-origin: left;
+  transform: rotate(0deg);
+  width: 100%;
+  height: 2rem;
+  background-color: white;
+  mask: linear-gradient(transparent 0%, white 120%);
+  -webkit-mask: linear-gradient(transparent 0%, white 120%);
+  animation: sparkle-rotate 2s linear infinite;
+}
+@keyframes sparkle-rotate { to { transform: rotate(360deg); } }
+.sparkle-btn .sparkle { position: relative; z-index: 10; width: 1.4rem; }
+.sparkle-btn .sparkle .path {
+  fill: currentColor;
+  stroke: currentColor;
+  transform-origin: center;
+  color: hsl(0, 0%, 100%);
+}
+.sparkle-btn:is(:hover, :focus) .sparkle .path { animation: sparkle-path 1.5s linear 0.5s infinite; }
+.sparkle-btn .sparkle .path:nth-child(1) { --scale_path_1: 1.2; }
+.sparkle-btn .sparkle .path:nth-child(2) { --scale_path_2: 1.2; }
+.sparkle-btn .sparkle .path:nth-child(3) { --scale_path_3: 1.2; }
+@keyframes sparkle-path {
+  0%, 34%, 71%, 100% { transform: scale(1); }
+  17% { transform: scale(var(--scale_path_1, 1)); }
+  49% { transform: scale(var(--scale_path_2, 1)); }
+  83% { transform: scale(var(--scale_path_3, 1)); }
+}
+.sparkle-btn .text_button {
+  position: relative;
+  z-index: 10;
+  background-image: linear-gradient(90deg, hsla(0 0% 100% / 1) 0%, hsla(0 0% 100% / var(--active, 0)) 120%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: transparent;
+}
+
+/* 3D tilt-on-hover for the patient KPI cards. Six transparent hover zones tilt
+   the card toward the cursor quadrant (namespaced .kpi-tilt so the generic
+   button/.hover selectors don't leak). Zones sit on top and bubble clicks to the
+   wrapping link, so navigation still works. */
+.kpi-tilt { position: relative; display: block; perspective: 800px; transition: transform 0.3s ease; }
+.kpi-tilt:active { transform: scale(0.97); }
+.kpi-tilt .kz { position: absolute; z-index: 5; width: 33.34%; height: 50%; }
+.kpi-tilt .kz1 { top: 0; left: 0; }
+.kpi-tilt .kz2 { top: 0; left: 33.33%; }
+.kpi-tilt .kz3 { top: 0; right: 0; }
+.kpi-tilt .kz4 { bottom: 0; left: 0; }
+.kpi-tilt .kz5 { bottom: 0; left: 33.33%; }
+.kpi-tilt .kz6 { bottom: 0; right: 0; }
+.kpi-tilt-target {
+  height: 100%;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.kpi-tilt .kz1:hover ~ .kpi-tilt-target { transform: rotateX(10deg) rotateY(-10deg); box-shadow: -5px -5px 16px rgba(15, 23, 42, 0.16); }
+.kpi-tilt .kz3:hover ~ .kpi-tilt-target { transform: rotateX(10deg) rotateY(10deg); box-shadow: 5px -5px 16px rgba(15, 23, 42, 0.16); }
+.kpi-tilt .kz4:hover ~ .kpi-tilt-target { transform: rotateX(-10deg) rotateY(-10deg); box-shadow: -5px 5px 16px rgba(15, 23, 42, 0.16); }
+.kpi-tilt .kz6:hover ~ .kpi-tilt-target { transform: rotateX(-10deg) rotateY(10deg); box-shadow: 5px 5px 16px rgba(15, 23, 42, 0.16); }
+.kpi-tilt .kz2:hover ~ .kpi-tilt-target { transform: rotateX(10deg); box-shadow: 0 -5px 16px rgba(15, 23, 42, 0.16); }
+.kpi-tilt .kz5:hover ~ .kpi-tilt-target { transform: rotateX(-10deg); box-shadow: 0 5px 16px rgba(15, 23, 42, 0.16); }
+
+/* Live Smart OP Queue card — a slowly rotating teal glow border (in the spirit
+   of the sparkle button's spinning border) to signal it's "live". The card sits
+   above the spinning conic gradient; only the 2px padding ring shows it. */
+.queue-glow {
+  position: relative;
+  display: flex;
+  padding: 3px;                 /* thickness of the moving line */
+  border-radius: 1.6rem;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #ffffff;    /* ring base = card colour, so no hard outline where the sweep isn't */
+}
+.theme-dark .queue-glow { background-color: #121212; }
+/* teal-50 ring is near-white → shows as a white border in dark; drop it (the
+   moving green line is the border). */
+.theme-dark .ring-teal-50 { --tw-ring-color: transparent; }
+.queue-glow::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  z-index: 0;
+  background: conic-gradient(from 0deg, transparent 0deg 225deg, #5eead4 290deg, #2dd4bf 340deg, #5eead4 360deg);
+  animation: queue-spin 4.5s linear infinite;
+}
+/* Opaque inner cover: sits above the spinning gradient but below the card, so
+   the moving line shows ONLY in the 3px ring — never bleeding through the
+   translucent (glass) card body into the middle. */
+.queue-glow::after {
+  content: "";
+  position: absolute;
+  inset: 3px;                        /* leave exactly the 3px border exposed */
+  z-index: 0;                        /* painted after ::before → covers its centre */
+  border-radius: calc(1.6rem - 3px);
+  background: #ffffff;
+}
+.theme-dark .queue-glow::after { background: #121212; }
+.queue-glow > * { position: relative; z-index: 1; flex: 1; }
+@keyframes queue-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .queue-glow::before { animation: none; } }
+
+/* Gentle pulse on the Smart OP Queue "now serving" number. */
+@keyframes token-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.85; }
+}
+.animate-token-pulse { display: inline-block; animation: token-pulse 2.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .animate-token-pulse { animation: none; } }
+
+/* Print: show only the patient UHID card (the "Print card" button). */
+@media print {
+  body * { visibility: hidden; }
+  .print-card, .print-card * { visibility: visible; }
+  .print-card {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 320px; box-shadow: none !important;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}
+
+/* ── Hospital sidebar "glider" nav effect ──────────────────────────────────
+   Adapted from a radio-input glider: the vertical bar + yellow glow slide to
+   the active nav item. Position is driven by an inline translateY (active
+   route index) instead of :checked, so it works with react-router NavLink. */
+.radio-container {
+  --main-color: #f7e479;
+  --main-color-opacity: #f7e4791c;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-left: 0.5rem;
+}
+.radio-container .glider-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(27, 27, 27, 1) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  width: 1px;
+}
+.radio-container .glider-container .glider {
+  position: relative;
+  height: calc(100% / var(--total-radio));
+  width: 100%;
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0) 0%,
+    var(--main-color) 50%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  transition: transform 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56);
+}
+.radio-container .glider-container .glider::before {
+  content: "";
+  position: absolute;
+  height: 60%;
+  width: 300%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--main-color);
+  filter: blur(10px);
+}
+.radio-container .glider-container .glider::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    90deg,
+    var(--main-color-opacity) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+.radio-container .nav-item {
+  cursor: pointer;
+  padding: 0.85rem 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #9aa4b2;
+  transition: color 0.3s ease-in-out;
+}
+.radio-container .nav-item:hover {
+  color: #e2e8f0;
+}
+.radio-container .nav-item.active {
+  color: var(--main-color);
+}
+
+/* The hospital rail's own treatment, opted into via `nav-hospital` on the
+   container. The `.nav-item` rules above are shared with the Super Admin
+   sidebar, so changing them directly would restyle that console too.
+
+   Colour: the base rule paints idle rows #9aa4b2, a cool grey that reads dull
+   and washed-out against the teal-900 rail. Every other console — doctor,
+   front desk, patient — uses teal-100 at 80% with white on hover, so the hospital
+   now matches them instead of being the one grey rail.
+
+   Size: the glider is sized as a fraction of the container
+   (100% / --total-radio), so taller rows need no other change. */
+.radio-container.nav-hospital .nav-item {
+  font-size: 0.9375rem;
+  padding: 0.95rem 1rem;
+  color: rgba(204, 251, 241, 0.8);   /* teal-100/80 */
+}
+.radio-container.nav-hospital .nav-item:hover {
+  color: #ffffff;
+}
+/* Active stays the glider's accent — that highlight is this rail's whole idea. */
+.radio-container.nav-hospital .nav-item.active {
+  color: var(--main-color);
+}
+
+/* ============================================================================
+   "GREEN GLASS" CONSOLES — frosted cards over the landing-style gradient.
+   Opt-in per console via the `glass-console` class on its layout shell (patient,
+   doctor, hospital, reception). `shadow-card` is the hook used only by the shared
+   <Card/> component, so every Card picks up the frosted treatment without
+   editing each page. Dark mode opts out (no `glass-console` class applied).
+   ========================================================================== */
+.glass-console .shadow-card {
+  background-color: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px -18px rgba(13, 148, 136, 0.35);
+}
+
+/* ---------------------------------------------------------------------------
+   LANDING-EXACT GLASS (`glass-landing`, added alongside `glass-console`).
+   Matches `.theme-editorial .bg-card` on the landing page exactly — more
+   transparent and saturated than the console default above. Rolled out one
+   console at a time; consoles without this class keep the 0.68/blur(12px) look.
+   -------------------------------------------------------------------------- */
+.glass-console.glass-landing .shadow-card {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 12px 34px -18px rgba(13, 148, 136, 0.4);
+}
+
+/* The topbar is a full-width surface — left opaque it cuts a hard white band
+   across the frosted canvas, so it gets the same treatment. */
+.glass-console.glass-landing .console-topbar {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border-bottom-color: rgba(255, 255, 255, 0.55);
+}
+
+/* backdrop-filter above makes the topbar its own stacking context, which traps
+   anything inside it — the notification dropdown's z-40 could not rise above the
+   cards in <main>, because the whole header painted below them as a static flex
+   sibling. Lifting the header itself is what fixes it; raising the dropdown's
+   z-index cannot, since it is confined to this context.
+
+   30 is deliberate, not arbitrary. It has to clear <main> (z-auto) so the
+   dropdown covers the stat cards, while staying under the mobile sidebar
+   drawer (z-50) and its backdrop (z-40) — at 50 the header would sit on top of
+   the open drawer — and under the page modals (z-50).
+
+   Applied unscoped so it holds in dark theme too, where backdrop-filter is not
+   set and the header would otherwise fall back to document order. */
+.console-topbar {
+  position: relative;
+  z-index: 30;
+}
+
+/* Nested panels inside a frosted card must not stack a second layer of white,
+   or the glass turns milky. Keep them barely tinted. */
+.glass-console.glass-landing .shadow-card .bg-slate-50,
+.glass-console.glass-landing .shadow-card .bg-slate-50\/60 {
+  background-color: rgba(255, 255, 255, 0.34);
+}
+
+/* Shared patient, doctor and hospital authentication treatment. */
+.login-glass-page .bg-brand-blue {
+  background-color: rgb(13 148 136);
+  background-image: linear-gradient(to right, rgb(13 148 136), rgb(22 163 74));
+}
+
+.login-glass-page .hover\:bg-brand-blueDark:hover {
+  background-color: rgb(15 118 110);
+  background-image: linear-gradient(to right, rgb(15 118 110), rgb(21 128 61));
+}
+
+.login-glass-page .bg-slate-100 {
+  background-color: rgb(255 255 255 / 0.55);
+  border: 1px solid rgb(255 255 255 / 0.7);
+  backdrop-filter: blur(8px);
+}
+
+/* ============================================================================
+   LANDING RE-SKIN — "sweet-looker" editorial LAYOUT tuned to the TapCure BRAND
+   (teal primary + navy ink + green/amber accents + Instrument Serif headings).
+   Scoped to the landing shell only via `.theme-editorial` (see LandingPage.jsx),
+   using the same scoped-override technique as `.theme-reception`/`.theme-dark`,
+   so no console outside the landing page is affected.
+   ========================================================================== */
+
+/* 1 — Brand tokens remapped to the teal/brand palette (RGB channels consumed by
+       tailwind.config `brand.*`). Colours the "past" <JourneySection /> so it
+       matches the teal sweet-looker tokens above. */
+.theme-editorial {
+  --brand-blue: 13 148 136;        /* teal-600 — primary actions/links */
+  --brand-blueDark: 15 118 110;    /* teal-700 — hover */
+  --brand-blueLight: 240 253 250;  /* teal-50  — tinted surfaces */
+  --brand-teal: 13 148 136;        /* teal-600 */
+  --brand-green: 22 163 74;        /* green-600 — alternating step accent */
+  --brand-greenLight: 236 253 245; /* green-50 — tinted surfaces */
+  --brand-navy: 15 39 66;          /* brand navy — headings / body text */
+}
+
+/* 2 — Dashboard typography: Inter everywhere (no serif), upright (no italics).
+       Remap every `font-serif` usage on the landing to Inter, give headings a
+       bold weight, and force all `<em>` / `.italic` text upright. Scoped rules
+       (0,2,0 / 0,1,1) beat the utility classes they override. */
+.theme-editorial .font-serif {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+}
+.theme-editorial h1,
+.theme-editorial h2,
+.theme-editorial h3 {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+.theme-editorial em,
+.theme-editorial .italic {
+  font-style: normal;
+}
+
+/* Trust chip — a small green light continuously travels around the border.
+   Animating the conic angle (not `transform`) so the pill itself never spins. */
+@property --trust-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+.theme-editorial .trust-glow { position: relative; }
+.theme-editorial .trust-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.6px;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--trust-angle),
+    transparent 0deg 250deg,
+    #86efac 305deg,
+    #22c55e 335deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: trust-spin 2.6s linear infinite;
+}
+@keyframes trust-spin {
+  to { --trust-angle: 360deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-editorial .trust-glow::before { animation: none; }
+}
+
+/* Testimonials accordion — collapsed panels show the reviewer's name rotated
+   vertically; hovering a panel expands it (flex 5) and reveals the full quote. */
+.theme-editorial .review-acc {
+  display: flex;
+  gap: 10px;
+  height: 100%;
+  min-height: 340px;
+}
+.theme-editorial .review-panel {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 18px;
+  border: 1.5px solid #99f6e4;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: flex 0.5s ease, background 0.5s ease, border-color 0.5s ease;
+}
+.theme-editorial .review-panel:hover {
+  flex: 5;
+  background: linear-gradient(135deg, #f4fdf7 0%, #dcfce7 100%);
+  border-color: #16a34a;
+}
+.theme-editorial .review-label {
+  white-space: nowrap;
+  transform: rotate(-90deg);
+  transition: all 0.5s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f766e;
+}
+.theme-editorial .review-panel:hover .review-label { opacity: 0; }
+.theme-editorial .review-body {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 21rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.6rem;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.15s;
+}
+.theme-editorial .review-panel:hover .review-body { opacity: 1; }
+
+/* First panel starts OPEN by default … */
+.theme-editorial .review-acc .review-panel:first-child {
+  flex: 5;
+  background: linear-gradient(135deg, #f4fdf7 0%, #dcfce7 100%);
+  border-color: #16a34a;
+}
+.theme-editorial .review-acc .review-panel:first-child .review-label { opacity: 0; }
+.theme-editorial .review-acc .review-panel:first-child .review-body { opacity: 1; }
+
+/* … and closes as soon as any other panel is hovered. */
+.theme-editorial .review-acc:has(.review-panel:not(:first-child):hover) .review-panel:first-child {
+  flex: 1;
+  background: #ffffff;
+  border-color: #99f6e4;
+}
+.theme-editorial .review-acc:has(.review-panel:not(:first-child):hover) .review-panel:first-child .review-label { opacity: 1; }
+.theme-editorial .review-acc:has(.review-panel:not(:first-child):hover) .review-panel:first-child .review-body { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-editorial .review-panel,
+  .theme-editorial .review-label { transition: none; }
+}
+
+/* Isometric app-store icons — on hover the icon lifts, three stacked rings fan
+   out behind it (isometric look) and a label slides in. Themed green. */
+.theme-editorial .iso-list {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.theme-editorial .iso-pro {
+  position: relative;
+  transition: 0.5s;
+}
+.theme-editorial .iso-pro .svg {
+  transition: all 0.3s;
+  padding: 1rem;
+  height: 60px;
+  width: 60px;
+  border-radius: 100%;
+  color: #16a34a;
+  background: #ffffff;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 0 5px rgba(255, 255, 255, 0.5), 0 5px 5px rgba(0, 0, 0, 0.164);
+}
+.theme-editorial .iso-pro .text {
+  opacity: 0;
+  position: absolute;
+  top: 16px;
+  left: 58px;
+  z-index: 9999;
+  white-space: nowrap;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #15803d;
+  background-color: rgba(255, 255, 255, 0.75);
+  transition: all 0.3s;
+  box-shadow: -5px 0 1px rgba(153, 153, 153, 0.15),
+    -10px 0 1px rgba(153, 153, 153, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 0 5px rgba(255, 255, 255, 0.5), 0 5px 5px rgba(0, 0, 0, 0.082);
+}
+.theme-editorial .iso-pro:hover a > .svg { transform: translate(15px, -15px); }
+.theme-editorial .iso-pro:hover .text { opacity: 1; transform: translate(25px, -2px) skew(-5deg); }
+.theme-editorial .iso-pro:hover .svg { transform: translate(5px, -5px); }
+.theme-editorial .iso-pro span {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 60px;
+  border: 1px solid #16a34a;
+  border-radius: 50%;
+  transition: all 0.3s;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.3),
+    inset 0 0 5px rgba(255, 255, 255, 0.5), 0 5px 5px rgba(0, 0, 0, 0.164);
+}
+.theme-editorial .iso-pro:hover span { opacity: 1; }
+.theme-editorial .iso-pro:hover span:nth-child(1) { opacity: 0.2; }
+.theme-editorial .iso-pro:hover span:nth-child(2) { opacity: 0.4; transform: translate(5px, -5px); }
+.theme-editorial .iso-pro:hover span:nth-child(3) { opacity: 0.6; transform: translate(10px, -10px); }
+
+/* Spinning coin flip — used on the fee-note rupee coin. */
+@keyframes coin-flip-3d {
+  0%, 100% { animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5); }
+  0% { transform: rotateY(0deg); }
+  50% { transform: rotateY(1800deg); animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1); }
+  100% { transform: rotateY(3600deg); }
+}
+.coin-flip-3d {
+  animation: coin-flip-3d 4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  transform-style: preserve-3d;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-flip-3d { animation: none; }
+}
+
+/* Nav links — teal→green gradient underline grows from the left on hover, with
+   a subtle lift and colour shift. */
+.theme-editorial .nav-link {
+  position: relative;
+  padding-bottom: 3px;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+.theme-editorial .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  border-radius: 9999px;
+  background-image: linear-gradient(90deg, #0d9488, #16a34a);
+  opacity: 0.55;
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: opacity 0.25s ease, transform 0.3s ease;
+}
+.theme-editorial .nav-link:hover {
+  color: #0f766e;
+  transform: translateY(-1px);
+}
+.theme-editorial .nav-link:hover::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+/* Highlighted nav pills — soft teal chip that reads as a button at rest, and
+   fills with the brand gradient + lifts on hover. */
+.theme-editorial .nav-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.95rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  color: #0f766e;
+  background-color: #d9f2e6;
+  border: 1px solid rgba(13, 148, 136, 0.28);
+  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.08);
+  transition: color 0.25s ease, background-color 0.25s ease,
+    background-image 0.25s ease, border-color 0.25s ease, transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+.theme-editorial .nav-pill:hover {
+  color: #ffffff;
+  background-image: linear-gradient(90deg, #0d9488, #16a34a);
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px -8px rgba(13, 148, 136, 0.5);
+}
+.theme-editorial .nav-pill:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* "Brutalist" step cards — on hover a teal→green circle expands from the bottom
+   to fill the card, the card lifts with a hard offset shadow, and the text flips
+   to white. Themed to the brand and identical across all cards. */
+.theme-editorial .brutal-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 rgba(13, 148, 136, 0.22);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.theme-editorial .brutal-card::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -150%;
+  width: 300%;
+  height: 300%;
+  border-radius: 50%;
+  z-index: 0;
+  transform: translateX(-50%) scale(0);
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  background: linear-gradient(135deg, #0d9488 0%, #16a34a 100%);
+}
+.theme-editorial .brutal-card:hover::before {
+  transform: translateX(-50%) scale(1);
+}
+.theme-editorial .brutal-card:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 rgba(13, 148, 136, 0.32);
+}
+.theme-editorial .brutal-card:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 rgba(13, 148, 136, 0.32);
+}
+
+/* Step cards — a 3D flip card. The dark face with a rotating teal→green glow
+   ring shows at rest; on hover the card flips on its Y axis to a detail face
+   with floating blurred brand-green blobs. */
+.theme-editorial .flip-card {
+  overflow: visible;
+  width: 100%;
+  height: 254px;
+  perspective: 1000px;
+}
+.theme-editorial .flip-content {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 300ms;
+  border-radius: 16px;
+}
+.theme-editorial .flip-front,
+.theme-editorial .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+  /* Frosted glass surface */
+  background-color: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.theme-editorial .flip-back {
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+.theme-editorial .flip-back-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  color: #0f2742;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  padding: 1rem;
+}
+.theme-editorial .flip-back-icon {
+  display: grid;
+  place-items: center;
+  height: 3.25rem;
+  width: 3.25rem;
+  border-radius: 1rem;
+  background: rgba(204, 251, 241, 0.6);
+  color: #0f766e;
+}
+.theme-editorial .flip-step {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+.theme-editorial .flip-card:hover .flip-content {
+  transform: rotateY(180deg);
+}
+.theme-editorial .flip-front {
+  transform: rotateY(180deg);
+  color: #0f2742;
+}
+.theme-editorial .flip-front-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+}
+.theme-editorial .flip-badge {
+  background-color: rgba(204, 251, 241, 0.55);
+  color: #0f766e;
+  padding: 3px 12px;
+  border-radius: 10px;
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  width: fit-content;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.theme-editorial .flip-description {
+  box-shadow: 0 8px 24px rgba(30, 43, 36, 0.12);
+  width: 100%;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.78);
+  border: 1px solid #d8e7e4;
+  backdrop-filter: blur(6px);
+  border-radius: 8px;
+}
+.theme-editorial .flip-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f2742;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.theme-editorial .flip-footer {
+  color: #475569;
+  margin-top: 6px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+.theme-editorial .flip-circle {
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background-color: rgba(22, 163, 74, 0.45);
+  filter: blur(18px);
+  animation: flip_floating 2600ms infinite linear;
+}
+.theme-editorial #flip-bottom {
+  background-color: rgba(13, 148, 136, 0.4);
+  left: 50px;
+  top: 40px;
+  width: 150px;
+  height: 150px;
+  animation-delay: -800ms;
+}
+.theme-editorial #flip-right {
+  background-color: rgba(74, 222, 128, 0.5);
+  left: 160px;
+  top: -20px;
+  width: 40px;
+  height: 40px;
+  animation-delay: -1800ms;
+}
+@keyframes flip_floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(10px); }
+  100% { transform: translateY(0px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-editorial .flip-content { transition: none; }
+  .theme-editorial .flip-circle { animation: none; }
+}
+
+/* Feature "social" cards — teal→green gradient card; the icon+title logo is
+   centred at rest and slides to the top-left on hover while decorative boxes
+   fan in from the bottom-left and the description reveals. */
+.theme-editorial .feat-card {
+  position: relative;
+  height: 250px;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 2px solid #ffffff;
+  box-shadow: rgba(15, 39, 66, 0.12) 0px 7px 24px 0px;
+  transition: transform 0.6s ease-in-out, box-shadow 0.6s ease-in-out;
+}
+.theme-editorial .feat-card:hover {
+  transform: scale(1.04);
+  box-shadow: rgba(15, 39, 66, 0.18) 0px 12px 30px 0px;
+}
+.theme-editorial .feat-card .background {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(135deg, #f4fdf7 0%, #dcfce7 100%);
+}
+/* Colour layer that fades in on hover (the card "gets the colour"). */
+.theme-editorial .feat-card .feat-fill {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  background-image: linear-gradient(120deg, #ffffff 0%, #f7fdfa 55%, #eefaf2 100%);
+  transition: opacity 0.6s ease-in-out;
+}
+/* Photo panel that fades in on the right and dissolves into the copy on the
+   left. Replaces the old white "shard" boxes. */
+.theme-editorial .feat-card .feat-photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60%;
+  z-index: 2;
+  opacity: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.06);
+  transition: opacity 0.6s ease-in-out, transform 0.9s ease-in-out;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.65) 28%, #000 62%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.65) 28%, #000 62%);
+}
+.theme-editorial .feat-card:hover .feat-photo { opacity: 1; transform: scale(1); }
+/* Sits above the photo, below the copy: keeps the title/description on a clean
+   white field no matter what the artwork has on its left side. */
+.theme-editorial .feat-card .feat-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to right,
+    #ffffff 0%,
+    rgba(255, 255, 255, 0.97) 34%,
+    rgba(255, 255, 255, 0.72) 48%,
+    rgba(255, 255, 255, 0) 66%
+  );
+  transition: opacity 0.6s ease-in-out;
+}
+.theme-editorial .feat-card:hover .feat-scrim { opacity: 1; }
+/* Soft mint quarter-circle in the bottom-left, as in the reference card. */
+.theme-editorial .feat-card::after {
+  content: "";
+  position: absolute;
+  left: -60px;
+  bottom: -70px;
+  height: 190px;
+  width: 190px;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.09);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.6s ease-in-out;
+}
+.theme-editorial .feat-card:hover::after { opacity: 1; }
+/* Pale green chip behind the icon. */
+.theme-editorial .feat-card .feat-icon {
+  display: flex;
+  height: 46px;
+  width: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.12);
+  transition: all 0.6s ease-in-out;
+}
+
+.theme-editorial .feat-card:hover .feat-fill { opacity: 1; }
+.theme-editorial .feat-card .feat-logo {
+  position: absolute;
+  right: 50%;
+  bottom: 50%;
+  transform: translate(50%, 50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: center;
+  color: #15803d;
+  z-index: 4;
+  transition: all 0.6s ease-in-out;
+}
+.theme-editorial .feat-card .feat-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.4px;
+  max-width: 11rem;
+  white-space: normal;
+  line-height: 1.2;
+}
+.theme-editorial .feat-card:hover .feat-title { max-width: 13rem; }
+.theme-editorial .feat-card:hover .feat-logo {
+  right: auto;
+  bottom: auto;
+  top: 20px;
+  left: 22px;
+  transform: translate(0, 0);
+  align-items: flex-start;
+  text-align: left;
+  color: #0f2942;
+}
+.theme-editorial .feat-card:hover .feat-title { font-size: 1.4rem; font-weight: 800; }
+.theme-editorial .feat-card:hover .feat-title { letter-spacing: 0; }
+/* Pinned to the bottom of .feat-logo (top: 100%), so it always clears the
+   title no matter how many lines the title wraps to. */
+.theme-editorial .feat-card .feat-desc {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 9px;
+  width: 13rem;
+  text-align: left;
+  color: #475569;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s ease-in-out 0.15s;
+}
+.theme-editorial .feat-card:hover .feat-desc { opacity: 1; transform: translateY(0); }
+/* (white "shard" boxes removed — replaced by .feat-photo above) */
+
+/* Teal→green gradient text for highlighted words (matches the hero accent). */
+.theme-editorial .grad-text {
+  background-image: linear-gradient(90deg, #0d9488, #16a34a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glassmorphism — frosted translucent cards floating over the gradient canvas.
+   Every `bg-card` surface on the landing becomes frosted glass at once. */
+.theme-editorial .bg-card {
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+/* Frosted glass helper for surfaces that aren't `bg-card`. */
+.theme-editorial .glass {
+  background-color: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+
+/* Calculator list "glider" — a silver light bar (with a soft glow) slides in on
+   hover of each item. Adapted from the gold radio-glider; recoloured silver to
+   read as a cool metallic accent on the teal/green glass. */
+.theme-editorial .calc-item { position: relative; }
+.theme-editorial .calc-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  height: 78%;
+  width: 4px;
+  border-radius: 9999px;
+  transform: translateY(-50%) scaleY(0.15);
+  background: linear-gradient(
+    0deg,
+    rgba(22, 163, 74, 0) 0%,
+    #22c55e 42%,
+    #4ade80 50%,
+    #22c55e 58%,
+    rgba(22, 163, 74, 0) 100%
+  );
+  box-shadow: 0 0 16px 4px rgba(34, 197, 94, 0.85),
+    0 0 4px 1px rgba(74, 222, 128, 0.9);
+  opacity: 0;
+  transition: opacity 0.3s ease,
+    transform 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56);
+}
+.theme-editorial .calc-item:hover::before {
+  opacity: 1;
+  transform: translateY(-50%) scaleY(1);
+}
+/* Hovered row text picks up the green to reinforce the light. */
+.theme-editorial .calc-item:hover .calc-label {
+  color: #15803d;
+}
+
+/* Brand CTA buttons.
+   `btn-sweep`      → primary pill (Log in / Sign up): filled teal→green gradient
+                       at rest with a glossy shine that sweeps across on hover + lift.
+   `btn-ghost`      → secondary pill (For hospitals): white/outline that fills on hover.
+   `btn-sweep-menu` → dropdown / list rows: brand gradient slides in from the left. */
+.theme-editorial .btn-sweep {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid transparent;
+  color: #ffffff;
+  background-image: linear-gradient(90deg, #0f766e, #16a34a);
+  box-shadow: 0 6px 16px -6px rgba(15, 118, 110, 0.55);
+  transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.2s ease;
+}
+.theme-editorial .btn-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    110deg,
+    transparent 25%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 75%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.7s ease;
+}
+.theme-editorial .btn-sweep:hover::after {
+  transform: translateX(130%);
+}
+.theme-editorial .btn-sweep:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -8px rgba(15, 118, 110, 0.7);
+  filter: brightness(1.05);
+}
+.theme-editorial .btn-sweep:active {
+  transform: translateY(0) scale(0.98);
+  filter: brightness(0.96);
+}
+
+/* Secondary outline pill — white at rest, fills with the brand gradient on hover. */
+.theme-editorial .btn-ghost {
+  color: #0f766e;
+  background-color: #ffffff;
+  border: 1px solid rgba(13, 148, 136, 0.4);
+  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.12);
+  transition: color 0.25s ease, background-color 0.25s ease,
+    background-image 0.25s ease, border-color 0.25s ease, transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+.theme-editorial .btn-ghost:hover {
+  color: #ffffff;
+  background-image: linear-gradient(90deg, #0d9488, #16a34a);
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -6px rgba(13, 148, 136, 0.5);
+}
+.theme-editorial .btn-ghost:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Dropdown / list rows — brand gradient wipes in from the left; text flips white. */
+.theme-editorial .btn-sweep-menu {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+.theme-editorial .btn-sweep-menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(90deg, #0d9488, #16a34a);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s ease;
+}
+.theme-editorial .btn-sweep-menu:hover::before {
+  transform: scaleX(1);
+}
+.theme-editorial .btn-sweep-menu:hover,
+.theme-editorial .btn-sweep-menu:hover span {
+  color: #ffffff;
+}
+.theme-editorial .btn-sweep-menu:active {
+  filter: brightness(0.94);
+  transform: scale(0.99);
+}
+
+/* Search sparkle button — recolour the shared `.sparkle-btn` to a teal→green
+   brand pill (not the dark default) with a green glow + green sparkle wash. */
+.theme-editorial .sparkle-btn {
+  --black-700: #0d9488; /* teal-600 pill */
+  padding: 0.7rem 1.6rem;
+}
+.theme-editorial .sparkle-btn::before {
+  box-shadow: inset 0 0.5px hsl(0 0% 100% / 0.7),
+    inset 0 -1px 2px 0 hsl(174 80% 16%),
+    0px 4px 10px -4px hsla(174 80% 16% / calc(1 - var(--active, 0))),
+    0 0 0 calc(var(--active, 0) * 0.375rem) hsl(150 76% 45% / 0.6);
+}
+.theme-editorial .sparkle-btn::after {
+  background-color: hsl(150 76% 50% / 0.85);
+  background-image: radial-gradient(at 51% 89%, hsl(150 60% 80%) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, hsl(160 55% 55%) 0px, transparent 50%),
+    radial-gradient(at 22% 91%, hsl(150 55% 62%) 0px, transparent 50%);
+}
+
+/* Star-burst CTA cards — little stars scatter out from behind on hover. Green
+   themed (glow) to match the brand. */
+.theme-editorial .star-btn { position: relative; }
+.theme-editorial .star-btn .star {
+  position: absolute;
+  z-index: -5;
+  opacity: 0;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 0 0 #22c55e);
+  transition: all 1s cubic-bezier(0, 0.4, 0, 1.01);
+}
+.theme-editorial .star-btn .fil0 { fill: #16a34a; transition: fill 0.3s ease; }
+.theme-editorial .star-btn .star-1 { top: 20%; left: 20%; width: 22px; transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96); }
+.theme-editorial .star-btn .star-2 { top: 45%; left: 45%; width: 13px; }
+.theme-editorial .star-btn .star-3 { top: 40%; left: 40%; width: 6px; }
+.theme-editorial .star-btn .star-4 { top: 20%; left: 40%; width: 8px; transition: all 0.8s cubic-bezier(0, 0.4, 0, 1.01); }
+.theme-editorial .star-btn .star-5 { top: 25%; left: 45%; width: 13px; transition: all 0.6s cubic-bezier(0, 0.4, 0, 1.01); }
+.theme-editorial .star-btn .star-6 { top: 5%; left: 50%; width: 6px; transition: all 0.8s ease; }
+
+.theme-editorial .star-btn:hover .star { opacity: 1; z-index: 2; filter: drop-shadow(0 0 6px #86efac); }
+.theme-editorial .star-btn:hover .fil0 { fill: #22c55e; }
+.theme-editorial .star-btn:hover .star-1 { top: -80%; left: -30%; }
+.theme-editorial .star-btn:hover .star-2 { top: -25%; left: 10%; }
+.theme-editorial .star-btn:hover .star-3 { top: 55%; left: 25%; }
+.theme-editorial .star-btn:hover .star-4 { top: 30%; left: 80%; }
+.theme-editorial .star-btn:hover .star-5 { top: 25%; left: 115%; }
+.theme-editorial .star-btn:hover .star-6 { top: 5%; left: 60%; }
+
+/* 3 — Softer card shadows. */
+.theme-editorial .shadow-card {
+  box-shadow: 0 1px 2px rgba(15, 39, 66, 0.04), 0 10px 30px rgba(15, 39, 66, 0.06);
+}
+.theme-editorial .shadow-cardHover {
+  box-shadow: 0 2px 6px rgba(15, 39, 66, 0.06), 0 22px 50px rgba(15, 39, 66, 0.12);
+}
+
+/* 4 — Literal blue tint surfaces in the JourneySection fee panel → teal tints,
+       so nothing reads as the old royal-blue. */
+.theme-editorial .bg-blue-50\/50 { background-color: rgba(204, 251, 241, 0.5); }
+.theme-editorial .border-blue-100 { border-color: #99f6e4; }
+.theme-editorial .text-blue-100 { color: #ccfbf1; }
+
+/* 5 — Subtle paper grain over the page (sits behind all content). */
+.editorial-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(15, 39, 66, 0.045) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  opacity: 0.3;
+}
+
+/* Use only our accessible password visibility button; hide browser-added duplicate eyes. */
+.password-control::-ms-reveal,
+.password-control::-ms-clear {
+  display: none;
+}
+
+/* ── Scale-to-fit ─────────────────────────────────────────────────────────────
+   The consoles are designed at 1440px. <DisplayScale/> zooms a root wrapper so
+   the same layout renders on every monitor and at every browser-zoom level (see
+   components/common/DisplayScale.jsx for why).
+
+   Viewport units are the one thing zoom does NOT re-base: `100vh` inside the
+   zoomed subtree still resolves against the real window, so a full-height shell
+   would render `scale x` too tall and every modal capped at `85vh` would spill
+   off screen. DisplayScale publishes the wrapper's own 1vh/1vw as px, and these
+   rules re-point the utilities the app actually uses at them.
+
+   Scoped to `[data-app-scaled='on']`, which DisplayScale only sets on desktop —
+   phones and tablets keep genuine viewport units. `#app-scale .x` outranks
+   Tailwind's `.x`, so no !important is needed. */
+:root[data-app-scaled='on'] #app-scale .h-screen { height: calc(var(--app-vh) * 100); }
+:root[data-app-scaled='on'] #app-scale .min-h-screen { min-height: calc(var(--app-vh) * 100); }
+:root[data-app-scaled='on'] #app-scale .w-screen { width: calc(var(--app-vw) * 100); }
+:root[data-app-scaled='on'] #app-scale .h-\[72vh\] { height: calc(var(--app-vh) * 72); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[94vh\] { max-height: calc(var(--app-vh) * 94); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[92vh\] { max-height: calc(var(--app-vh) * 92); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[90vh\] { max-height: calc(var(--app-vh) * 90); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[88vh\] { max-height: calc(var(--app-vh) * 88); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[85vh\] { max-height: calc(var(--app-vh) * 85); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[62vh\] { max-height: calc(var(--app-vh) * 62); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[46vh\] { max-height: calc(var(--app-vh) * 46); }
+:root[data-app-scaled='on'] #app-scale .max-h-\[42vh\] { max-height: calc(var(--app-vh) * 42); }
+
+/* ============================================================================
+   CONSOLE SURFACE — green edge wash + theme-green hairlines.
+
+   Applied once to each console layout's <main> (hospital, doctor, patient, front
+   desk, super admin), so every page inherits it and the wash is continuous as
+   you navigate rather than restarting per page.
+
+   Kept behind `.tc-surface` rather than styling `.shadow-card` globally: that
+   hook is also used by the public/marketing pages, which run the editorial
+   design and must not pick this up.
+
+   Placed at the end of the file deliberately: `.tc-surface .shadow-card` and
+   `.glass-console .shadow-card` have the same specificity (0,2,0), so the later
+   rule wins. Moving this block above the glass section would silently undo it.
+   ========================================================================== */
+.tc-surface {
+  /* Green only at the corners, clear through the middle, so it frames the page
+     rather than tinting the content sitting on it. */
+  background:
+    radial-gradient(58% 44% at 0% 0%,     rgba(16, 185, 129, 0.13), transparent 72%),
+    radial-gradient(52% 40% at 100% 8%,   rgba(13, 148, 136, 0.13), transparent 72%),
+    radial-gradient(60% 42% at 100% 100%, rgba(34, 197, 94, 0.10),  transparent 72%),
+    radial-gradient(58% 40% at 0% 100%,   rgba(13, 148, 136, 0.09), transparent 72%);
+  /* <main> scrolls. The default `scroll` attachment pins the gradient to the
+     element's box, so the wash keeps framing what you can see instead of
+     sliding away down a long page. Stated explicitly so it isn't "tidied" to
+     `local` later. */
+  background-attachment: scroll;
+}
+
+/* Card outlines in theme green instead of neutral slate — this is what stops
+   the panels running into one another. */
+.tc-surface .shadow-card {
+  border-color: rgba(13, 148, 136, 0.22);
+  /* 1.5px, not 2: at 1px the tinted edge almost disappears against the wash,
+     and a full 2px reads as a boxed-in outline rather than a separator. */
+  border-width: 1.5px;
+}
+
+/* The date chip and any slate-bordered control on this page follow suit. */
+.tc-surface .border-slate-200 {
+  border-color: rgba(13, 148, 136, 0.22);
+  border-width: 1.5px;
+}
+
+/* Dark mode opts out. `.theme-dark` repaints surfaces to neutral grays; a teal
+   wash and 22%-teal hairlines read as dirt against #121212, and the dark rules
+   further up would otherwise be overridden by the block above purely because it
+   comes later in the file. */
+.theme-dark .tc-surface {
+  background-image: none;
+}
+.theme-dark .tc-surface .shadow-card,
+.theme-dark .tc-surface .border-slate-200 {
+  border-color: #333333;
+  border-width: 1px;
+}
+
+/* ----------------------------------------------------------------------------
+   PUBLIC / MARKETING PAGES — the same hairline, in their own idiom.
+
+   These already carry the green edge wash: StaticPageShell and the landing page
+   both paint the blurred teal/emerald blobs, so nothing is needed there. What
+   they lack is the separation — editorial cards outline in translucent WHITE
+   (border-white/50, /60, /70, /80), which disappears against the pale wash
+   behind them. Exactly the "everything runs together" the consoles had.
+
+   Scoped to `.theme-editorial`, which both the landing page and StaticPageShell
+   carry, so no console is touched. Every one of these sits on a LIGHT surface
+   (bg-white/20 … /75) — there is no dark-section case where a white hairline is
+   the intended effect and this would erase it.
+
+   Width is split on purpose: card edges go to 1.5px to match the consoles, but
+   the full-width section rules (`border-y border-white/40`) stay at 1px. A line
+   spanning the whole page does not need extra weight to read, and at 1.5px it
+   starts to band the page.
+   -------------------------------------------------------------------------- */
+.theme-editorial .border-white\/40 {
+  border-color: rgba(13, 148, 136, 0.18);
+}
+.theme-editorial .border-white\/50,
+.theme-editorial .border-white\/60,
+.theme-editorial .border-white\/70,
+.theme-editorial .border-white\/80 {
+  border-color: rgba(13, 148, 136, 0.22);
+  border-width: 1.5px;
+}
+
+/* ============================================================================
+   Signup pages — slightly larger type (`signup-lg`)
+   ----------------------------------------------------------------------------
+   Applied ONLY on the roots of /doctor-signup and /hospital-signup. These are the
+   first screens a doctor or hospital ever sees, and the form runs long, so the
+   body text is bumped ~2px for readability.
+
+   Every rule below is scoped under `.signup-lg`, so it is inert on every other
+   screen. That matters because the form fields come from the shared
+   `FormControls.jsx` (used by 23 files) and the shared `.field-input` class —
+   sizing those directly would have resized every form in all three consoles.
+
+   Display headings (22px/28px/30px) are deliberately left alone; they are
+   already large and scaling them would push the stepper layout around.
+   ========================================================================== */
+.signup-lg .text-\[11px\]    { font-size: 13px; }
+.signup-lg .text-\[11\.5px\] { font-size: 13.5px; }
+.signup-lg .text-\[12px\]    { font-size: 14px; }
+.signup-lg .text-\[12\.5px\] { font-size: 14.5px; }
+.signup-lg .text-\[13px\]    { font-size: 15px; }
+.signup-lg .text-\[13\.5px\] { font-size: 15.5px; }
+.signup-lg .text-\[14px\]    { font-size: 16px; }
+.signup-lg .text-\[15px\]    { font-size: 17px; }
+
+/* Field labels and the text the user actually types. Element selectors keep
+   these above Tailwind's single-class utilities without needing !important. */
+.signup-lg label             { font-size: 15px; }
+.signup-lg .text-sm          { font-size: 16px; }
+.signup-lg input,
+.signup-lg select,
+.signup-lg textarea,
+.signup-lg .field-input      { font-size: 16px; }
+.signup-lg input::placeholder,
+.signup-lg textarea::placeholder,
+.signup-lg .field-input::placeholder { font-size: 15.5px; }

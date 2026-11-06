@@ -1,0 +1,265 @@
+method,path,tag,guard,reachable_by,summary
+POST,/auth/login,auth,PUBLIC,ANYONE (no login),Login
+POST,/auth/register,auth,PUBLIC,ANYONE (no login),Register
+POST,/auth/otp/request,auth,PUBLIC,ANYONE (no login),Otp Request
+POST,/auth/otp/login,auth,PUBLIC,ANYONE (no login),Otp Login
+POST,/auth/otp/register,auth,PUBLIC,ANYONE (no login),Otp Register
+POST,/auth/register-clinic,auth,PUBLIC,ANYONE (no login),Register Clinic
+POST,/auth/register-doctor,auth,PUBLIC,ANYONE (no login),Register Doctor
+POST,/auth/refresh,auth,PUBLIC,ANYONE (no login),Refresh
+POST,/auth/logout,auth,any logged-in,ANY logged-in user,Logout
+POST,/auth/change-password,auth,any logged-in,ANY logged-in user,Change Password
+POST,/auth/forgot-password,auth,PUBLIC,ANYONE (no login),Forgot Password
+POST,/auth/reset-password,auth,PUBLIC,ANYONE (no login),Reset Password
+POST,/auth/verify-email,auth,PUBLIC,ANYONE (no login),Verify Email
+GET,/auth/me,auth,any logged-in,ANY logged-in user,Me
+POST,/auth/request-email-verification,auth,any logged-in,ANY logged-in user,Request Email Verification
+GET,/users,users & roles,user.read,"HOSPITAL_ADMIN,SUPER_ADMIN",List Users
+POST,/users,users & roles,user.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Create User
+GET,/users/{user_id},users & roles,user.read,"HOSPITAL_ADMIN,SUPER_ADMIN",Get User
+PUT,/users/{user_id},users & roles,user.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update User
+DELETE,/users/{user_id},users & roles,user.delete,"HOSPITAL_ADMIN,SUPER_ADMIN",Deactivate User
+GET,/roles,users & roles,role.read,"HOSPITAL_ADMIN,SUPER_ADMIN",List Roles
+GET,/login-history,users & roles,any logged-in,ANY logged-in user,Login History
+GET,/activity-logs,users & roles,any logged-in,ANY logged-in user,Activity Logs
+GET,/hospitals,hospitals,hospital.read,"PATIENT,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Hospitals
+POST,/hospitals,hospitals,hospital.create,SUPER_ADMIN,Create Hospital
+GET,/hospitals/pending,hospitals,role,ROLE_SUPER_ADMIN,Pending Hospitals
+POST,/hospitals/{hospital_id}/approve,hospitals,role,ROLE_SUPER_ADMIN,Approve Hospital
+POST,/hospitals/{hospital_id}/reject,hospitals,role,ROLE_SUPER_ADMIN,Reject Hospital
+GET,/hospitals/{hospital_id},hospitals,hospital.read,"PATIENT,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Hospital
+PUT,/hospitals/{hospital_id},hospitals,hospital.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update Hospital
+DELETE,/hospitals/{hospital_id},hospitals,hospital.delete,SUPER_ADMIN,Deactivate Hospital
+POST,/hospitals/{hospital_id}/logo,hospitals,hospital.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Upload Hospital Logo
+GET,/hospitals/{hospital_id}/settings,hospitals,hospital.read,"PATIENT,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Settings
+PUT,/hospitals/{hospital_id}/settings,hospitals,hospital.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update Settings
+GET,/departments,departments,department.read,"PATIENT,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Departments
+POST,/departments,departments,department.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Create Department
+PUT,/departments/{department_id},departments,department.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update Department
+DELETE,/departments/{department_id},departments,department.delete,"HOSPITAL_ADMIN,SUPER_ADMIN",Deactivate Department
+GET,/doctors,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Doctors
+POST,/doctors,doctors,doctor.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Create Doctor
+GET,/doctors/duty-today,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Doctors Duty Today
+GET,/doctors/pending,doctors,role,ROLE_SUPER_ADMIN,Pending Doctors
+GET,/doctors/verifications,doctors,role,ROLE_SUPER_ADMIN,Doctor Verifications
+GET,/doctors/{doctor_id},doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Doctor
+PUT,/doctors/{doctor_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Update Doctor
+DELETE,/doctors/{doctor_id},doctors,doctor.delete,"HOSPITAL_ADMIN,SUPER_ADMIN",Deactivate Doctor
+POST,/doctors/onboard,doctors,doctor.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Onboard Doctor
+POST,/doctors/{doctor_id}/photo,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Upload Doctor Photo
+POST,/doctors/{doctor_id}/verify,doctors,role,ROLE_SUPER_ADMIN,Verify Doctor
+POST,/doctors/{doctor_id}/reject,doctors,role,ROLE_SUPER_ADMIN,Reject Doctor
+GET,/doctor-affiliations,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Affiliations
+POST,/doctor-affiliations,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Add Affiliation
+PUT,/doctor-affiliations/{affiliation_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Update Affiliation
+GET,/doctor-schedule,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Schedule
+POST,/doctor-schedule,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Add Schedule
+PUT,/doctor-schedule/{schedule_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Edit Schedule
+DELETE,/doctor-schedule/{schedule_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Delete Schedule
+GET,/doctor-schedule/{schedule_id}/impact,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Schedule Delete Impact
+POST,/doctor-breaks,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Add Break
+DELETE,/doctor-breaks/{break_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Remove Break
+GET,/doctor-holidays,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Holidays
+POST,/doctor-holidays,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Add Holiday
+DELETE,/doctor-holidays/{holiday_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Cancel Holiday
+GET,/doctor-delay,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Delays
+POST,/doctor-delay,doctors,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Log Delay
+GET,/doctor-leave,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Leave
+POST,/doctor-leave,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Submit Leave
+PUT,/doctor-leave/{leave_id},doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Decide Leave
+GET,/doctor-status,doctors,doctor.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Status
+PUT,/doctor-status,doctors,doctor.update,"DOCTOR,HOSPITAL_ADMIN,SUPER_ADMIN",Set Status
+GET,/receptionists,reception,reception.read,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Receptionists
+POST,/receptionists,reception,reception.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Create Receptionist
+POST,/receptionists/onboard,reception,reception.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Onboard Receptionist
+PUT,/receptionists/{receptionist_id},reception,reception.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update Receptionist
+DELETE,/receptionists/{receptionist_id},reception,reception.delete,"HOSPITAL_ADMIN,SUPER_ADMIN",Deactivate Receptionist
+GET,/receptionist-shifts,reception,reception.read,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Shifts
+POST,/receptionist-shifts,reception,reception.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Create Shift
+PUT,/receptionist-shifts/{shift_id},reception,reception.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update Shift
+DELETE,/receptionist-shifts/{shift_id},reception,reception.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Cancel Shift
+GET,/patients,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Patients
+POST,/patients,patients,patient.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Create Patient
+GET,/patients/search,patients,require_staff,all staff (patients blocked),Search Patients
+GET,/patients/by-uhid/{code},patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Patient By Uhid
+GET,/patients/{patient_id},patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Patient
+PUT,/patients/{patient_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Update Patient
+DELETE,/patients/{patient_id},patients,patient.delete,SUPER_ADMIN,Delete Patient
+POST,/patients/{patient_id}/photo,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Upload Patient Photo
+GET,/patients/{patient_id}/family,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Family
+POST,/family-members,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Add Family
+PUT,/family-members/{member_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Update Family
+DELETE,/family-members/{member_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Remove Family
+POST,/family-members/{member_id}/photo,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Upload Family Member Photo
+GET,/family-links/requests,patients,any logged-in,ANY logged-in user,Link Requests
+GET,/family-links/invitable,patients,any logged-in,ANY logged-in user,Link Invitable
+POST,/family-links/{member_id}/invite,patients,any logged-in,ANY logged-in user,Link Invite
+GET,/family-links/invitations,patients,any logged-in,ANY logged-in user,Link Invitations
+POST,/family-links/{member_id}/approve,patients,any logged-in,ANY logged-in user,Link Approve
+POST,/family-links/{member_id}/decline,patients,any logged-in,ANY logged-in user,Link Decline
+POST,/family-links/{member_id}/accept,patients,any logged-in,ANY logged-in user,Link Accept
+POST,/family-links/{member_id}/reject,patients,any logged-in,ANY logged-in user,Link Reject
+GET,/family-links/shared-vitals,patients,any logged-in,ANY logged-in user,Shared Vitals
+GET,/family-links/shared-appointments,patients,any logged-in,ANY logged-in user,Shared Appointments
+GET,/patients/{patient_id}/medical-history,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List History
+POST,/medical-history,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Add History
+PUT,/medical-history/{history_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Update History
+GET,/patients/{patient_id}/allergies,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Allergies
+POST,/allergies,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Add Allergy
+DELETE,/allergies/{allergy_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Remove Allergy
+GET,/patients/{patient_id}/documents,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Documents
+POST,/documents,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Upload Document
+DELETE,/documents/{document_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Delete Document
+GET,/vitals/recent,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Recent Vitals
+GET,/patients/{patient_id}/vitals,patients,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Vitals
+POST,/vitals,patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Record Vitals
+DELETE,/vitals/{vital_id},patients,patient.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Delete Vitals
+GET,/patients/{patient_id}/appointments,patients,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Patient Appointments
+GET,/appointments,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Appointments
+POST,/appointments,appointments,appointment.create,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Book
+GET,/appointments/available-slots,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Available Slots
+GET,/appointments/next-available-dates,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Next Available Dates
+GET,/appointments/day-availability,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Day Availability
+GET,/appointments/today,appointments,require_staff,all staff (patients blocked),Today For Doctor
+GET,/appointments/upcoming,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Upcoming For Patient
+GET,/appointments/cancellations,appointments,require_staff,all staff (patients blocked),Cancellation Report
+POST,/appointments/reschedule,appointments,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Reschedule
+POST,/appointments/cancel,appointments,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Cancel
+POST,/appointments/{appointment_id}/collect-payment,appointments,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Collect Consultation Payment
+POST,/appointments/walk-in,appointments,appointment.create,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Walk In
+POST,/appointments/feedback,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Feedback
+GET,/appointments/{appointment_id},appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Appointment
+PUT,/appointments/{appointment_id},appointments,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Update Appointment
+DELETE,/appointments/{appointment_id},appointments,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Cancel By Id
+GET,/appointments/{appointment_id}/status-history,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Status History
+GET,/appointments/{appointment_id}/reschedule-history,appointments,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Reschedule History
+GET,/prescriptions,prescriptions,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Prescriptions
+POST,/prescriptions,prescriptions,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Create Prescription
+GET,/patients/{patient_id}/prescriptions,prescriptions,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Patient Prescriptions
+GET,/prescriptions/{prescription_id},prescriptions,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Prescription
+DELETE,/prescriptions/{prescription_id},prescriptions,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Delete Prescription
+POST,/prescriptions/{prescription_id}/items,prescriptions,appointment.update,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Add Prescription Items
+GET,/medicine-courses,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Courses
+GET,/medicine-courses/{course_id},medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Course
+POST,/medicine-courses/start,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Start Courses
+POST,/medicine-courses/{course_id}/stop,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Stop Course
+POST,/medicine-courses/{course_id}/times,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Set Course Times
+GET,/medicine-doses/today,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Todays Doses
+GET,/medicine-doses/upcoming,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Upcoming Doses
+POST,/medicine-doses/{reminder_id}/taken,medicine-reminders,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Mark Dose Taken
+POST,/medicine-reminders/run,medicine-reminders,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Run Ticker
+GET,/follow-ups/mine,follow-ups,any logged-in,ANY logged-in user,My Follow Ups
+POST,/tokens/generate,token engine,token.create,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Generate
+GET,/tokens/current,token engine,require_staff,all staff (patients blocked),Get Current
+GET,/tokens/waiting,token engine,require_staff,all staff (patients blocked),Get Waiting
+GET,/tokens/queue,token engine,token.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Queue
+GET,/tokens/estimate,token engine,token.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Estimate
+GET,/tokens/stats,token engine,require_staff,all staff (patients blocked),Get Stats
+GET,/tokens/live-display,token engine,token.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Live Display
+GET,/tokens/history,token engine,require_staff,all staff (patients blocked),Token History
+GET,/tokens/no-show,token engine,require_staff,all staff (patients blocked),No Show Report
+POST,/tokens/next,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Call Next
+POST,/tokens/complete,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Complete
+POST,/tokens/recall,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Recall
+POST,/tokens/cancel,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Cancel
+POST,/tokens/missed,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Missed
+POST,/tokens/skip,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Skip
+POST,/tokens/postpone,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Postpone
+POST,/tokens/reorder,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Reorder
+POST,/tokens/bulk-cancel,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Bulk Cancel
+POST,/tokens/notify,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Notify Token
+POST,/emergency,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Create Emergency
+GET,/emergency,token engine,token.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Emergency
+POST,/emergency/{emergency_id}/complete,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Complete Emergency
+GET,/tokens/{token_id},token engine,require_staff,all staff (patients blocked),Get Token
+PUT,/tokens/{token_id}/priority,token engine,token.manage,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Set Priority
+GET,/tokens/{token_id}/status-history,token engine,require_staff,all staff (patients blocked),Token Status History
+GET,/tokens/{token_id}/movement-logs,token engine,require_staff,all staff (patients blocked),Token Movement Logs
+GET,/payments/config,payments,PUBLIC,ANYONE (no login),Payment Config
+GET,/payments/my,payments,payment.read,"PATIENT,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",My Payment History
+POST,/payments/appointment/order,payments,appointment.create,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Create Appointment Order
+POST,/payments/appointment/confirm,payments,appointment.create,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Confirm Appointment Payment
+POST,/payments/webhook,payments,PUBLIC,ANYONE (no login),Razorpay Webhook
+POST,/sms/send,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Sms Send
+POST,/sms/bulk,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Sms Bulk
+POST,/whatsapp/send,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Whatsapp Send
+POST,/email/send,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Email Send
+POST,/push/send,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Push Send
+POST,/push/bulk,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Push Bulk
+GET,/notification-history,notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Notification History
+GET,/notifications/unread-count,notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Unread Count
+POST,/notifications/{notification_id}/read,notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Mark Notification Read
+POST,/notifications/read-all,notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Mark All Notifications Read
+GET,/notifications/{notification_id},notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Get Notification
+GET,/sms-logs,notifications,require_staff,all staff (patients blocked),Sms Logs
+GET,/whatsapp-logs,notifications,require_staff,all staff (patients blocked),Whatsapp Logs
+GET,/email-logs,notifications,require_staff,all staff (patients blocked),Email Logs
+GET,/notification-stats,notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Notification Stats
+GET,/notification-templates,notifications,notification.read,"PATIENT,DOCTOR,RECEPTIONIST,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Notification Templates
+POST,/notification-settings,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Notification Settings
+POST,/notification-test,notifications,notification.create,"RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Notification Test
+GET,/plans,subscriptions,subscription.read,"HOSPITAL_ADMIN,SUPER_ADMIN",List Plans
+POST,/plans,subscriptions,role,ROLE_SUPER_ADMIN,Create Plan
+PUT,/plans/{plan_id},subscriptions,role,ROLE_SUPER_ADMIN,Update Plan
+GET,/subscriptions,subscriptions,subscription.read,"HOSPITAL_ADMIN,SUPER_ADMIN",List Subscriptions
+POST,/subscriptions,subscriptions,subscription.create,SUPER_ADMIN,Create Subscription
+GET,/subscriptions/usage,subscriptions,subscription.read,"HOSPITAL_ADMIN,SUPER_ADMIN",Subscription Usage
+PUT,/subscriptions/{subscription_id},subscriptions,subscription.update,"HOSPITAL_ADMIN,SUPER_ADMIN",Update Subscription
+DELETE,/subscriptions/{subscription_id},subscriptions,subscription.delete,SUPER_ADMIN,Cancel Subscription
+GET,/invoices,subscriptions,subscription.read,"HOSPITAL_ADMIN,SUPER_ADMIN",List Invoices
+GET,/invoices/{invoice_id},subscriptions,subscription.read,"HOSPITAL_ADMIN,SUPER_ADMIN",Get Invoice
+GET,/reports/daily,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Daily
+GET,/reports/monthly,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Monthly
+GET,/reports/doctor,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Doctor Report
+GET,/reports/department,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Department Report
+GET,/reports/revenue,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Revenue
+GET,/reports/peak-hours,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Peak Hours
+GET,/reports/no-show,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",No Show
+GET,/reports/cancellations,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Cancellations
+GET,/reports/wait-time,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Wait Time
+GET,/reports/patient-flow,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Patient Flow
+GET,/reports/token-forecast,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Token Forecast
+GET,/reports/receptionist,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Receptionist Report
+GET,/reports/clinic-overview,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Clinic Overview
+GET,/reports/dashboard,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Dashboard
+GET,/reports/super-admin,reports,role,ROLE_SUPER_ADMIN,Super Admin Report
+GET,/reports/export,reports,report.read,"DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Export Report
+GET,/audit-logs,audit,audit.read,"HOSPITAL_ADMIN,SUPER_ADMIN",Query Logs
+GET,/audit-logs/user/{target_user_id},audit,audit.read,"HOSPITAL_ADMIN,SUPER_ADMIN",Logs By User
+GET,/audit-logs/{entity_type}/{entity_id},audit,audit.read,"HOSPITAL_ADMIN,SUPER_ADMIN",Logs For Entity
+POST,/voice/transcribe,voice,PUBLIC,ANYONE (no login),Transcribe
+POST,/voice/nlu,voice,any logged-in,ANY logged-in user,Nlu
+POST,/voice/tts,voice,PUBLIC,ANYONE (no login),Tts
+GET,/voice/status,voice,PUBLIC,ANYONE (no login),Voice Status
+GET,/public/discovery,public-discovery,PUBLIC,ANYONE (no login),Discover
+GET,/public/cities,public-discovery,PUBLIC,ANYONE (no login),Public Cities
+GET,/public/health-news,public-discovery,PUBLIC,ANYONE (no login),Health News
+GET,/public/doctors/{doctor_id},public-discovery,PUBLIC,ANYONE (no login),Public Doctor
+GET,/public/clinics/{hospital_id},public-discovery,PUBLIC,ANYONE (no login),Public Clinic
+POST,/support/contact,support,PUBLIC,ANYONE (no login),Submit Support Request
+GET,/support/requests,support,role,ROLE_SUPER_ADMIN,List Support Requests
+GET,/support/requests/count,support,role,ROLE_SUPER_ADMIN,Open Support Count
+PATCH,/support/requests/{request_id},support,role,ROLE_SUPER_ADMIN,Update Support Request
+GET,/revisit-passes/mine,revisit-passes,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",My Passes
+GET,/revisit-passes/lookup,revisit-passes,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Lookup
+GET,/revisit-passes/for-patient,revisit-passes,patient.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",For Patient
+GET,/revisit-passes/window,revisit-passes,appointment.read,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",My Windows
+POST,/revisit-passes/{pass_id}/redeem,revisit-passes,appointment.create,"PATIENT,DOCTOR,RECEPTIONIST,HOSPITAL_ADMIN,SUPER_ADMIN",Redeem
+POST,/pharmacy/stock/preview,pharmacy,pharmacy.update,"PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Preview Stock
+POST,/pharmacy/stock/confirm,pharmacy,pharmacy.update,"PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Confirm Stock
+GET,/pharmacy/template,pharmacy,pharmacy.update,"PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Stock Template
+PUT,/pharmacy/settings,pharmacy,pharmacy.update,"PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Update Settings
+GET,/pharmacy/stock,pharmacy,pharmacy.read,"DOCTOR,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",List Stock
+GET,/pharmacy/search,pharmacy,pharmacy.read,"DOCTOR,PHARMACIST,HOSPITAL_ADMIN,SUPER_ADMIN",Search Medicines
+GET,/pharmacists,pharmacy,user.read,"HOSPITAL_ADMIN,SUPER_ADMIN",List Pharmacists
+POST,/pharmacists/onboard,pharmacy,user.create,"HOSPITAL_ADMIN,SUPER_ADMIN",Onboard Pharmacist
+DELETE,/pharmacists/{user_id},pharmacy,user.delete,"HOSPITAL_ADMIN,SUPER_ADMIN",Deactivate Pharmacist
+GET,/pharmacy/prescriptions,pharmacy,permission (via const),?,Counter Prescriptions
+GET,/pharmacy/prescriptions/{prescription_id},pharmacy,permission (via const),?,Counter Prescription
+POST,/pharmacy/prescriptions/{prescription_id}/dispense,pharmacy,permission (via const),?,Dispense
+POST,/pharmacy/dispenses/{dispense_id}/undo,pharmacy,permission (via const),?,Undo Dispense
+GET,/pharmacy/walkin-sales,pharmacy,permission (via const),?,Walkin Sales
+POST,/pharmacy/walkin-sales,pharmacy,permission (via const),?,Create Walkin Sale
+POST,/pharmacy/walkin-sales/{sale_id}/undo,pharmacy,permission (via const),?,Undo Walkin Sale
+GET,/,meta,(unmapped),?,Root
+GET,/health,meta,(unmapped),?,Health

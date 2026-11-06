@@ -1,0 +1,67 @@
+# =========================
+# PYTHON BACKEND
+# =========================
+__pycache__/
+*.py[cod]
+*.db
+.venv/
+venv/
+
+# =========================
+# ENVIRONMENT VARIABLES
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# FRONTEND (React / Vite)
+# =========================
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# Next.js (if applicable)
+.next/
+
+# =========================
+# UPLOADS
+# =========================
+uploads/
+
+# =========================
+# TESTING
+# =========================
+.pytest_cache/
+.coverage
+
+# =========================
+# LOGS
+# =========================
+*.log
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# OS FILES
+# =========================
+.DS_Store
+Thumbs.db
+
+
+
+# Unwanted backend folders
+backend/tests/
+backend/perf/
+backend/scripts/
+
+# Unwanted backend files
+backend/sync_permissions.py
+backend/sync_schema.py
+# backend/alembic.ini is NOT ignored: `alembic upgrade head` needs it (no secrets inside)
