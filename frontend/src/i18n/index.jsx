@@ -22,6 +22,7 @@ import { landingExtraT } from './dict/landingExtra.js'
 import { shellT } from './dict/shell.js'
 import { tcPricingT } from './dict/tcPricing.js'
 import { accountDeleteT } from './dict/accountDelete.js'
+import { insuranceT } from './dict/insurance.js'
 
 /**
  * Lightweight i18n for the patient-facing surfaces. The selected language is
@@ -90,6 +91,8 @@ const coreT = {
   'auth.registerCta': { en: 'Register', te: 'నమోదు చేయండి', hi: 'रजिस्टर करें' },
   'auth.otpOnWhatsapp': { en: 'We have sent an OTP to your WhatsApp on +91 {phone}. Please enter it below.', te: '+91 {phone} వాట్సాప్‌కు OTP పంపాం. దయచేసి దాన్ని క్రింద నమోదు చేయండి.', hi: 'हमने +91 {phone} पर आपके WhatsApp पर OTP भेजा है। कृपया उसे नीचे दर्ज करें।' },
   'auth.sendOtp': { en: 'Send OTP', te: 'OTP పంపండి', hi: 'OTP भेजें' },
+  'auth.resendOtp': { en: 'Resend OTP', te: 'OTP మళ్ళీ పంపండి', hi: 'OTP दोबारा भेजें' },
+  'auth.resendIn': { en: 'Resend OTP in {s}', te: 'OTP మళ్ళీ పంపడానికి {s}', hi: '{s} में OTP दोबारा भेजें' },
   'auth.otpLabel': { en: 'Enter OTP', te: 'OTP నమోదు చేయండి', hi: 'OTP दर्ज करें' },
   'auth.otpPrompt': { en: 'You will get an O T P. Please say or type the 6 digit code.', te: 'మీకు OTP వస్తుంది. దయచేసి 6 అంకెల కోడ్ చెప్పండి లేదా టైప్ చేయండి.', hi: 'आपको OTP मिलेगा। कृपया 6 अंकों का कोड बोलें या टाइप करें।' },
   'auth.otpSentDemo': { en: 'OTP sent to +91 {phone}. Demo OTP: {otp}', te: '+91 {phone} కు OTP పంపబడింది. డెమో OTP: {otp}', hi: '+91 {phone} पर OTP भेजा गया। डेमो OTP: {otp}' },
@@ -150,7 +153,7 @@ const coreT = {
 }
 
 // Core (navbar/hero/lifeline/auth) merged with the Phase-2 landing + dashboard dicts.
-const T = { ...coreT, ...landingT, ...editorialLandingT, ...tcLandingT, ...tcFaqT, ...tcLeaveNowT, ...tcHeroT, ...tcLedgerT, ...dashboardT, ...symptomT, ...patientMiscT, ...nutritionT, ...legalTermsT, ...legalPrivacyT, ...legalRefundT, ...staticPagesT, ...staticFaqT, ...publicPagesT, ...authExtraT, ...patientExtraT, ...landingExtraT, ...shellT, ...tcPricingT, ...accountDeleteT }
+const T = { ...coreT, ...landingT, ...editorialLandingT, ...tcLandingT, ...tcFaqT, ...tcLeaveNowT, ...tcHeroT, ...tcLedgerT, ...dashboardT, ...symptomT, ...patientMiscT, ...nutritionT, ...legalTermsT, ...legalPrivacyT, ...legalRefundT, ...staticPagesT, ...staticFaqT, ...publicPagesT, ...authExtraT, ...patientExtraT, ...landingExtraT, ...shellT, ...tcPricingT, ...accountDeleteT, ...insuranceT }
 
 const Ctx = createContext(null)
 

@@ -33,7 +33,7 @@ import { useI18n } from '../../i18n/index.jsx'
  */
 
 const COMPANY = 'Trovate LLP'
-const CONTACT_EMAIL = 'thetapcure@gmail.com'
+const CONTACT_EMAIL = 'hello@tapcure.in'
 const CONTACT_PHONE = '+91 93468 21621'
 
 const buildSections = (t) => {

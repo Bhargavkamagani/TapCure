@@ -43,6 +43,7 @@ const Contact = lazy(() => import('./pages/static/Contact.jsx'))
 const Resources = lazy(() => import('./pages/static/Resources.jsx'))
 const Calculators = lazy(() => import('./pages/static/Calculators.jsx'))
 const HealthArticles = lazy(() => import('./pages/static/HealthArticles.jsx'))
+const InsurancePage = lazy(() => import('./pages/public/Insurance.jsx'))
 const PublicSearch = lazy(() => import('./pages/public/Search.jsx'))
 const PublicDoctorProfile = lazy(() => import('./pages/public/DoctorProfile.jsx'))
 const PublicHospitalProfile = lazy(() => import('./pages/public/HospitalProfile.jsx'))
@@ -166,6 +167,7 @@ function App() {
           <Route path="/resources" element={<Resources />} />
           <Route path="/calculators" element={<Calculators />} />
           <Route path="/health-articles" element={<HealthArticles />} />
+          <Route path="/insurance" element={<InsurancePage />} />
           <Route path="/search" element={<PublicSearch />} />
           <Route path="/doctors/:doctorId" element={<PublicDoctorProfile />} />
           <Route path="/hospitals/:hospitalId" element={<PublicHospitalProfile />} />

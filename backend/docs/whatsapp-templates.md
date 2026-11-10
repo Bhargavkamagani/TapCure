@@ -771,6 +771,40 @@ stop a patient travelling to a clinic where no doctor will be present.
 
 ---
 
+## 12. `tapcure_pilot_reminder` — NEW 10 Nov 2026, NEEDS APPROVAL
+
+| Field | Value |
+| --- | --- |
+| Template name | `tapcure_pilot_reminder` (env `WHATSAPP_PILOT_REMINDER_TEMPLATE`, **empty by default = not sent**) |
+| Category | UTILITY |
+| Type | TEXT |
+| Header | `Free trial reminder` |
+
+**Body** (3 parameters, in this order)
+
+```
+Hello {{1}}, your TapCure free trial for *{{2}}* {{3}}.
+
+Open Plan & Bookings in your TapCure console to choose a plan so patients can keep booking online. Your data stays safe either way.
+```
+
+| # | Meaning | Built from | Example |
+| --- | --- | --- | --- |
+| `{{1}}` | Hospital admin's name | `users.name` (fallback `there`) | `Satya Sai` |
+| `{{2}}` | Hospital name | `hospitals.name` | `satya sai` |
+| `{{3}}` | Status | days left / end date | `ends in 7 days (10 December)` · `ends tomorrow (10 December)` · `ends today (10 December)` · `ended on 10 December. Online bookings are paused, walk-ins still work` |
+
+**When it fires:** `booking_quota.pilot_reminders` — together with the in-app
+pop-up/bell notice, once per notice (7, 3, 1, 0 days left, ended). To every
+active hospital admin with a phone; if none has one, the hospital's phone.
+Not affected by the plan's WhatsApp switch (it's about the plan itself).
+
+**To switch on:** submit the copy above at Dovesoft, wait for approval, then set
+`WHATSAPP_PILOT_REMINDER_TEMPLATE=tapcure_pilot_reminder` in the backend `.env`
+and restart. Until then only the in-app notice goes.
+
+---
+
 ## Sending: what has to be true
 
 1. `WHATSAPP_ENABLED=true` with the Dovesoft URL, key and WABA number set —

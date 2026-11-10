@@ -159,6 +159,34 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
   const [busy, setBusy] = useState(false)
   const [agreed, setAgreed] = useState(false) // consent gate (register only)
   const [consentErr, setConsentErr] = useState(false)
+  // Resend cooldown (2026-11-02). Every send costs a WhatsApp message and the
+  // backend allows only 5 per phone per 15 min, so a patient tapping Resend
+  // repeatedly would lock themselves out. Wait grows with use, per SAME number:
+  // after the 1st OTP 30s, after the 2nd and every later one 60s. A different
+  // number starts again at 30s.
+  const resendWait = (sends) => (sends >= 2 ? 60 : 30)
+  const [resendIn, setResendIn] = useState(0)
+  const [sentTo, setSentTo] = useState('')
+  // Ref, not state: submitDetails is a memoised callback and would read a
+  // stale count from state.
+  const sendsRef = useRef({ phone: '', count: 0 })
+  useEffect(() => {
+    if (resendIn <= 0) return undefined
+    const id = setTimeout(() => setResendIn((s) => s - 1), 1000)
+    return () => clearTimeout(id)
+  }, [resendIn])
+  const coolingDown = resendIn > 0 && phone === sentTo
+  // "45s" under a minute, "14:59" above — a 15-minute lock in seconds is unreadable.
+  const waitLabel = resendIn >= 60
+    ? `${Math.floor(resendIn / 60)}:${String(resendIn % 60).padStart(2, '0')}`
+    : `${resendIn}s`
+  // The backend says "too many attempts" with the exact seconds left (429).
+  // Lock the send/resend buttons for exactly that long, so the countdown on
+  // screen matches the server instead of letting the patient tap into a wall.
+  const lockFromError = (e, p) => {
+    const secs = e?.status === 429 ? Number(e?.detail?.retry_after) : 0
+    if (secs > 0) { setSentTo(p); setResendIn(Math.ceil(secs)) }
+  }
 
   // Guided walkthrough state
   const [guideOn, setGuideOn] = useState(false)
@@ -210,6 +238,11 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
         return false
       }
       setStep('otp')
+      const prev = sendsRef.current
+      const count = prev.phone === p ? prev.count + 1 : 1
+      sendsRef.current = { phone: p, count }
+      setSentTo(p)
+      setResendIn(resendWait(count))
       setBanner({
         type: 'success',
         msg: res.dev_otp
@@ -218,6 +251,7 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
       })
       return true
     } catch (e) {
+      lockFromError(e, p)
       setBanner({ type: 'error', msg: e.message || t('ax.pva.sendFailed') })
       return false
     } finally {
@@ -226,6 +260,7 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
   }, [requestOtp, t])
 
   const sendOtp = () => {
+    if (coolingDown) return
     // Consent is mandatory to register — block sending the OTP (and advancing to
     // the verify step) until the Terms/Privacy/Refund box is ticked.
     if (mode === 'register' && !agreed) {
@@ -256,6 +291,9 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
         : await loginOtp(phone, otp)
       finish(u)
     } catch (e) {
+      // Five wrong codes lock the number — and, since 2026-11-02, sending to
+      // it too. Count the same wait down on Resend.
+      lockFromError(e, phone)
       setBanner({ type: 'error', msg: e.message || t('ax.pva.verifyFailed') })
     } finally {
       setBusy(false)
@@ -547,8 +585,8 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
               />
             </div>
           )}
-          <button type="button" disabled={busy || (mode === 'register' && !agreed)} onClick={sendOtp} className="w-full rounded-xl bg-brand-blue py-4 text-[15.5px] font-semibold text-white transition-colors hover:bg-brand-blueDark disabled:opacity-60 disabled:cursor-not-allowed">
-            {mode === 'register' ? t('auth.registerCta') : t('auth.loginCta')}
+          <button type="button" disabled={busy || coolingDown || (mode === 'register' && !agreed)} onClick={sendOtp} className="w-full rounded-xl bg-brand-blue py-4 text-[15.5px] font-semibold text-white transition-colors hover:bg-brand-blueDark disabled:opacity-60 disabled:cursor-not-allowed">
+            {coolingDown ? t('auth.resendIn', { s: waitLabel }) : mode === 'register' ? t('auth.registerCta') : t('auth.loginCta')}
           </button>
         </>
       ) : (
@@ -563,6 +601,9 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
           )}
           <button type="button" disabled={busy} onClick={verify} className="w-full rounded-xl bg-brand-blue py-4 text-[15.5px] font-semibold text-white transition-colors hover:bg-brand-blueDark disabled:opacity-60">
             {mode === 'register' ? t('auth.createAccount') : t('auth.verifyLogin')}
+          </button>
+          <button type="button" disabled={busy || coolingDown} onClick={() => { setOtp(''); sendOtp() }} className="w-full text-[13.5px] font-semibold text-brand-blue hover:underline disabled:cursor-not-allowed disabled:text-slate-400 disabled:no-underline">
+            {coolingDown ? t('auth.resendIn', { s: waitLabel }) : t('auth.resendOtp')}
           </button>
           <button type="button" onClick={() => { setStep(mode === 'register' ? 'details' : 'mobile'); setBanner(null) }} className="flex w-full items-center justify-center gap-1.5 text-[13px] font-medium text-slate-500 hover:text-brand-blue">
             <ArrowLeft className="h-4 w-4" /> {t('auth.back')}

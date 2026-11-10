@@ -100,6 +100,11 @@ export const discoveryApi = {
   // Public-health headlines, proxied + cached server-side. Returns
   // { items: [] } when no feed is configured — never an error.
   healthNews: (limit) => api.get(`/public/health-news${qs({ limit })}`, { auth: false }),
+  // Every insurer + government scheme in 4 groups (the one list, backend
+  // services/insurers.py). `state` puts that state's schemes first.
+  insurers: (state) => api.get(`/public/insurers${qs({ state })}`, { auth: false }),
+  // { counts: { code: number of live hospitals accepting it } } — Insurance page.
+  insurerCounts: () => api.get('/public/insurers/hospital-counts', { auth: false }),
 }
 
 export const doctorsApi = {
@@ -444,6 +449,8 @@ export const subscriptionsApi = {
   choose: (choice, packs = 1) => api.post('/subscriptions/bookings/choice', { choice, packs }),
   // Hospital picks its own paid plan after the pilot / once a plan ended: 'starter' | 'smart_hospital' | 'pro'.
   choosePlan: (plan_code) => api.post('/subscriptions/plan/choose', { plan_code }),
+  // New hospital clicked "Start free trial" (its pilot waits as not_started until then).
+  startTrial: () => api.post('/subscriptions/trial/start'),
   // Monthly → yearly: pay first (Checkout), the plan changes once paid.
   startYearly: () => api.post('/subscriptions/yearly/start'),
   // Yearly → monthly when the paid year ends (renew: false), or keep yearly (true).

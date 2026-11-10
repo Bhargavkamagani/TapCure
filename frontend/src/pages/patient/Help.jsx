@@ -10,7 +10,7 @@ import { realEmail } from '../../lib/patientDisplay.js'
 const CONTACTS = [
   { icon: Phone, labelKey: 'ppage.callUs', value: '1800-123-4567', tone: 'bg-blue-100 text-brand-blue' },
   { icon: MessageCircle, labelKey: 'ppage.whatsapp', value: '+91 98765 00000', tone: 'bg-green-100 text-green-600' },
-  { icon: Mail, labelKey: 'ppage.email', value: 'thetapcure@gmail.com', tone: 'bg-purple-100 text-purple-600' },
+  { icon: Mail, labelKey: 'ppage.email', value: 'hello@tapcure.in', tone: 'bg-purple-100 text-purple-600' },
 ]
 
 // FAQ text lives in the dictionary; data file order maps to these keys 1:1.

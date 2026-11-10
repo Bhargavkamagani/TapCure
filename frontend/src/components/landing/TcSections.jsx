@@ -436,8 +436,10 @@ function TcFooter() {
      with fallback colours. Styles live in LandingPage.jsx's <style> block. */
   const EXPLORE = [
     ['tc.foot.about', '/about'], ['tc.foot.features', '/features'], ['tc.foot.pricing', '/pricing'],
-    ['tc.foot.faq', '/faq'], ['tc.foot.help', '/contact'], ['tc.foot.resources', '/resources'],
-    ['tc.foot.articles', '/health-articles'], ['tc.foot.contact', '/contact'],
+    ['tc.foot.faq', '/faq'], ['tc.foot.articles', '/health-articles'], ['tc.foot.contact', '/contact'],
+    // 2026-11-02: removed "Help" (same /contact page as Contact) and "Resources"
+    // (its posts repeated /features; health content lives on /health-articles).
+    // The /resources route still exists in App.jsx for old links.
   ]
   /* Partner routes. "Become a Partner" is the hospital onboarding form; doctors
      running their own practice have a separate sign-up; and a hospital that has
@@ -506,9 +508,9 @@ function TcFooter() {
               so a patient never finds two ways to contact us that disagree. */}
           <div className="f-col f-reach">
             <h4>{t('tc.foot.reachUs')}</h4>
-            <a href="mailto:thetapcure@gmail.com">
+            <a href="mailto:hello@tapcure.in">
               <span className="f-ico"><Mail className="fr-i" /></span>
-              <span className="f-txt">thetapcure@gmail.com</span>
+              <span className="f-txt">hello@tapcure.in</span>
             </a>
             <a href="tel:+919346821621">
               <span className="f-ico"><Phone className="fr-i" /></span>

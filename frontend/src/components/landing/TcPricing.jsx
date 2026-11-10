@@ -23,17 +23,17 @@ import { useI18n } from '../../i18n/index.jsx'
 // tiles: [doctors, bookings a month, per extra booking, max bill a month]
 // highlights: [i18n key, included?] — false is shown muted with a cross.
 const PLANS = [
-  // Prices shown as X's for now (2026-10-27), one X per digit — the real ones are set later.
+  // Real list prices shown (2026-11-02); billing itself is still ₹0 for now.
   // `shown`: [monthly, yearly (10 months), struck-through 12 months].
   // Previous: starter 499 (₹4 extra, ₹999 max), smart 999 (₹3, ₹1,999), pro 1999 (₹2, ₹4,999).
   { key: 'pilot', free: true, monthly: 0, cta: 'tc.price.pilot.cta',
     tiles: ['∞', '∞', '₹0', '₹0'], highlights: [['every', true], ['whatsapp', true], ['noPay', true]] },
-  { key: 'starter', monthly: 0, shown: ['₹0xx', '₹0,xxx', '₹0,xxx'],
-    tiles: ['1', '50', '₹0', '₹0xx'], highlights: [['core', true], ['upgrade', true], ['noWhatsapp', false]] },
-  { key: 'smart', monthly: 0, popular: true, shown: ['₹0xx', '₹0,xxx', '₹0x,xxx'],
-    tiles: ['1', '200', '₹0', '₹0,xxx'], highlights: [['core', true], ['whatsapp', true], ['upgrade', true]] },
-  { key: 'pro', monthly: 0, shown: ['₹0,xxx', '₹0x,xxx', '₹0x,xxx'],
-    tiles: ['3', '600', '₹0', '₹0,xxx'], highlights: [['core', true], ['whatsapp', true], ['addDoc', true]] },
+  { key: 'starter', monthly: 0, shown: ['₹499', '₹4,990', '₹5,988'],
+    tiles: ['1', '50', '₹4', '₹999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['upgrade', true]] },
+  { key: 'smart', monthly: 0, popular: true, shown: ['₹999', '₹9,990', '₹11,988'],
+    tiles: ['1', '200', '₹3', '₹1,999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['upgrade', true]] },
+  { key: 'pro', monthly: 0, shown: ['₹1,999', '₹19,990', '₹23,988'],
+    tiles: ['3', '600', '₹2', '₹4,999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['addDoc', true]] },
 ]
 const TILES = ['doctors', 'bookings', 'extra', 'cap']
 const EVERY_PLAN = ['queue', 'leave', 'walkins', 'rx', 'pharmacy', 'reports', 'billing']
@@ -158,8 +158,7 @@ export default function TcPricing() {
               </div>
               <p className={`pr-was${yearly && !free && (p.shown || p.monthly) ? '' : ' empty'}`}>{yearly && !free && (p.shown || p.monthly) ? (p.shown ? p.shown[2] : rupees(p.monthly * 12)) : ' '}</p>
 
-              {/* Number boxes (doctors / bookings / per extra booking / max bill) hidden
-                  for now (2026-10-27) — uncomment to bring them back.
+              {/* Number boxes: doctors / bookings a month / per extra booking / max bill. */}
               <div className="pr-tiles">
                 {TILES.map((tk, j) => (
                   <div className="pr-tile" key={tk}>
@@ -168,7 +167,6 @@ export default function TcPricing() {
                   </div>
                 ))}
               </div>
-              */}
 
               <ul className="pr-hl">
                 {p.highlights.map(([hk, ok]) => (
@@ -185,7 +183,7 @@ export default function TcPricing() {
                 </ul>
               </div>
 
-              <button type="button" className={`btn ${p.popular || free ? 'btn-primary' : 'btn-ghost'} pr-btn`} onClick={() => navigate('/hospital-signup')}>
+              <button type="button" className="btn btn-primary pr-btn" onClick={() => navigate('/hospital-signup')}>
                 {t(p.cta || 'tc.price.choose')}
               </button>
             </article>

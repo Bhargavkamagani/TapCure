@@ -148,9 +148,9 @@ def _practice(db: Session, rx: Prescription, doctor: Doctor | None) -> Practice:
     d = practice_details(db, rx, doctor)
     return Practice(
         name=d["name"], address_lines=d["address_lines"], contact=d["contact"], registration=d["registration"],
-        logo=_image(storage.read_bytes(d["logo_ref"])),
-        header=_image(storage.read_bytes(d["header_ref"])),
-        footer=_image(storage.read_bytes(d["footer_ref"])),
+        logo=_image(storage.media_bytes(d["logo_ref"], "hospitals")),
+        header=_image(storage.media_bytes(d["header_ref"], "letterheads")),
+        footer=_image(storage.media_bytes(d["footer_ref"], "letterheads")),
     )
 
 
@@ -177,15 +177,15 @@ def paper(db: Session, rx: Prescription) -> dict:
         "practice": {
             "name": d["name"], "address_lines": d["address_lines"],
             "contact": d["contact"], "registration": d["registration"],
-            "logo_url": storage.public_url(d["logo_ref"]),
-            "header_url": storage.public_url(d["header_ref"]),
-            "footer_url": storage.public_url(d["footer_ref"]),
+            "logo_url": storage.media_url(d["logo_ref"], "hospitals"),
+            "header_url": storage.media_url(d["header_ref"], "letterheads"),
+            "footer_url": storage.media_url(d["footer_ref"], "letterheads"),
         },
         "doctor": None if not doctor else {
             "name": _dr(doctor.name), "qualification": doctor.qualification or "",
             "specialization": doctor.specialization or "",
             "registration_number": doctor.registration_number or "",
-            "signature_url": storage.public_url(doctor.signature_url) if doctor.signature_url else None,
+            "signature_url": storage.media_url(doctor.signature_url, "signatures"),
         },
         "patient": {
             "name": (member.name if member else (patient.name if patient else "")) or "",
@@ -205,7 +205,7 @@ def build(db: Session, rx: Prescription) -> bytes:
     patient = db.get(Patient, rx.patient_id)
     member = db.get(FamilyMember, rx.family_member_id) if rx.family_member_id else None
     practice = _practice(db, rx, doctor)
-    signature_bytes = storage.read_bytes(doctor.signature_url) if doctor else None
+    signature_bytes = storage.media_bytes(doctor.signature_url, "signatures") if doctor else None
     signature = _image(signature_bytes)
 
     written = _written_ist(rx)

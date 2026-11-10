@@ -25,6 +25,7 @@ import { TextInput, PasswordInput, SelectInput, Banner } from '../components/com
 import AddressAutocomplete from '../components/common/AddressAutocomplete.jsx'
 import { toMobile } from '../lib/phone.js'
 import ConsentCheck from '../components/legal/ConsentCheck.jsx'
+import { InsurancePicker } from '../components/common/Insurance.jsx'
 import BackToHome from '../components/common/BackToHome.jsx'
 import { authApi, discoveryApi } from '../api'
 import { geocodeAddress } from '../lib/geo.js'
@@ -198,8 +199,8 @@ function RegistrationSubmitted({ hospitalName, email, phone, applicationId, onLo
 
         <p className="mt-6 text-xs text-slate-400">
           Need help? Reach us at{' '}
-          <a href="mailto:thetapcure@gmail.com" className="font-semibold text-brand-blue hover:underline">
-            thetapcure@gmail.com
+          <a href="mailto:hello@tapcure.in" className="font-semibold text-brand-blue hover:underline">
+            hello@tapcure.in
           </a>
         </p>
       </div>
@@ -212,7 +213,7 @@ function HospitalSignup() {
   // alwaysOpen defaults ON: patient booking has always followed the DOCTOR's
   // sessions, never the hospital's advertised window, so asking for opening hours
   // up front constrained the hospital's own doctors for no benefit to patients.
-  const [form, setForm] = useState({ days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], services: [], other: '', alwaysOpen: true })
+  const [form, setForm] = useState({ days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], services: [], insurers: [], other: '', alwaysOpen: true })
   const [logo, setLogo] = useState(null)              // the File picked for the hospital logo
   const [logoPreview, setLogoPreview] = useState('')  // object URL for the preview
   const [photo, setPhoto] = useState(null)            // optional hospital photo (Find Hospitals card)
@@ -412,6 +413,7 @@ function HospitalSignup() {
         consultation_minutes: consultMins,
         working_days: form.days,
         services: form.services,
+        insurance_partners: form.insurers,
         terms_accepted: true,
       }, logo, photo)
       // Swap the whole form out for the pending-approval confirmation screen.
@@ -784,6 +786,15 @@ function HospitalSignup() {
                   </button>
                 </div>
               </div>
+            </SectionCard>
+            )}
+            {step === 3 && (
+            <SectionCard icon={ShieldCheck} title="Insurance & schemes accepted">
+              <p className="text-[12.5px] text-slate-500">
+                Optional. Tick every insurance company and government scheme your hospital accepts.
+                Patients will see these on your hospital card. You can change them later in Profile.
+              </p>
+              <InsurancePicker value={form.insurers} onChange={(insurers) => setForm((f) => ({ ...f, insurers }))} state={form.state} />
             </SectionCard>
             )}
           </div>

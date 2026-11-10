@@ -228,6 +228,53 @@ def public_url(value: str | None) -> str | None:
     )
 
 
+def _in_own_folder(value: str, folders: tuple[str, ...]) -> bool:
+    """True when a stored ref points into one of OUR upload folders named here.
+
+    public_url signs whatever ref it is given, and read_bytes reads it; that is
+    right for refs the server wrote itself. A logo, photo or letterhead ref is
+    only safe to sign if it really is one — a ref aimed at `patients/...`,
+    `signatures/...` or another bucket must not come back as a working link.
+    """
+    if not value or ".." in value.split("?")[0].split("/"):
+        return False
+    if value.startswith("/uploads/"):
+        parts = value[len("/uploads/"):].split("/")
+        return len(parts) > 1 and parts[0] in folders
+    if value.startswith("s3://"):
+        bucket, _, key = value[5:].partition("/")
+        if bucket not in {settings.s3_upload_bucket, rx_bucket()}:
+            return False
+        parts = key.split("/")
+        prefix = settings.s3_upload_prefix.strip("/")
+        if prefix and parts and parts[0] == prefix:
+            parts = parts[1:]
+        return len(parts) > 1 and parts[0] in folders
+    return False
+
+
+def media_url(value: str | None, *folders: str) -> str | None:
+    """public_url for an image the server shows as a logo / photo / letterhead /
+    signature: only when the ref lives in one of `folders`. A full http(s) URL
+    (old seed data) is passed through untouched — it is not one of our files, so
+    there is nothing private to sign. Anything else gives no link at all."""
+    if not value:
+        return None
+    if value.startswith(("http://", "https://")):
+        return value
+    return public_url(value) if _in_own_folder(value, folders) else None
+
+
+def media_bytes(value: str | None, *folders: str) -> bytes | None:
+    """read_bytes, under the same folder rule as media_url (for the Rx PDF)."""
+    return read_bytes(value) if value and _in_own_folder(value, folders) else None
+
+
+def media_validator(*folders: str):
+    """A pydantic `before` validator signing a media field via media_url."""
+    return lambda v: media_url(v, *folders)
+
+
 def read_bytes(value: str | None) -> bytes | None:
     """The raw bytes behind a stored reference, for building files server-side
     (the prescription PDF embeds the logo, letterhead and signature).

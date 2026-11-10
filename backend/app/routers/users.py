@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..deps import get_current_user, require_permission, user_has_permission
 from ..models import ActivityLog, LoginHistory, Permission, Role, RolePermission, User
-from ..rbac import ROLE_SUPER_ADMIN
+from ..rbac import ROLE_PATIENT, ROLE_SUPER_ADMIN
 from ..schemas.security import (
     ActivityLogOut, LoginHistoryOut, RoleWithPermissions, UserCreate, UserOut, UserUpdate,
 )
@@ -110,6 +110,15 @@ def update_user(user_id: UUID, body: UserUpdate, me: User = Depends(require_perm
     # the new number, every reminder still going to the old one.
     new_phone = data.pop("phone", None)
     if new_phone is not None:
+        # A PATIENT signs in by OTP to this number, so moving it hands the
+        # account to whoever holds the new one. Staff sign in by email and stay
+        # editable; a patient's login number is Super Admin only.
+        if (user.role and user.role.name == ROLE_PATIENT and not _is_super(me)
+                and new_phone.strip() != (user.phone or "").strip()):
+            raise HTTPException(
+                status.HTTP_403_FORBIDDEN,
+                "This patient signs in with their mobile number. It can't be changed from here.",
+            )
         accounts.change_phone(db, user, new_phone)
     for k, v in data.items():
         setattr(user, k, v)
@@ -161,11 +170,28 @@ def _own_or_auditor(db: Session, me: User, user_id: UUID | None) -> int:
     the platform.
     """
     target = me.user_id if user_id is None else user_id
-    if target != me.user_id and not user_has_permission(db, me, "audit", "read"):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You can only view your own history",
-        )
+    if target == me.user_id:
+        return target
+    denied = HTTPException(
+        status_code=status.HTTP_403_FORBIDDEN,
+        detail="You can only view your own history",
+    )
+    if not user_has_permission(db, me, "audit", "read"):
+        raise denied
+    if me.role and me.role.name == ROLE_SUPER_ADMIN:
+        return target
+    # audit.read on a HOSPITAL_ADMIN means their own hospital's staff — not the
+    # Super Admin, not another hospital, not patients (who are only anchored to
+    # a hospital at signup, not employed by it). Same 403 either way, so the
+    # answer doesn't reveal whether the id exists.
+    other = db.get(User, target)
+    if (
+        other is None
+        or me.hospital_id is None
+        or other.hospital_id != me.hospital_id
+        or (other.role and other.role.name in (ROLE_SUPER_ADMIN, ROLE_PATIENT))
+    ):
+        raise denied
     return target
 
 

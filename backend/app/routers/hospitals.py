@@ -16,6 +16,7 @@ from ..schemas.hospital import (
     HospitalUpdateResult, RejectRequest,
 )
 from ..services import audit
+from ..services import insurers as _insurers
 from ..services import booking_quota
 from ..services.hospital_location import sync_hospital_affiliations
 from ..services import notifications as notify
@@ -84,7 +85,7 @@ def hospital_registration(hospital_id: UUID, db: Session = Depends(get_db)):
         "registration_number": h.registration_number,
         "hfr_id": h.hfr_id,
         "gstin": h.gstin,
-        "logo_url": storage.public_url(h.logo_url),
+        "logo_url": storage.media_url(h.logo_url, "hospitals"),
         "address": h.address,
         "city": h.city,
         "state": h.state,
@@ -101,6 +102,8 @@ def hospital_registration(hospital_id: UUID, db: Session = Depends(get_db)):
             "consultation_minutes": st.consultation_duration if st else None,
         },
         "services": sorted(d.name for d in (h.departments or [])),
+        # Codes; the screen gets names/badges from GET /public/insurers.
+        "insurance_partners": _insurers.known(h.insurance_partners),
         "owner": None if not owner else {
             "name": owner.name,
             "email": owner.email,
@@ -202,6 +205,11 @@ def update_hospital(hospital_id: UUID, body: HospitalUpdate, me: User = Depends(
     ensure_same_tenant(me, hospital_id)
     h = _require(db, hospital_id)
     fields = body.model_dump(exclude_unset=True)
+    # Insurance tie-ups belong to the hospital: Super Admin sees them, only the
+    # hospital's own admin changes them (decided 2026-11-03).
+    if "insurance_partners" in fields and me.role and me.role.name == ROLE_SUPER_ADMIN:
+        raise HTTPException(status.HTTP_403_FORBIDDEN,
+                            "Only the hospital's admin can change its accepted insurances.")
     moved = any(
         k in fields and fields[k] != getattr(h, k)
         for k in ("name", "address", "city", "latitude", "longitude")

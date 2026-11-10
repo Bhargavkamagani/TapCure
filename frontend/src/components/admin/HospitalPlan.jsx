@@ -11,11 +11,11 @@ import { useDialog } from '../common/DialogProvider.jsx'
  */
 const PLANS = [
   { code: 'pilot', label: 'Pilot (free 30 days)' },
-  // Shown as X's for now (2026-10-27), one per digit. Previous: ₹499 / ₹999 / ₹1,999 / from ₹4,999.
-  { code: 'starter', label: 'Starter · ₹0xx' },
-  { code: 'smart_hospital', label: 'Smart Hospital · ₹0xx' },
-  { code: 'pro', label: 'Pro · ₹0,xxx' },
-  { code: 'hospital', label: 'Hospital · from ₹0,xxx' },
+  // Real list prices (2026-11-02); billing itself is still ₹0 for now.
+  { code: 'starter', label: 'Starter · ₹499' },
+  { code: 'smart_hospital', label: 'Smart Hospital · ₹999' },
+  { code: 'pro', label: 'Pro · ₹1,999' },
+  { code: 'hospital', label: 'Hospital · from ₹4,999' },
 ]
 
 export default function HospitalPlan({ hospitalId }) {
@@ -98,7 +98,7 @@ export default function HospitalPlan({ hospitalId }) {
         </label>
         {form.plan_code === 'pro' && (
           <label className="flex flex-col gap-1 text-[11.5px] font-semibold text-slate-500">
-            Extra doctors (₹0xx each)
+            Extra doctors (₹599 each)
             <select value={form.extra_doctors} onChange={set('extra_doctors')} className={field}>
               {[0, 1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>

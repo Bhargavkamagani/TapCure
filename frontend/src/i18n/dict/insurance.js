@@ -1,0 +1,92 @@
+/**
+ * Insurance tie-ups (2026-11-03) — patient-facing text only. Insurer and
+ * scheme NAMES stay in English (they come from the backend list); hospital
+ * signup / Profile / Super Admin pages are English-only like the rest of them.
+ */
+export const insuranceT = {
+  'ins.accepted': { en: 'Insurance accepted', te: 'అంగీకరించే బీమా', hi: 'स्वीकृत बीमा' },
+  'ins.more': { en: '+{n} more', te: '+{n} మరిన్ని', hi: '+{n} और' },
+  'ins.filterAny': { en: 'Any insurance', te: 'ఏ బీమా అయినా', hi: 'कोई भी बीमा' },
+  'ins.filterLabel': { en: 'Insurance', te: 'బీమా', hi: 'बीमा' },
+  'ins.search': { en: 'Search insurance or scheme', te: 'బీమా లేదా పథకాన్ని వెతకండి', hi: 'बीमा या योजना खोजें' },
+  'ins.noneListed': {
+    en: 'This hospital has not listed its insurances yet. Please ask the hospital.',
+    te: 'ఈ ఆసుపత్రి ఇంకా తన బీమాలను జాబితా చేయలేదు. దయచేసి ఆసుపత్రిని అడగండి.',
+    hi: 'इस अस्पताल ने अभी अपने बीमा नहीं बताए हैं। कृपया अस्पताल से पूछें।',
+  },
+  'ins.disclaimer': {
+    en: 'Cover depends on your policy. Please confirm with the hospital\'s insurance desk before treatment.',
+    te: 'కవరేజ్ మీ పాలసీపై ఆధారపడి ఉంటుంది. చికిత్సకు ముందు ఆసుపత్రి బీమా డెస్క్‌తో నిర్ధారించుకోండి.',
+    hi: 'कवरेज आपकी पॉलिसी पर निर्भर है। इलाज से पहले अस्पताल के बीमा डेस्क से पुष्टि करें।',
+  },
+  'ins.noMatch': {
+    en: 'No hospitals accept {name} yet.',
+    te: 'ఇంకా ఏ ఆసుపత్రీ {name}ను అంగీకరించడం లేదు.',
+    hi: 'अभी कोई अस्पताल {name} स्वीकार नहीं करता।',
+  },
+  // Public Insurance page (/insurance, header tab).
+  'ins.page.eyebrow': { en: 'Cashless network', te: 'క్యాష్‌లెస్ నెట్‌వర్క్', hi: 'कैशलेस नेटवर्क' },
+  'ins.page.title': { en: 'Find hospitals that accept your insurance', te: 'మీ బీమాను అంగీకరించే ఆసుపత్రులను కనుగొనండి', hi: 'वे अस्पताल खोजें जो आपका बीमा स्वीकार करते हैं' },
+  'ins.page.subtitle': {
+    en: 'Pick your insurance company or government scheme to see the hospitals that accept it.',
+    te: 'మీ బీమా సంస్థ లేదా ప్రభుత్వ పథకాన్ని ఎంచుకోండి, దాన్ని అంగీకరించే ఆసుపత్రులు కనిపిస్తాయి.',
+    hi: 'अपनी बीमा कंपनी या सरकारी योजना चुनें और उसे स्वीकार करने वाले अस्पताल देखें।',
+  },
+  'ins.page.nHospitals': { en: '{n} hospitals', te: '{n} ఆసుపత్రులు', hi: '{n} अस्पताल' },
+  'ins.page.oneHospital': { en: '1 hospital', te: '1 ఆసుపత్రి', hi: '1 अस्पताल' },
+  'ins.page.noHospitals': { en: 'No hospitals yet', te: 'ఇంకా ఆసుపత్రులు లేవు', hi: 'अभी कोई अस्पताल नहीं' },
+  'ins.page.noMatch': { en: 'No insurance or scheme matches “{q}”.', te: '“{q}”కు సరిపోయే బీమా లేదా పథకం లేదు.', hi: '“{q}” से मेल खाता कोई बीमा या योजना नहीं।' },
+  'ins.page.note': {
+    en: 'TapCure only shows which hospitals say they accept an insurance. Cover depends on your policy — please confirm with the hospital’s insurance desk before treatment.',
+    te: 'ఏ ఆసుపత్రులు ఏ బీమాను అంగీకరిస్తాయని చెప్పాయో మాత్రమే TapCure చూపిస్తుంది. కవరేజ్ మీ పాలసీపై ఆధారపడి ఉంటుంది — చికిత్సకు ముందు ఆసుపత్రి బీమా డెస్క్‌తో నిర్ధారించుకోండి.',
+    hi: 'TapCure केवल यह दिखाता है कि कौन से अस्पताल कोई बीमा स्वीकार करने की बात कहते हैं। कवरेज आपकी पॉलिसी पर निर्भर है — इलाज से पहले अस्पताल के बीमा डेस्क से पुष्टि करें।',
+  },
+  // Static network-hospital directory on /insurance.
+  'ins.dir.title': { en: 'Network hospital directory', te: 'నెట్‌వర్క్ ఆసుపత్రుల జాబితా', hi: 'नेटवर्क अस्पताल सूची' },
+  'ins.dir.subtitle': {
+    en: 'Hospitals listed in each insurer’s own network directory for Telangana and Hyderabad. Filter by insurer, city or hospital name.',
+    te: 'తెలంగాణ, హైదరాబాద్‌లో ప్రతి బీమా సంస్థ నెట్‌వర్క్ జాబితాలో ఉన్న ఆసుపత్రులు. బీమా సంస్థ, నగరం లేదా ఆసుపత్రి పేరుతో వడపోయండి.',
+    hi: 'तेलंगाना और हैदराबाद के लिए हर बीमा कंपनी की अपनी नेटवर्क सूची में दर्ज अस्पताल। बीमा कंपनी, शहर या अस्पताल के नाम से छाँटें।',
+  },
+  'ins.dir.heroSub': {
+    en: 'Network hospitals of 11 insurers across Telangana and Hyderabad. Tap your insurer, then narrow by city or hospital name.',
+    te: 'తెలంగాణ, హైదరాబాద్‌లో 11 బీమా సంస్థల నెట్‌వర్క్ ఆసుపత్రులు. మీ బీమా సంస్థను నొక్కి, నగరం లేదా ఆసుపత్రి పేరుతో వెతకండి.',
+    hi: 'तेलंगाना और हैदराबाद में 11 बीमा कंपनियों के नेटवर्क अस्पताल। अपनी बीमा कंपनी चुनें, फिर शहर या अस्पताल के नाम से खोजें।',
+  },
+  'ins.dir.statHospitals': { en: '{n} hospitals', te: '{n} ఆసుపత్రులు', hi: '{n} अस्पताल' },
+  'ins.dir.statInsurers': { en: '{n} insurers', te: '{n} బీమా సంస్థలు', hi: '{n} बीमा कंपनियाँ' },
+  'ins.dir.statArea': { en: 'Telangana & Hyderabad', te: 'తెలంగాణ & హైదరాబాద్', hi: 'तेलंगाना और हैदराबाद' },
+  'ins.dir.showing': { en: 'Showing {shown} of {total} hospitals', te: '{total} ఆసుపత్రులలో {shown} చూపిస్తోంది', hi: '{total} में से {shown} अस्पताल दिखाए जा रहे हैं' },
+  'ins.dir.clear': { en: 'Clear filters', te: 'ఫిల్టర్లు తొలగించు', hi: 'फ़िल्टर हटाएँ' },
+  'ins.dir.call': { en: 'Call', te: 'కాల్', hi: 'कॉल' },
+  'ins.dir.noPhone': { en: 'Phone not listed', te: 'ఫోన్ నంబర్ లేదు', hi: 'फ़ोन नंबर उपलब्ध नहीं' },
+  'ins.dir.showDelisted': { en: 'Show delisted hospitals ({n})', te: 'తొలగించిన ఆసుపత్రులు చూపించు ({n})', hi: 'हटाए गए अस्पताल दिखाएँ ({n})' },
+  'ins.dir.type': { en: 'Type', te: 'రకం', hi: 'प्रकार' },
+  'ins.dir.allTypes': { en: 'All types', te: 'అన్ని రకాలు', hi: 'सभी प्रकार' },
+  'ins.dir.allLocations': { en: 'All locations', te: 'అన్ని ప్రాంతాలు', hi: 'सभी स्थान' },
+  'ins.dir.searchAll': { en: 'Search hospital, insurer, scheme, area or PIN', te: 'ఆసుపత్రి, బీమా, పథకం, ప్రాంతం లేదా పిన్ వెతకండి', hi: 'अस्पताल, बीमा, योजना, इलाका या पिन खोजें' },
+  'ins.dir.matching': { en: 'Matching hospitals', te: 'సరిపోయే ఆసుపత్రులు', hi: 'मेल खाते अस्पताल' },
+  'ins.dir.noneHere': { en: 'No hospitals in {city}', te: '{city}లో ఆసుపత్రులు లేవు', hi: '{city} में कोई अस्पताल नहीं' },
+  'ins.dir.acceptedBy': { en: 'Accepted by {n} insurers', te: '{n} బీమా సంస్థలు అంగీకరిస్తాయి', hi: '{n} बीमा कंपनियाँ स्वीकार करती हैं' },
+  'ins.dir.acceptedByOne': { en: 'Accepted by {name}', te: '{name} అంగీకరిస్తుంది', hi: '{name} स्वीकार करती है' },
+  'ins.dir.delistedBy': { en: 'Delisted by {name}', te: '{name} జాబితా నుండి తొలగించింది', hi: '{name} ने सूची से हटाया' },
+  'ins.dir.directions': { en: 'Directions', te: 'దారి', hi: 'रास्ता' },
+  'ins.dir.allInsurers': { en: 'All insurers', te: 'అన్ని బీమా సంస్థలు', hi: 'सभी बीमा कंपनियाँ' },
+  'ins.dir.city': { en: 'City / locality', te: 'నగరం / ప్రాంతం', hi: 'शहर / इलाका' },
+  'ins.dir.allCities': { en: 'All cities', te: 'అన్ని నగరాలు', hi: 'सभी शहर' },
+  'ins.dir.search': { en: 'Search hospital, area or PIN', te: 'ఆసుపత్రి, ప్రాంతం లేదా పిన్ వెతకండి', hi: 'अस्पताल, इलाका या पिन खोजें' },
+  'ins.dir.count': { en: '{n} hospitals', te: '{n} ఆసుపత్రులు', hi: '{n} अस्पताल' },
+  'ins.dir.none': { en: 'No hospitals match these filters.', te: 'ఈ ఫిల్టర్లకు సరిపోయే ఆసుపత్రులు లేవు.', hi: 'इन फ़िल्टर से मेल खाता कोई अस्पताल नहीं।' },
+  'ins.dir.showMore': { en: 'Show {n} more', te: 'మరో {n} చూపించు', hi: '{n} और दिखाएँ' },
+  'ins.dir.excluded': { en: 'delisted', te: 'తొలగించబడింది', hi: 'हटाया गया' },
+  'ins.dir.loadFailed': { en: 'Could not load the hospital directory. Please try again.', te: 'ఆసుపత్రుల జాబితా లోడ్ కాలేదు. మళ్ళీ ప్రయత్నించండి.', hi: 'अस्पताल सूची लोड नहीं हो सकी। कृपया फिर से कोशिश करें।' },
+  'ins.dir.note': {
+    en: 'Compiled from each insurer’s public hospital directory ({date}). For information only — these hospitals are not booked through TapCure, and networks change often. Confirm cashless status with your insurer before admission.',
+    te: 'ప్రతి బీమా సంస్థ పబ్లిక్ ఆసుపత్రి జాబితా నుండి సేకరించబడింది ({date}). సమాచారం కోసం మాత్రమే — ఈ ఆసుపత్రులను TapCure ద్వారా బుక్ చేయలేరు, నెట్‌వర్క్‌లు తరచూ మారుతాయి. చేరే ముందు క్యాష్‌లెస్ స్థితిని మీ బీమా సంస్థతో నిర్ధారించుకోండి.',
+    hi: 'हर बीमा कंपनी की सार्वजनिक अस्पताल सूची से संकलित ({date})। केवल जानकारी के लिए — ये अस्पताल TapCure से बुक नहीं होते, और नेटवर्क अक्सर बदलते हैं। भर्ती से पहले अपनी बीमा कंपनी से कैशलेस स्थिति की पुष्टि करें।',
+  },
+  'ins.group.government': { en: 'Government schemes', te: 'ప్రభుత్వ పథకాలు', hi: 'सरकारी योजनाएँ' },
+  'ins.group.health': { en: 'Health insurers', te: 'ఆరోగ్య బీమా సంస్థలు', hi: 'स्वास्थ्य बीमा कंपनियाँ' },
+  'ins.group.general': { en: 'General insurers', te: 'సాధారణ బీమా సంస్థలు', hi: 'सामान्य बीमा कंपनियाँ' },
+  'ins.group.psu': { en: 'Public sector insurers', te: 'ప్రభుత్వ రంగ బీమా సంస్థలు', hi: 'सार्वजनिक क्षेत्र की बीमा कंपनियाँ' },
+}

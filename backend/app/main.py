@@ -437,18 +437,34 @@ def serve_upload(subdir: str, rest: str, exp: str | None = None, sig: str | None
     whatever was uploaded, so nothing stored here can ever be served as a web
     page on this origin. Anything else downloads instead of rendering.
     """
-    path = f"/uploads/{subdir}/{rest}"
-    if subdir in storage.PRIVATE_SUBDIRS and not storage.verify_signed_path(path, exp, sig):
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="This link has expired. Open the document from the app again.",
-        )
+    not_found = HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found")
+    # No link the app makes contains "..". The private check below used to read
+    # the folder NAME in the URL, so /uploads/doctors/%2E%2E/patients/… passed as
+    # "doctors" (public) and then resolved into patients/ — a report with no
+    # signed link. Refuse such paths outright.
+    if ".." in f"{subdir}/{rest}".replace("\\", "/").split("/"):
+        raise not_found
 
     # Resolve inside the uploads root, then confirm it stayed there: a path like
     # `../../.env` must not escape, whatever the URL says.
-    full = os.path.realpath(os.path.join(_UPLOADS_DIR, subdir, rest))
-    if not full.startswith(os.path.realpath(_UPLOADS_DIR) + os.sep) or not os.path.isfile(full):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="File not found")
+    root = os.path.realpath(_UPLOADS_DIR)
+    full = os.path.realpath(os.path.join(root, subdir, rest))
+    if not full.startswith(root + os.sep):
+        raise not_found
+
+    # Decide private/public from where the file REALLY is, not from what the URL
+    # says, and case-blind: on Windows /uploads/Patients/… opens patients/.
+    # The signature is checked against that same real path, so a link signed
+    # for one file can't be bent to reach another.
+    rel = os.path.relpath(full, root).replace(os.sep, "/")
+    if rel.split("/", 1)[0].lower() in storage.PRIVATE_SUBDIRS:
+        if not storage.verify_signed_path(f"/uploads/{rel}", exp, sig):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="This link has expired. Open the document from the app again.",
+            )
+    if not os.path.isfile(full):
+        raise not_found
 
     ext = os.path.splitext(full)[1].lower()
     media_type = storage.DOC_CONTENT_TYPES.get(ext, "application/octet-stream")

@@ -686,7 +686,8 @@ def create_emergency(body: EmergencyCreate, me: User = Depends(require_permissio
 
 
 @router.get("/emergency", response_model=list[EmergencyOut])
-def list_emergency(hospital_id: UUID | None = Query(None), doctor_id: UUID | None = Query(None), me: User = Depends(require_permission("token", "read")), db: Session = Depends(get_db)):
+def list_emergency(hospital_id: UUID | None = Query(None), doctor_id: UUID | None = Query(None), me: User = Depends(require_permission("token", "read")),
+                   _staff: User = Depends(require_staff), db: Session = Depends(get_db)):
     stmt = select(EmergencyQueue).where(EmergencyQueue.status.in_(("waiting", "attending")))
     if not (me.role and me.role.name == "SUPER_ADMIN"):
         stmt = stmt.where(EmergencyQueue.hospital_id == me.hospital_id)

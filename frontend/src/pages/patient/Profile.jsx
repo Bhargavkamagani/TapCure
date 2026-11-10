@@ -232,7 +232,7 @@ function Profile() {
         )}
         <div className="leading-tight">
           <p className="text-[18px] font-extrabold text-brand-navy">{translitName(patient.name, lang)}</p>
-          <p className="text-[13px] text-slate-500">{realEmail(patient) || patient.phone}</p>
+          {realEmail(patient) && <p className="text-[13px] text-slate-500">{realEmail(patient)}</p>}
           <p className="text-[12.5px] text-slate-400">{patient.phone}</p>
         </div>
         <span className={`ml-auto rounded-full px-3 py-1 text-[12px] font-semibold ${patient.is_registered ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>

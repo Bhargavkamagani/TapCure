@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { BadgeCheck, Building2, MapPin, Phone, Stethoscope, Users } from 'lucide-react'
+import { BadgeCheck, Building2, MapPin, Phone, ShieldCheck, Stethoscope, Users } from 'lucide-react'
 import StaticPageShell from '../../components/landing/StaticPageShell.jsx'
 import HospitalMap from '../../components/common/HospitalMap.jsx'
 import { discoveryApi, fileUrl } from '../../api'
@@ -9,6 +9,7 @@ import { beginBooking } from '../../lib/bookingIntent.js'
 import { useI18n } from '../../i18n/index.jsx'
 import { translitName, translitDegrees } from '../../lib/translit.js'
 import { specialtyLabel } from '../../data/symptomSpecialty.js'
+import { InsuranceList } from '../../components/common/Insurance.jsx'
 
 export default function PublicHospitalProfile() {
   const { hospitalId } = useParams()
@@ -66,6 +67,14 @@ export default function PublicHospitalProfile() {
                   {data.phone && <a href={`tel:${data.phone}`} className="flex items-center gap-2 hover:text-sage-deep"><Phone className="h-4 w-4 text-sage-deep" />{data.phone}</a>}
                 </div>
               </div>
+            </section>
+
+            {/* Insurers / schemes accepted — full list (2026-11-03). */}
+            <section className="mt-6 rounded-3xl border border-white/60 bg-white/70 p-6 shadow-sm backdrop-blur">
+              <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-foreground">
+                <ShieldCheck className="h-5 w-5 text-sage-deep" />{t('ins.accepted')}
+              </h2>
+              <InsuranceList codes={data.insurance_partners} />
             </section>
 
             {data.latitude != null && data.longitude != null && (

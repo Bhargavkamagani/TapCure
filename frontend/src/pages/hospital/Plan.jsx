@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { CreditCard, RefreshCw, AlertTriangle, CheckCircle2, ArrowUpCircle, Package, IndianRupee, Info, Repeat } from 'lucide-react'
+import { CreditCard, RefreshCw, AlertTriangle, CheckCircle2, ArrowUpCircle, Package, IndianRupee, Info, Repeat, Check } from 'lucide-react'
 import { subscriptionsApi } from '../../api'
 import { openCheckout } from '../../lib/razorpay.js'
 import { Card, PageHeading, ToolButton } from '../../components/hospital/ui.jsx'
@@ -89,12 +89,40 @@ export default function HospitalPlan() {
     }
   }
 
+  // The hospital layout re-checks the plan so the full console opens.
+  const planChanged = () => window.dispatchEvent(new Event('tc:plan-changed'))
+
+  const startTrial = async () => {
+    const ok = await dialog.confirm({
+      title: 'Start your free trial?',
+      message: `${data?.trial_days || 30} days free, with all Smart Hospital features and no booking limit. `
+        + 'The days start on your first OPD day (the first token you issue). No payment needed now.',
+      tone: 'info',
+      confirmLabel: 'Yes, start free trial',
+      cancelLabel: 'Cancel',
+    })
+    if (!ok) return
+    setBusy(true)
+    try {
+      const res = await subscriptionsApi.startTrial()
+      setData(res.usage)
+      await dialog.alert({ title: 'Free trial started', message: res.message, tone: 'success' })
+      planChanged()
+    } catch (e) {
+      await dialog.alert({ title: 'Could not start', message: e?.message || 'Please try again.', tone: 'danger' })
+    } finally {
+      setBusy(false)
+    }
+  }
+
   const pickPlan = async (p) => {
     const onPilot = data?.plan?.code === 'pilot' && data?.online_booking_open
     const ok = await dialog.confirm({
       title: `Choose ${p.name}?`,
       message: `${p.name} is ${shownPrice(p.code, 'price', inr(p.price))} a month + GST, billed at the end of each month.`
-        + (onPilot ? ' It starts today and ends your free pilot.' : ' It starts today and online bookings open again.'),
+        + (data?.state === 'choose'
+          ? ' It starts today, instead of the free trial.'
+          : onPilot ? ' It starts today and ends your free pilot.' : ' It starts today and online bookings open again.'),
       tone: 'info',
       confirmLabel: `Yes, choose ${p.name}`,
       cancelLabel: 'Cancel',
@@ -105,6 +133,7 @@ export default function HospitalPlan() {
       const res = await subscriptionsApi.choosePlan(p.code)
       setData(res.usage)
       await dialog.alert({ title: 'Done', message: res.message, tone: 'success' })
+      planChanged()
     } catch (e) {
       await dialog.alert({ title: 'Could not save', message: e?.message || 'Please try again.', tone: 'danger' })
     } finally {
@@ -116,10 +145,12 @@ export default function HospitalPlan() {
   const bill = data?.bill
 
   return (
-    <div className="mx-auto flex w-full max-w-[980px] flex-col gap-5">
-      <PageHeading title="Plan & Bookings" subtitle="Your TapCure plan and this month's online bookings. Walk-ins are always free.">
-        <ToolButton icon={RefreshCw} onClick={load} disabled={loading}>Refresh</ToolButton>
-      </PageHeading>
+    <div className={`mx-auto flex w-full flex-col gap-5 ${data?.state === 'choose' ? 'max-w-[1180px]' : 'max-w-[980px]'}`}>
+      {data?.state !== 'choose' && (
+        <PageHeading title="Plan & Bookings" subtitle="Your TapCure plan and this month's online bookings. Walk-ins are always free.">
+          <ToolButton icon={RefreshCw} onClick={load} disabled={loading}>Refresh</ToolButton>
+        </PageHeading>
+      )}
 
       {loading && !data && <p className="py-10 text-center text-sm text-slate-400">Loading…</p>}
       {error && <Card className="border-red-100 bg-red-50 text-sm text-red-600">{error}</Card>}
@@ -138,7 +169,11 @@ export default function HospitalPlan() {
       )}
       {data && !plan && <PlanPicker choices={data.plan_choices} busy={busy} onPick={pickPlan} />}
 
-      {plan && (
+      {data?.state === 'choose' && (
+        <ChooseStart data={data} busy={busy} onTrial={startTrial} onPick={pickPlan} />
+      )}
+
+      {plan && data.state !== 'choose' && (
         <>
           <Card className="flex flex-wrap items-center gap-4">
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-teal-100 text-teal-700">
@@ -228,8 +263,8 @@ export default function HospitalPlan() {
                   </>
                 )}
                 <p className="mt-3 text-[12px] text-slate-400">
-                  Counted: bookings patients make online or on WhatsApp ({data.counts.online}) and walk-ins sent WhatsApp queue alerts ({data.counts.walkin_with_alerts}).
-                  Not counted: walk-ins, and visits the hospital cancelled ({data.counts.not_counted_hospital_cancelled}).
+                  Counted: bookings patients make online or on WhatsApp ({data.counts.online}).
+                  Not counted: walk-ins (always free), visits the hospital cancelled ({data.counts.not_counted_hospital_cancelled}), and free revisits ({data.counts.not_counted_free_revisit ?? 0}).
                 </p>
               </Card>
 
@@ -253,10 +288,12 @@ export default function HospitalPlan() {
             </div>
           )}
 
-          {(data.state === 'near' || data.state === 'full' || data.state === 'over_chosen') && data.options?.length > 0 && (
-            <Card className={data.state === 'full' ? 'border-red-200' : 'border-amber-200'}>
+          {['ok', 'near', 'full', 'over_chosen'].includes(data.state) && data.options?.length > 0 && (
+            <Card className={data.state === 'full' ? 'border-red-200' : data.state === 'ok' ? '' : 'border-amber-200'}>
               <div className="flex items-start gap-3">
-                {data.state === 'over_chosen'
+                {data.state === 'ok'
+                  ? <Info className="mt-0.5 h-5 w-5 shrink-0 text-teal-600" />
+                  : data.state === 'over_chosen'
                   ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
                   : <AlertTriangle className={`mt-0.5 h-5 w-5 shrink-0 ${data.state === 'full' ? 'text-red-500' : 'text-amber-500'}`} />}
                 <div>
@@ -264,6 +301,7 @@ export default function HospitalPlan() {
                     {data.state === 'full' && 'Your free bookings are used up. What would you like to do?'}
                     {data.state === 'near' && `You've used ${data.used} of ${data.allowance} free bookings. Plan ahead:`}
                     {data.state === 'over_chosen' && 'You can still change your choice for this month:'}
+                    {data.state === 'ok' && 'Need more bookings or doctors? You can upgrade anytime:'}
                   </p>
                   {data.state === 'full' && (
                     <p className="mt-1 text-[13px] text-slate-500">
@@ -403,6 +441,100 @@ function Yearly({ data, onChanged, setData }) {
   )
 }
 
+// ---- First-login "how do you want to start?" screen (state "choose", 2026-11-09) ----
+// Clean & light pricing layout (user pick): four equal white cards, the free
+// trial marked only by a teal border + badge.
+
+const PLAN_TAG = {
+  starter: 'For a doctor just going online',
+  smart_hospital: 'For a busy single-doctor hospital',
+  pro: 'For hospitals with a team of doctors',
+}
+
+function Tick({ children }) {
+  return (
+    <li className="flex items-start gap-2.5">
+      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-teal-50">
+        <Check className="h-3 w-3 text-teal-600" strokeWidth={3} />
+      </span>
+      <span>{children}</span>
+    </li>
+  )
+}
+
+function PlanCard({ highlight, badge, name, tag, price, term, ticks, cta, primary, busy, onClick }) {
+  return (
+    <div className={`relative flex flex-col rounded-2xl bg-white p-6 ${
+      highlight ? 'border-2 border-teal-500 shadow-[0_8px_30px_-12px_rgba(13,148,136,0.35)]' : 'border border-slate-200'
+    }`}>
+      {badge && (
+        <span className={`absolute -top-3 left-6 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide ${
+          highlight ? 'bg-teal-500 text-white' : 'bg-slate-100 text-slate-600'
+        }`}>{badge}</span>
+      )}
+      <p className="text-[15px] font-bold text-brand-navy">{name}</p>
+      <p className="mt-1 min-h-[2.5rem] text-[13px] leading-snug text-slate-500">{tag}</p>
+      <p className="mt-4 text-[32px] font-extrabold leading-none tracking-tight text-brand-navy">{price}</p>
+      <p className="mt-1.5 text-[12.5px] text-slate-400">{term}</p>
+      <hr className="my-5 border-dashed border-slate-200" />
+      <ul className="flex-1 space-y-2.5 text-[13px] text-slate-600">
+        {ticks.map((t) => <Tick key={t}>{t}</Tick>)}
+      </ul>
+      <button type="button" disabled={busy} onClick={onClick}
+        className={`mt-6 w-full rounded-lg px-4 py-2.5 text-[14px] font-semibold transition disabled:opacity-60 ${
+          primary ? 'bg-teal-600 text-white hover:bg-teal-700' : 'border border-slate-300 bg-white text-brand-navy hover:border-teal-500 hover:text-teal-700'
+        }`}>
+        {busy ? 'Please wait…' : cta}
+      </button>
+    </div>
+  )
+}
+
+function ChooseStart({ data, busy, onTrial, onPick }) {
+  const days = data.trial_days || 30
+  const plans = data.plan_choices || []
+  return (
+    <div className="py-4">
+      <div className="mx-auto max-w-xl text-center">
+        <h1 className="text-[28px] font-extrabold tracking-tight text-brand-navy">How would you like to start?</h1>
+        <p className="mt-2 text-[15px] text-slate-500">
+          Try TapCure free for {days} days, or pick a plan now. Your dashboard opens as soon as you choose.
+        </p>
+      </div>
+
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <PlanCard
+          highlight badge="Free trial" name="Free trial" tag="See TapCure working in your OPD first"
+          price="₹0" term={`for ${days} days · no payment now`}
+          ticks={['No limit on doctors', 'No limit on online bookings', 'All Smart Hospital features', `${days} days start on your first OPD day`]}
+          cta="Start free trial" primary busy={busy} onClick={onTrial}
+        />
+        {plans.map((p) => (
+          <PlanCard
+            key={p.code}
+            badge={p.code === 'smart_hospital' ? 'Popular' : null}
+            name={p.name} tag={PLAN_TAG[p.code] || ''}
+            price={shownPrice(p.code, 'price', inr(p.price))} term="per month + GST"
+            ticks={[
+              p.code === 'pro' ? `${p.doctors} doctors (add more ${shownPrice('pro', 'extraDoctor', '')}/mo)` : `${p.doctors} doctor`,
+              `${p.included} online bookings / month`,
+              `Then ${shownPrice(p.code, 'fee', '')} per booking`,
+              `Bill never above ${shownPrice(p.code, 'limit', '')}`,
+            ]}
+            cta={`Choose ${p.name}`} busy={busy} onClick={() => onPick(p)}
+          />
+        ))}
+      </div>
+
+      <p className="mx-auto mt-8 max-w-2xl text-center text-[12.5px] leading-relaxed text-slate-400">
+        Every plan includes the live OPD queue, free walk-ins, WhatsApp alerts, prescriptions, pharmacy and reports.
+        Paid plans are billed at the end of each month. Need more doctors? The Hospital plan starts
+        at {shownPrice('hospital', 'price', '₹4,999')}/month — contact TapCure.
+      </p>
+    </div>
+  )
+}
+
 function PlanPicker({ title = 'Choose your plan', choices, busy, onPick }) {
   if (!choices?.length) return null
   return (
@@ -423,6 +555,7 @@ function PlanPicker({ title = 'Choose your plan', choices, busy, onPick }) {
             <span className="text-[12.5px] text-slate-500">
               {p.included} free online bookings a month · {p.doctors} doctor{p.doctors > 1 ? 's' : ''}
             </span>
+            <span className="text-[12px] text-teal-700">Free revisits don't use your bookings</span>
           </button>
         ))}
       </div>

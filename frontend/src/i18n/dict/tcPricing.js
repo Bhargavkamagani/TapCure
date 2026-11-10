@@ -49,11 +49,12 @@ export const tcPricingT = {
   'tc.price.h.every': { en: 'Every feature unlocked', te: 'అన్ని ఫీచర్లు అందుబాటులో', hi: 'हर सुविधा उपलब्ध' },
   'tc.price.h.noPay': { en: 'No payment to start', te: 'ప్రారంభించడానికి చెల్లింపు అవసరం లేదు', hi: 'शुरू करने के लिए कोई भुगतान नहीं' },
   'tc.price.h.core': { en: 'All core features', te: 'అన్ని ముఖ్య ఫీచర్లు', hi: 'सभी मुख्य सुविधाएँ' },
+  'tc.price.h.freeRevisit': { en: "Free revisits don't use your bookings", te: 'ఉచిత రీవిజిట్‌లు మీ బుకింగ్‌లలో లెక్కించబడవు', hi: 'मुफ़्त दोबारा विज़िट आपकी बुकिंग में नहीं गिनी जातीं' },
   'tc.price.h.upgrade': { en: 'Upgrade anytime', te: 'ఎప్పుడైనా అప్‌గ్రేడ్ చేయండి', hi: 'कभी भी अपग्रेड करें' },
   'tc.price.h.whatsapp': { en: 'WhatsApp queue alerts', te: 'WhatsApp క్యూ అలర్ట్‌లు', hi: 'WhatsApp कतार अलर्ट' },
   'tc.price.h.noWhatsapp': { en: 'WhatsApp alerts from Smart Hospital', te: 'WhatsApp అలర్ట్‌లు స్మార్ట్ ఆసుపత్రి నుండి', hi: 'WhatsApp अलर्ट स्मार्ट अस्पताल से' },
   // Shown as X's for now (2026-10-27). Previous: ₹599/mo each.
-  'tc.price.h.addDoc': { en: 'Add doctors at ₹0xx/mo each', te: 'ఒక్కో డాక్టర్‌కు ₹0xx/నెల', hi: 'हर डॉक्टर ₹0xx/माह पर जोड़ें' },
+  'tc.price.h.addDoc': { en: 'Add doctors at ₹599/mo each', te: 'ఒక్కో డాక్టర్‌కు ₹599/నెల', hi: 'हर डॉक्टर ₹599/माह पर जोड़ें' },
 
   /* the small "Also included" list at the bottom of each card */
   'tc.price.allTitle': { en: 'Also included', te: 'ఇవి కూడా ఉన్నాయి', hi: 'यह भी शामिल' },
@@ -72,7 +73,7 @@ export const tcPricingT = {
 
   'tc.price.hosp.name': { en: 'Hospital', te: 'హాస్పిటల్', hi: 'हॉस्पिटल' },
   // Previous: 'tc.price.hosp.price': { en: 'from ₹4,999 / month', te: '₹4,999 / నెల నుండి', hi: '₹4,999 / महीना से' },
-  'tc.price.hosp.price': { en: 'from ₹0,xxx / month', te: '₹0,xxx / నెల నుండి', hi: '₹0,xxx / महीना से' },
+  'tc.price.hosp.price': { en: 'from ₹4,999 / month', te: '₹4,999 / నెల నుండి', hi: '₹4,999 / महीना से' },
   'tc.price.hosp.body': {
     en: 'Unlimited doctors and bookings, every department, set up with you by our team.',
     te: 'అపరిమిత డాక్టర్లు, బుకింగ్‌లు, అన్ని విభాగాలు — మా బృందం మీతో కలిసి సెటప్ చేస్తుంది.',

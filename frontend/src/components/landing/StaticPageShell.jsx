@@ -20,7 +20,7 @@ const FOOTER_LINKS = [
   { labelKey: 'shell.features', to: '/features' },
   { labelKey: 'shell.pricing', to: '/pricing' },
   { labelKey: 'shell.faq', to: '/faq' },
-  { labelKey: 'shell.resources', to: '/resources' },
+  // 2026-11-02: "Resources" removed here too, same as the landing footer.
   { labelKey: 'shell.calculators', to: '/calculators' },
   { labelKey: 'shell.contact', to: '/contact' },
   { labelKey: 'shell.policies', to: '/policies' },

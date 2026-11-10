@@ -101,7 +101,7 @@ export default function Contact() {
               <p className="text-muted-foreground">
                 {t('scontact.patientSupportBody')}
               </p>
-              <p>{t('scontact.emailLabel')} <a href="mailto:thetapcure@gmail.com" className="underline underline-offset-2">thetapcure@gmail.com</a></p>
+              <p>{t('scontact.emailLabel')} <a href="mailto:hello@tapcure.in" className="underline underline-offset-2">hello@tapcure.in</a></p>
               <p>{t('scontact.phoneLabel')} <a href="tel:+919346821621" className="underline underline-offset-2">+91 93468 21621</a></p>
               <p>{t('scontact.whatsappLabel')} <a href="https://wa.me/919346821621" className="underline underline-offset-2">+91 93468 21621</a></p>
             </InfoCard>
@@ -110,7 +110,7 @@ export default function Contact() {
               <p className="text-muted-foreground">
                 {t('scontact.partnershipsBody')}
               </p>
-              <p>{t('scontact.emailLabel')} <a href="mailto:thetapcure@gmail.com" className="underline underline-offset-2">thetapcure@gmail.com</a></p>
+              <p>{t('scontact.emailLabel')} <a href="mailto:hello@tapcure.in" className="underline underline-offset-2">hello@tapcure.in</a></p>
               <p>{t('scontact.phoneLabel')} <a href="tel:+919346821621" className="underline underline-offset-2">+91 93468 21621</a></p>
             </InfoCard>
 

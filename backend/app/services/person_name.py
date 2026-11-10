@@ -14,15 +14,38 @@ wrote it. A leading title (Dr., Mr., Mrs., Ms., Prof.) is never part of the
 first name; when `name` is rebuilt, the title the person already had is kept,
 so "Dr. Rahul Sharma" still reads "Dr. Rahul Sharma" everywhere.
 """
+import re
 from typing import Optional
 
 from sqlalchemy import event, inspect
 
 TITLES = {"dr", "dr.", "mr", "mr.", "mrs", "mrs.", "ms", "ms.", "prof", "prof."}
 
+_LETTERS = re.compile(r"[^\W\d_]+")
+
 
 def clean(value) -> str:
     return " ".join(str(value or "").split())
+
+
+def nice_case(value) -> Optional[str]:
+    """Capital first letter for names typed all-lowercase or ALL-CAPS (2026-11-03).
+
+    Word by word: 'janaki rao' -> 'Janaki Rao', 'RAVI KUMAR' -> 'Ravi Kumar',
+    "d'souza" -> "D'Souza", 'mary-ann' -> 'Mary-Ann', 'dr. rahul' -> 'Dr. Rahul'.
+    A word the person typed with deliberate mixed capitals ('McDonald',
+    'DeSouza') is left exactly as typed, and so is a single capital letter
+    used as an initial ('Ramesh K'). Scripts without upper/lower case
+    (Telugu, Hindi) are never changed."""
+    if value is None:
+        return None
+
+    def fix(word: str) -> str:
+        if not (word.islower() or word.isupper()):
+            return word  # deliberate mixed case, or no cased letters at all
+        return _LETTERS.sub(lambda m: m.group(0)[0].upper() + m.group(0)[1:].lower(), word)
+
+    return " ".join(fix(w) for w in clean(value).split(" ") if w)
 
 
 def split_title(full) -> tuple[str, str]:
@@ -68,6 +91,13 @@ def _sync(mapper, connection, target) -> None:
     elif name_h.has_changes() or (clean(target.name) and not clean(target.first_name)):
         target.first_name, target.last_name = split_name(target.name)
         target.first_name = target.first_name or None
+    # Capital first letter on every save, whichever form or script wrote it.
+    for attr in ("name", "first_name", "last_name"):
+        value = getattr(target, attr)
+        if value:
+            fixed = nice_case(value)
+            if fixed != value:
+                setattr(target, attr, fixed)
 
 
 def register(*models) -> None:

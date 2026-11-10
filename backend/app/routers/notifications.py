@@ -284,6 +284,15 @@ def _visible_stmt(me: User, db: Session):
 @router.get("/notifications/unread-count")
 def unread_count(me: User = Depends(require_permission("notification", "read")), db: Session = Depends(get_db)):
     """Badge count for the bell — visible notifications this user hasn't read."""
+    if me.role and me.role.name == ROLE_HOSPITAL_ADMIN and me.hospital_id:
+        # Free-pilot reminders (7/3/1 days, ended) — checked here because the
+        # bell is polled; throttled, and never allowed to break the badge.
+        try:
+            from ..services import booking_quota
+            booking_quota.pilot_reminders_throttled(db, me.hospital_id)
+            db.commit()
+        except Exception:
+            db.rollback()
     stmt = _visible_stmt(me, db)
     if stmt is None:
         return {"unread": 0}

@@ -19,7 +19,7 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import Session
 
 from ..config import settings
-from ..database import get_db, utcnow
+from ..database import get_db, parse_uuid, utcnow
 from ..deps import _MULTI_SESSION_ROLES, get_current_user, get_optional_user
 from ..models import (
     Department, Doctor, DoctorAffiliation, DoctorDocument, DoctorStatus,
@@ -503,6 +503,10 @@ def otp_request(body: OtpRequest, db: Session = Depends(get_db)):
     # limiter would close that number for fifteen minutes — which reads as a
     # broken app and fails the submission. Nobody else is affected.
     if not review:
+        # 2026-11-02: a number locked for wrong OTPs can't verify anything for
+        # 15 minutes, so sending it a fresh code only spends a WhatsApp message
+        # on a code that cannot be used. Refuse the send with the same wait.
+        attempts.check("otp-verify", phone, attempts.OTP_VERIFY)
         attempts.check("otp-request", phone, attempts.OTP_REQUEST)
         attempts.record("otp-request", phone)
 
@@ -615,6 +619,7 @@ def delete_account_otp(body: DeleteAccountOtpRequest, me: User | None = Depends(
         raise HTTPException(status.HTTP_404_NOT_FOUND, _DEL_NOT_FOUND)
     review = _is_review_login(phone)
     if not review:
+        attempts.check("otp-verify", phone, attempts.OTP_VERIFY)   # see otp_request
         attempts.check("otp-request", phone, attempts.OTP_REQUEST)
         attempts.record("otp-request", phone)
     otp = None
@@ -697,9 +702,15 @@ def otp_register(body: OtpRegister, request: Request, response: Response, db: Se
     phone = body.phone.strip()
     # Registration accepts the review code too — the account has to be created
     # once before a reviewer can ever log in with it.
-    if not _review_otp_ok(phone, body.otp.strip()) \
-            and not otp_store.verify(_otp_key(phone), body.otp.strip()):
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid or expired OTP")
+    # Counted on the same "otp-verify" key as /otp/login: signing up with a
+    # walk-in's number claims their whole history, so this needs the same lock,
+    # and moving between the two endpoints must not reset the count.
+    if not _review_otp_ok(phone, body.otp.strip()):
+        attempts.check("otp-verify", phone, attempts.OTP_VERIFY)
+        if not otp_store.verify(_otp_key(phone), body.otp.strip()):
+            attempts.record("otp-verify", phone)
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid or expired OTP")
+        attempts.clear("otp-verify", phone)
     existing_user = _user_by_phone(db, phone)
     if existing_user:
         if existing_user.role and existing_user.role.name == ROLE_PATIENT:
@@ -908,6 +919,7 @@ def register_hospital(
         phone=body.phone, email=str(body.email), hfr_id=body.hfr_id,
         # Collected at signup since day one; stored only from f1a7c3e95d24 on.
         registration_number=body.registration_number,
+        insurance_partners=body.insurance_partners,
         status="pending", is_active=False,
     )
     settings = HospitalSettings(token_prefix=short, consultation_duration=body.consultation_minutes)
@@ -1298,8 +1310,15 @@ def forgot_password(body: ForgotPasswordRequest, db: Session = Depends(get_db)):
 
 @router.post("/reset-password")
 def reset_password(body: ResetPasswordRequest, db: Session = Depends(get_db)):
-    if not otp_store.verify(body.identifier.strip().lower(), body.otp):
+    # Five wrong codes locks this identifier for 15 minutes. Without it the
+    # 6-digit code could be guessed for its whole 10 minutes — and these are
+    # staff accounts, the Super Admin included.
+    identifier = body.identifier.strip().lower()
+    attempts.check("reset-verify", identifier, attempts.OTP_VERIFY)
+    if not otp_store.verify(identifier, body.otp):
+        attempts.record("reset-verify", identifier)
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid or expired OTP")
+    attempts.clear("reset-verify", identifier)
     user = _find_by_identifier(db, body.identifier)
     if not user:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
@@ -1321,7 +1340,8 @@ def verify_email(body: VerifyEmailRequest, db: Session = Depends(get_db)):
     payload = decode_access_token(body.token)
     if not payload or payload.get("type") != "verify_email":
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid verification token")
-    user = db.get(User, int(payload["sub"]))
+    user_id = parse_uuid(payload.get("sub"))
+    user = db.get(User, user_id) if user_id else None
     if not user:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
     user.is_email_verified = True

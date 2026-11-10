@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { hospitalsApi, fileUrl } from '../../api'
 import HospitalMap from '../common/HospitalMap.jsx'
+import { InsuranceList } from '../common/Insurance.jsx'
 
 /**
  * Everything a hospital submitted at sign-up, for the Super Admin (2026-10-01).
@@ -209,6 +210,12 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
                 ) : (
                   <p className="text-[13px] italic text-slate-400">None selected</p>
                 )}
+              </Section>
+
+              {/* View only: the hospital's own admin changes these (2026-11-03). */}
+              <Section icon={ShieldCheck} title="Insurance & schemes accepted">
+                <InsuranceList codes={data.insurance_partners} showDisclaimer={false}
+                  emptyText={<span className="italic">None selected</span>} />
               </Section>
 
               <p className="flex items-center gap-1.5 text-[12px] text-slate-400">

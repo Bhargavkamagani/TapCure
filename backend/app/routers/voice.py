@@ -17,12 +17,13 @@ import json
 from typing import List, Literal, Optional
 
 import httpx
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile, status
 from pydantic import BaseModel, Field
 
 from ..config import settings
 from ..deps import get_current_user
 from ..models import User
+from ..services import attempts
 
 router = APIRouter(prefix="/voice", tags=["voice"])
 
@@ -35,6 +36,13 @@ HTTP_TIMEOUT = httpx.Timeout(60.0, connect=10.0)
 # telling Whisper which language to expect; unknown values are simply omitted.
 _WHISPER_LANG = {"en": "en", "te": "te", "hi": "hi"}
 _LANG_NAME = {"en": "English", "te": "Telugu", "hi": "Hindi"}
+
+
+def _limit_public(request: Request, action: str) -> None:
+    """Count one call to a public (billed) voice endpoint against the caller's IP."""
+    ip = request.client.host if request.client else ""
+    attempts.check(action, ip, attempts.VOICE_PUBLIC)
+    attempts.record(action, ip)
 
 
 def _stt_provider() -> str:
@@ -75,6 +83,7 @@ def _require_voice_enabled() -> str:
 # ============================================================ Transcribe =====
 @router.post("/transcribe")
 async def transcribe(
+    request: Request,
     audio: UploadFile = File(...),
     language: str = Form("en"),
 ):
@@ -84,6 +93,7 @@ async def transcribe(
     guide. The OpenAI key stays server-side.
     """
     provider, key = _require_stt_enabled()
+    _limit_public(request, "voice-transcribe")
     data = await audio.read()
     if not data:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Empty audio upload")
@@ -378,9 +388,10 @@ class ExtractResponse(BaseModel):
 
 
 @router.post("/extract", response_model=ExtractResponse)
-async def extract(body: ExtractRequest):
+async def extract(body: ExtractRequest, request: Request):
     """Pull the answer out of a messy spoken reply in the voice sign-up."""
     key = _require_voice_enabled()
+    _limit_public(request, "voice-extract")
     transcript = (body.transcript or "").strip()
     if not transcript:
         return ExtractResponse()
@@ -475,13 +486,14 @@ def _require_tts_enabled(language: str) -> tuple[str, str]:
 
 
 @router.post("/tts")
-async def tts(body: TtsRequest):
+async def tts(body: TtsRequest, request: Request):
     """Text-to-speech via Cartesia Sonic. Returns MP3 audio bytes.
 
     Intentionally public (no auth): it powers the landing page and the
     login/register voice guide, which run before the patient is signed in.
     """
     key, voice = _require_tts_enabled(body.language)
+    _limit_public(request, "voice-tts")
     text = (body.text or "").strip()
     if not text:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Empty text")

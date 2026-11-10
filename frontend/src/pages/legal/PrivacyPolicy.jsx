@@ -13,7 +13,7 @@ import { useI18n } from '../../i18n/index.jsx'
  * Public Privacy Policy page (route: /privacy).
  *
  * Verbatim copy from the "TapCure Website Content Pack 1" doc, with the known
- * placeholders filled in (Trovate LLP, TapCure, thetapcure@gmail.com, tapcure.in,
+ * placeholders filled in (Trovate LLP, TapCure, hello@tapcure.in, tapcure.in,
  * effective 9 July 2026). Registered address and grievance-officer name remain
  * as [ ] placeholders until finalised. Reachable without auth — required for
  * DPDP compliance and app-store / payment-gateway onboarding.
@@ -28,7 +28,7 @@ import { useI18n } from '../../i18n/index.jsx'
 const COMPANY = 'Trovate LLP'
 const EFFECTIVE_DATE = '1 September 2026'
 const WEBSITE = 'https://tapcure.in'
-const CONTACT_EMAIL = 'thetapcure@gmail.com'
+const CONTACT_EMAIL = 'hello@tapcure.in'
 const CONTACT_PHONE = '+91 93468 21621'
 const CONTACT_ADDRESS = 'Hyderabad, Telangana, India'
 

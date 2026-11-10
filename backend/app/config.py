@@ -249,6 +249,10 @@ class Settings(BaseSettings):
     # Doctor's end-of-day wrap-up — 6 body params
     # (doctor, date, scheduled, completed, cancelled/no-show, hospital).
     whatsapp_doctor_day_complete_template: str = "doctor_day_complete"
+    # Free-trial reminder to the hospital admin (7/3/1/0 days left, ended) — 3
+    # body params (name, hospital, status). EMPTY = not sent: set it to
+    # "tapcure_pilot_reminder" only once Meta has approved that template.
+    whatsapp_pilot_reminder_template: str = ""
 
     # --- Doctor morning digest ---
     # The only clock-driven message. OFF by default for the same reason the

@@ -35,6 +35,7 @@ const NAV_LINKS = [
   { key: 'doctors', i18n: 'land.nav.doctors', to: '/search?type=doctors' },
   { key: 'hospitals', i18n: 'land.nav.hospitals', to: '/search?type=hospitals' },
   { key: 'articles', i18n: 'land.nav.articles', to: '/health-articles' },
+  { key: 'insurance', i18n: 'land.nav.insurance', to: '/insurance' },
 ]
 
 const ROLES = ['patient', 'doctor', 'hospital']
@@ -344,7 +345,7 @@ function PageStyles() {
       /* ---------- hero ---------- */
       .tcx .hero{ padding:clamp(130px,15vw,180px) 0 clamp(50px,6vw,80px); position:relative; }
       .tcx .hero-grid{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(30px,4vw,56px); align-items:center; }
-      .tcx .hero h1{ margin:22px 0 20px; }
+      .tcx .hero h1{ margin:22px 0 20px; font-size:clamp(38px,5.6vw,70px); }
       .tcx .hero-actions{ display:flex; flex-wrap:wrap; gap:12px; margin:28px 0 24px; }
       /* Hero tagline: typed out letter by letter, erased, typed again (TypeLoop).
          min-height keeps the headline from jumping while the line is empty. */
@@ -678,9 +679,11 @@ function PageStyles() {
         background:radial-gradient(120% 100% at 50% 0%, rgba(0,201,197,.20), transparent 65%); }
       .tcx .spec:hover{ transform:translateY(-6px); border-color:var(--stroke-2); }
       .tcx .spec:hover::after{ opacity:1; }
-      .tcx .spec .em{ font-size:20px; line-height:1; margin-bottom:7px; display:block; position:relative; }
-      .tcx .spec b{ display:block; font-size:14.5px; letter-spacing:-.015em; position:relative; }
-      .tcx .spec > span:last-child{ font-size:11.5px; color:var(--muted); position:relative; }
+      /* Icon on the left, name + "Book today" beside it (was stacked under the icon). */
+      .tcx .spec{ display:grid; grid-template-columns:auto 1fr; column-gap:12px; align-items:center; }
+      .tcx .spec .em{ grid-column:1; grid-row:1 / span 2; font-size:26px; line-height:1; display:block; position:relative; }
+      .tcx .spec b{ grid-column:2; display:block; font-size:14.5px; letter-spacing:-.015em; position:relative; padding-right:18px; }
+      .tcx .spec > span:last-child{ grid-column:2; font-size:11.5px; color:var(--muted); position:relative; }
       .tcx .spec .go{ position:absolute; right:12px; top:13px; opacity:0; transform:translateX(-6px);
         transition:.4s var(--ease); color:var(--mint); z-index:1; }
       .tcx .spec:hover .go{ opacity:1; transform:none; }
@@ -1703,6 +1706,15 @@ function PageStyles() {
         .tcx .hero-grid{ grid-template-columns:1fr; }
         .tcx .hero-visual{ height:clamp(380px,80vw,460px); }
         .tcx .hero-photo{ inset:0 -6% 0 -8%; }
+        /* Line the doctor card up with the text edge above it (it hung 15-20px
+           past it on tablet/phone). */
+        .tcx .card-doc{ left:0; }
+      }
+      /* Phones: logo + theme + "Log In / Sign Up" + burger don't fit in the bar —
+         the login button poked out and pushed the burger off-screen. The burger
+         menu already lists every login role, so drop the separate button here. */
+      @media (max-width:480px){
+        .tcx .nav-login{ display:none; }
       }
       @media (max-width:700px){
         .tcx .bookbar{ grid-template-columns:1fr 1fr; border-radius:var(--r-lg); }
@@ -1710,6 +1722,40 @@ function PageStyles() {
         .tcx .bookbar .fld{ border-radius:var(--r-sm); }
         .tcx .nav-cta .btn-ghost{ display:none; }
       }
+
+      /* ---------- Telugu / Hindi text sizes ----------
+         Same px size looks much bigger in Telugu (marks above and below every
+         letter) and the sentences are longer, so the hero headline grew 33% taller
+         and pushed the search bar 110px down. Only text is resized here —
+         numbers (4:12, 121) stay as they are. English is untouched.
+         <html lang> is set by the i18n provider. Telugu ~25% smaller headings,
+         Hindi (milder) ~12%. Extra line-height keeps the marks from touching. */
+      html[lang="te"] .tcx .hero h1{ font-size:clamp(29px,4.2vw,52px); line-height:1.24; }
+      html[lang="te"] .tcx h2{ font-size:clamp(25px,3.5vw,44px); line-height:1.28; }
+      html[lang="te"] .tcx #specialties .sec-head h2,
+      html[lang="te"] .tcx .hx-teaser-copy h2{ font-size:clamp(21px,2.4vw,30px); }
+      html[lang="te"] .tcx h3{ font-size:clamp(17px,1.9vw,22px); line-height:1.38; }
+      html[lang="te"] .tcx .lnl-h{ font-size:clamp(22px,2.8vw,36px); line-height:1.3; }
+      html[lang="te"] .tcx .lnl-mode{ font-size:clamp(19px,2.5vw,32px); }
+      html[lang="te"] .tcx .hx-sheet h3{ font-size:clamp(22px,2.7vw,33px); line-height:1.3; }
+      html[lang="te"] .tcx .hx-next p,
+      html[lang="te"] .tcx .hx-guess-q{ font-size:clamp(17px,2vw,23px); line-height:1.4; }
+      html[lang="te"] .tcx .hx-verdict{ font-size:clamp(16px,1.8vw,21px); line-height:1.45; }
+      html[lang="te"] .tcx .lede{ font-size:clamp(15px,1.25vw,17.5px); line-height:1.75; }
+
+      html[lang="hi"] .tcx .hero h1{ font-size:clamp(33px,4.9vw,62px); line-height:1.18; }
+      html[lang="hi"] .tcx h2{ font-size:clamp(28px,3.9vw,49px); line-height:1.2; }
+      html[lang="hi"] .tcx #specialties .sec-head h2,
+      html[lang="hi"] .tcx .hx-teaser-copy h2{ font-size:clamp(23px,2.65vw,33px); }
+      html[lang="hi"] .tcx h3{ font-size:clamp(18px,2vw,23.5px); line-height:1.3; }
+      html[lang="hi"] .tcx .lnl-h{ font-size:clamp(24px,3.2vw,41px); line-height:1.2; }
+      html[lang="hi"] .tcx .lnl-mode{ font-size:clamp(21px,2.8vw,37px); }
+      html[lang="hi"] .tcx .hx-sheet h3{ font-size:clamp(24px,3vw,37px); line-height:1.22; }
+      html[lang="hi"] .tcx .hx-next p,
+      html[lang="hi"] .tcx .hx-guess-q{ font-size:clamp(19px,2.25vw,26px); line-height:1.35; }
+      html[lang="hi"] .tcx .hx-verdict{ font-size:clamp(17px,2vw,23.5px); line-height:1.4; }
+      html[lang="hi"] .tcx .lede{ font-size:clamp(15.5px,1.3vw,18px); line-height:1.7; }
+
       @media (prefers-reduced-motion: reduce){
         .tcx .rv{ opacity:1; transform:none; transition:none; }
         .tcx .grain,.tcx .marquee-track,.tcx .ecg path,.tcx .eyebrow .dot,.tcx .live-dot{ animation:none !important; }
@@ -1905,7 +1951,7 @@ function Nav({ menuOpen, setMenuOpen, theme, setTheme }) {
             </div>
 
             {/* login */}
-            <div style={{ position: 'relative' }}>
+            <div className="nav-login" style={{ position: 'relative' }}>
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() => { setRoleOpen((o) => !o); setLangOpen(false) }}

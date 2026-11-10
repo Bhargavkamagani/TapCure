@@ -40,6 +40,10 @@ class Hospital(Base):
     # Made the first time the admin opens the link box; replaced by "Make new link".
     display_key: Mapped[Optional[str]] = mapped_column(String(64), unique=True, index=True)
     gstin: Mapped[Optional[str]] = mapped_column(String(20))
+    # Insurers / government schemes this hospital accepts, as codes from
+    # services/insurers.py, e.g. ["pmjay", "star_health"] (migration f6f0ffee0006).
+    # Empty = the hospital has not said; it never blocks a booking.
+    insurance_partners: Mapped[list] = mapped_column(JSON, default=list)
     # Clinical-establishment licence number, issued by the state/district
     # authority. Collected at signup since day one but, until migration
     # f1a7c3e95d24, never stored — so historic hospitals have NULL here and it

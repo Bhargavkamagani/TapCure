@@ -9,6 +9,7 @@ import { useI18n } from '../../i18n/index.jsx'
 import { shortPlace } from '../../lib/shortPlace.js'
 import { haversineKm, travelMinutesBetween, getCurrentPosition } from '../../lib/geo.js'
 import { cityKey, sameCity } from '../../lib/cityMatch.js'
+import { InsuranceLogos, InsuranceFilter, useInsurers } from '../../components/common/Insurance.jsx'
 
 /** A coordinate is usable only if it's a finite, non-zero number. */
 const validCoord = (v) => v != null && v !== '' && Number.isFinite(Number(v)) && Number(v) !== 0
@@ -65,6 +66,9 @@ function Hospitals() {
   // City picker, same as the Doctors directory. Empty = every city.
   const [cityFilter, setCityFilter] = useState('')
   const [cities, setCities] = useState([])
+  // Insurance filter (2026-11-03): one insurer/scheme code, '' = any.
+  const [insurance, setInsurance] = useState('')
+  const { byCode: insurers } = useInsurers()
   // The patient's own city, used to float local hospitals to the top.
   const homeCity = cityKey(patient?.city)
 
@@ -110,6 +114,7 @@ function Hospitals() {
     // City picker, matched with the Doctors page's own rule (lib/cityMatch.js)
     // so "Hyderabad" also keeps "Hyderabad, Telangana".
     if (cityFilter) list = list.filter((c) => sameCity(c.city, cityFilter))
+    if (insurance) list = list.filter((c) => (c.insurance_partners || []).includes(insurance))
 
     /* Typed search, the same shape as the Doctors page. Matches the name, the
        city, the state and the address, so "Peruru", "Andhra" and "jeevan" all
@@ -146,7 +151,7 @@ function Hospitals() {
       })
     }
     return list
-  }, [hospitalsById, doctorsById, origin, radius, query, cityFilter, homeCity, lang])
+  }, [hospitalsById, doctorsById, origin, radius, query, cityFilter, insurance, homeCity, lang])
 
   return (
     <div className="flex flex-col gap-5">
@@ -182,6 +187,8 @@ function Hospitals() {
             {cities.map((c) => <option key={c} value={c}>{translitName(c, lang)}</option>)}
           </select>
         </div>
+        <InsuranceFilter value={insurance} onChange={setInsurance}
+          className="border-t border-slate-100 px-2 sm:border-l sm:border-t-0 sm:pl-3" />
       </div>
 
       {/* Near-me controls */}
@@ -224,15 +231,17 @@ function Hospitals() {
           {/* Say WHICH filter emptied the list, and offer the way out. "No
               hospitals yet" would be a lie when the typed word is the reason. */}
           <p className="text-[15px] font-bold text-brand-navy">
-            {query.trim() || cityFilter
+            {insurance && !query.trim() && !cityFilter
+              ? t('ins.noMatch', { name: insurers[insurance]?.name || insurance })
+              : query.trim() || cityFilter
               ? t('px.noHospitalsMatch', { q: query.trim() || translitName(cityFilter, lang) })
               : origin && radius !== 'any'
               ? t('px.noHospitalsWithin', { n: radius })
               : t('ppage.noHospitals')}
           </p>
-          {(query.trim() || cityFilter) && (
+          {(query.trim() || cityFilter || insurance) && (
             <button
-              onClick={() => { setQuery(''); setCityFilter('') }}
+              onClick={() => { setQuery(''); setCityFilter(''); setInsurance('') }}
               className="mt-3 rounded-xl bg-brand-blue px-4 py-2 text-[13px] font-semibold text-white hover:bg-brand-blueDark"
             >
               {t('pm.clearSearch')}
@@ -256,7 +265,11 @@ function Hospitals() {
               </div>
               <div className="flex flex-1 flex-col p-5 pt-4">
               <div className="min-w-0 leading-tight">
-                <p className="truncate text-[16px] font-bold text-brand-navy" title={c.name}>{translitName(c.name, lang)}</p>
+                {/* Insurers accepted: small logos, top right (2026-11-03). */}
+                <div className="flex items-start justify-between gap-2">
+                  <p className="min-w-0 truncate text-[16px] font-bold text-brand-navy" title={c.name}>{translitName(c.name, lang)}</p>
+                  <InsuranceLogos codes={c.insurance_partners} className="mt-0.5" />
+                </div>
                 {lang !== 'en' && <p className="text-[11px] text-slate-400">{c.name}</p>}
                 <p className="mt-1 flex items-center gap-1 text-[13px] text-slate-500" title={[c.address, c.city].filter(Boolean).join(', ')}>
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" />

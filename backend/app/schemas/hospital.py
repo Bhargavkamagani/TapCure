@@ -6,7 +6,8 @@ from typing import Optional
 
 from pydantic import AliasChoices, BaseModel, ConfigDict, EmailStr, Field, field_validator
 
-from ..services.storage import public_url
+from ..services import insurers as _insurers
+from ..services.storage import media_validator
 from .person import OwnerNamePartsIn
 from .common import validate_registration_number
 from .security import MIN_PASSWORD_LENGTH, validate_password
@@ -20,6 +21,17 @@ def _trim_to_none(v: Optional[str]) -> Optional[str]:
         return None
     s = str(v).strip()
     return s or None
+
+
+def _insurer_codes(v):
+    """Insurer codes from services/insurers.py only; unknown -> 422, duplicates dropped."""
+    if v is None:
+        return None
+    return _insurers.clean_codes(v)
+
+
+def _insurer_codes_out(v):
+    return _insurers.known(v)
 
 
 # ---- Hospital ----
@@ -45,7 +57,10 @@ class HospitalUpdate(BaseModel):
     pincode: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[EmailStr] = None
-    logo_url: Optional[str] = None
+    # No logo_url: it is set only by POST /hospitals/{id}/logo, which stores a
+    # real image. Accepting it here let an admin point the "logo" at any stored
+    # file — another hospital's patient report — and get a signed link back.
+    # An old client that still sends it has it ignored, not rejected.
     gstin: Optional[str] = None
     hfr_id: Optional[str] = None
     # Lets a hospital fill in the licence number it typed at signup but which was
@@ -54,8 +69,11 @@ class HospitalUpdate(BaseModel):
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     is_active: Optional[bool] = None
+    # Codes from GET /public/insurers. Omit = unchanged, [] = clears the list.
+    insurance_partners: Optional[list[str]] = None
 
     _norm_hfr = field_validator("hfr_id")(_trim_to_none)
+    _norm_insurers = field_validator("insurance_partners")(_insurer_codes)
     _norm_reg_no = field_validator("registration_number")(validate_registration_number)
 
 
@@ -81,10 +99,14 @@ class HospitalOut(BaseModel):
     photo_url: Optional[str] = None
     letterhead_header_url: Optional[str] = None
     letterhead_footer_url: Optional[str] = None
+    insurance_partners: list[str] = []
 
-    _media_logo = field_validator("logo_url", mode="before")(public_url)
-    _media_photo = field_validator("photo_url", mode="before")(public_url)
-    _media_letterhead = field_validator("letterhead_header_url", "letterhead_footer_url", mode="before")(public_url)
+    _insurers_out = field_validator("insurance_partners", mode="before")(_insurer_codes_out)
+    # Signed only when the ref really is a hospital image (storage.media_url).
+    _media_logo = field_validator("logo_url", mode="before")(media_validator("hospitals"))
+    _media_photo = field_validator("photo_url", mode="before")(media_validator("hospitals"))
+    _media_letterhead = field_validator("letterhead_header_url", "letterhead_footer_url",
+                                        mode="before")(media_validator("letterheads"))
 
 
 class HospitalUpdateResult(HospitalOut):
@@ -134,9 +156,12 @@ class HospitalRegister(OwnerNamePartsIn):
     consultation_minutes: int = 10
     working_days: list[str] = []
     services: list[str] = []
+    # Insurers / schemes accepted (codes from GET /public/insurers). Optional.
+    insurance_partners: list[str] = []
     terms_accepted: bool = False  # must be True — owner agreed to Terms/Privacy/Refund
 
     _norm_reg_no = field_validator("registration_number")(validate_registration_number)
+    _norm_insurers = field_validator("insurance_partners")(_insurer_codes)
 
     @field_validator("email")
     @classmethod
