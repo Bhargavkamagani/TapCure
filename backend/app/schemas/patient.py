@@ -9,6 +9,48 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 from ..services.english_text import to_english, to_english_name
 from ..services.storage import public_url
 from .person import NamePartsIn, NamePartsOut
+from ..services import insurers as _insurers
+
+
+class InsuranceItem(BaseModel):
+    """One insurance / scheme the patient holds (2026-11-10)."""
+    code: str
+    policy_no: Optional[str] = Field(None, max_length=40)
+
+    @field_validator("code")
+    @classmethod
+    def _known(cls, v: str) -> str:
+        return _insurers.clean_codes([v])[0] if (v or "").strip() else v
+
+    @field_validator("policy_no")
+    @classmethod
+    def _policy(cls, v: Optional[str]) -> Optional[str]:
+        v = (v or "").strip()
+        return v or None
+
+
+def _clean_insurances(v):
+    """De-duplicate by code (first kept), at most 10."""
+    if v is None:
+        return v
+    out, seen = [], set()
+    for item in v:
+        if item.code and item.code not in seen:
+            seen.add(item.code)
+            out.append(item)
+    if len(out) > 10:
+        raise ValueError("You can add up to 10 insurances")
+    return out
+
+
+def _insurances_out(v):
+    """Stored JSON -> list; unknown codes (insurer removed later) dropped."""
+    out = []
+    for item in v or []:
+        code = (item or {}).get("code") if isinstance(item, dict) else None
+        if code in _insurers.INSURERS:
+            out.append({"code": code, "policy_no": item.get("policy_no")})
+    return out
 
 Gender = Literal["Male", "Female", "Other"]
 
@@ -78,7 +120,9 @@ class PatientUpdate(NamePartsIn):
     abha_number: Optional[str] = None
     abha_address: Optional[str] = None
     is_registered: Optional[bool] = None
+    insurances: Optional[list[InsuranceItem]] = None
 
+    _clean_ins = field_validator("insurances")(_clean_insurances)
     _norm_abha = field_validator("abha_number")(_normalize_abha_number)
     _en_name = field_validator("name", "city", "emergency_contact_name")(to_english_name)
     _en_text = field_validator("address")(to_english)
@@ -108,7 +152,9 @@ class PatientOut(NamePartsOut):
     is_registered: bool
     registration_source: str
     created_at: Optional[datetime] = None
+    insurances: list[InsuranceItem] = []
 
+    _ins_out = field_validator("insurances", mode="before")(_insurances_out)
     _media_photo = field_validator("photo_url", mode="before")(public_url)
 
 
@@ -137,7 +183,9 @@ class FamilyMemberCreate(NamePartsIn):
     dob: Optional[date] = None
     gender: Optional[Gender] = None
     blood_group: Optional[str] = None
+    insurances: Optional[list[InsuranceItem]] = None
 
+    _clean_ins = field_validator("insurances")(_clean_insurances)
     _norm_phone = field_validator("phone")(_validate_member_phone)
     _en_name = field_validator("name", "relation")(to_english_name)
 
@@ -151,7 +199,9 @@ class FamilyMemberUpdate(NamePartsIn):
     gender: Optional[Gender] = None
     blood_group: Optional[str] = None
     is_active: Optional[bool] = None
+    insurances: Optional[list[InsuranceItem]] = None
 
+    _clean_ins = field_validator("insurances")(_clean_insurances)
     _norm_phone = field_validator("phone")(_validate_member_phone)
     _en_name = field_validator("name", "relation")(to_english_name)
 
@@ -169,6 +219,8 @@ class FamilyMemberOut(NamePartsOut):
     blood_group: Optional[str] = None
     photo_url: Optional[str] = None
     is_active: bool
+    insurances: list[InsuranceItem] = []
+    _ins_out = field_validator("insurances", mode="before")(_insurances_out)
     # 'none' | 'pending_holder' | 'pending_member' | 'linked' | 'declined'
     link_status: str = "none"
     linked_user_id: Optional[UUID] = None

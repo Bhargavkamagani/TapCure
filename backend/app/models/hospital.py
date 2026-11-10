@@ -44,6 +44,11 @@ class Hospital(Base):
     # services/insurers.py, e.g. ["pmjay", "star_health"] (migration f6f0ffee0006).
     # Empty = the hospital has not said; it never blocks a booking.
     insurance_partners: Mapped[list] = mapped_column(JSON, default=list)
+    # When the owner finished "Complete your profile" (picture + hours + a real
+    # service), migration a7b0ffee0007. NULL = not finished: patients do NOT see
+    # this hospital or its doctors until it is set. Set once, never cleared.
+    # Hospitals registered before 2026-11-10 (old long signup) were backfilled.
+    profile_completed_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     # Clinical-establishment licence number, issued by the state/district
     # authority. Collected at signup since day one but, until migration
     # f1a7c3e95d24, never stored — so historic hospitals have NULL here and it
@@ -83,6 +88,10 @@ class HospitalSettings(Base):
     # having to retype them. Nothing in patient booking reads any of these —
     # see the migration note in e6c3a91f4b72.
     always_open: Mapped[bool] = mapped_column(Boolean, default=False)
+    # The owner has chosen the hours themselves (signup only saves a 24x7
+    # default). Was kept in the owner's browser only; on the server since
+    # migration a7b0ffee0007 so profile completion can be judged here.
+    hours_confirmed: Mapped[bool] = mapped_column(Boolean, default=False)
     op_start_time: Mapped[time] = mapped_column(Time, default=time(8, 0))
     op_end_time: Mapped[time] = mapped_column(Time, default=time(17, 0))
     lunch_start: Mapped[Optional[time]] = mapped_column(Time)

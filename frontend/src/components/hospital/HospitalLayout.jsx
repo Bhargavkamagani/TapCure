@@ -56,15 +56,18 @@ function HospitalLayout() {
   const { incomplete, refresh } = setup
   useEffect(() => { if (incomplete) refresh() }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (mustChoose === null) {
+  // Wait for BOTH checks so the dashboard never flashes before a redirect.
+  // (setup.loading only matters for the owner; for anyone else the hook is off.)
+  if (mustChoose === null || (owner && setup.loading)) {
     return <div className="flex h-screen w-screen items-center justify-center text-sm text-slate-400">Loading…</div>
   }
-  // 1) No plan chosen yet -> only the Plan page.
+  // Order for a newly approved hospital (2026-11-10): profile first, then plan.
+  // 1) Profile not complete (under 3 of 3) -> "Complete your profile", like
+  //    WoVerse. "Skip for now" lets them in for this login only; the next
+  //    login opens the setup page again until all 3 steps are done.
+  if (owner && setup.incomplete && !skippedForNow()) return <Navigate to="/hospital-setup" replace />
+  // 2) No plan chosen yet -> only the Plan page.
   if (mustChoose && pathname !== PLAN_PATH) return <Navigate to={PLAN_PATH} replace />
-  // 2) Then: only a hospital with nothing filled yet (just approved) is sent to
-  // "Complete your profile", until it is done or "Skip for now" is picked for
-  // this login. Hospitals already in use only get the small bar.
-  if (!mustChoose && owner && setup.fresh && !skippedForNow()) return <Navigate to="/hospital-setup" replace />
 
   return (
     <div className="glass-console relative flex h-screen w-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">

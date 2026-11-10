@@ -883,20 +883,21 @@ def register_hospital(
     """Public hospital onboarding: creates a PENDING hospital + an INACTIVE owner
     admin. The account cannot log in until a Super Admin approves it.
 
-    Multipart since 2026-10-01: the form's fields as JSON in `payload`, plus the
-    hospital's LOGO, which is now required. The maps show a hospital by its
-    logo, and a pending hospital can't log in to add one later, so it has to come
-    with the registration."""
+    Multipart since 2026-10-01: the form's fields as JSON in `payload`, plus an
+    optional LOGO and PHOTO. Since 2026-11-10 the short signup (ui-updates) asks
+    for neither: the hospital adds them from Profile after approval, and maps
+    show a plain pin until a logo exists. Older clients that still send them
+    keep working."""
     try:
         body = HospitalRegister.model_validate_json(payload)
     except ValidationError as e:
         # Same 422 shape the JSON endpoint gave, so the form's errors still read.
         raise RequestValidationError(e.errors()) from None
     _require_consent(body.terms_accepted)
-    if logo is None or not (logo.filename or "").strip():
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Please upload your hospital logo (JPG or PNG).")
+    has_logo = logo is not None and bool((logo.filename or "").strip())
     # Checked before anything is created: a bad file must not leave a half-made hospital.
-    storage.require_image(logo)
+    if has_logo:
+        storage.require_image(logo)
     # Optional hospital photo (public Find Hospitals card), checked up front too.
     has_photo = photo is not None and bool((photo.filename or "").strip())
     if has_photo:
@@ -945,7 +946,8 @@ def register_hospital(
     db.add(hospital)
     db.flush()
     try:
-        hospital.logo_url, _ = storage.save_upload("hospitals", hospital.hospital_id, logo)
+        if has_logo:
+            hospital.logo_url, _ = storage.save_upload("hospitals", hospital.hospital_id, logo)
         if has_photo:
             hospital.photo_url, _ = storage.save_upload("hospitals", hospital.hospital_id, photo)
     except HTTPException:

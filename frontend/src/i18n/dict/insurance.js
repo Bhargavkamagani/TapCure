@@ -88,5 +88,25 @@ export const insuranceT = {
   'ins.group.government': { en: 'Government schemes', te: 'ప్రభుత్వ పథకాలు', hi: 'सरकारी योजनाएँ' },
   'ins.group.health': { en: 'Health insurers', te: 'ఆరోగ్య బీమా సంస్థలు', hi: 'स्वास्थ्य बीमा कंपनियाँ' },
   'ins.group.general': { en: 'General insurers', te: 'సాధారణ బీమా సంస్థలు', hi: 'सामान्य बीमा कंपनियाँ' },
+  // Patient's own insurance (Phase 2, 2026-11-10)
+  'ins.my.title': { en: 'My Insurance', te: 'నా బీమా', hi: 'मेरा बीमा' },
+  'ins.my.hint': {
+    en: "Add the health insurance or government scheme you have. We show which hospitals accept it. Claims stay with the hospital's insurance desk.",
+    te: 'మీకు ఉన్న ఆరోగ్య బీమా లేదా ప్రభుత్వ పథకాన్ని జోడించండి. దాన్ని ఏ ఆసుపత్రులు అంగీకరిస్తాయో చూపిస్తాము. క్లెయిమ్‌లు ఆసుపత్రి బీమా డెస్క్ చూసుకుంటుంది.',
+    hi: 'अपना स्वास्थ्य बीमा या सरकारी योजना जोड़ें। हम दिखाएँगे कि कौन से अस्पताल इसे स्वीकार करते हैं। क्लेम अस्पताल की बीमा डेस्क संभालती है।',
+  },
+  'ins.my.none': { en: 'No insurance added yet.', te: 'ఇంకా బీమా జోడించలేదు.', hi: 'अभी कोई बीमा नहीं जोड़ा गया।' },
+  'ins.my.add': { en: 'Add insurance', te: 'బీమా జోడించండి', hi: 'बीमा जोड़ें' },
+  'ins.my.edit': { en: 'Change', te: 'మార్చండి', hi: 'बदलें' },
+  'ins.my.policy': { en: 'Policy / card number (optional)', te: 'పాలసీ / కార్డ్ నంబర్ (ఐచ్ఛికం)', hi: 'पॉलिसी / कार्ड नंबर (वैकल्पिक)' },
+  'ins.my.saved': { en: 'Insurance saved.', te: 'బీమా సేవ్ అయింది.', hi: 'बीमा सेव हो गया।' },
+  'ins.accepts': { en: 'Accepts your {name}', te: 'మీ {name} అంగీకరిస్తుంది', hi: 'आपका {name} स्वीकार करता है' },
+  'ins.acceptsYours': { en: 'Accepts your insurance', te: 'మీ బీమా అంగీకరిస్తుంది', hi: 'आपका बीमा स्वीकार करता है' },
+  'ins.onlyMine': { en: 'Accepts my insurance', te: 'నా బీమా అంగీకరించేవి', hi: 'मेरा बीमा स्वीकार करने वाले' },
+  'ins.bookNote': {
+    en: '{hospital} accepts your {name}. Show your card at the insurance desk.',
+    te: '{hospital} మీ {name} అంగీకరిస్తుంది. బీమా డెస్క్ వద్ద మీ కార్డ్ చూపించండి.',
+    hi: '{hospital} आपका {name} स्वीकार करता है। बीमा डेस्क पर अपना कार्ड दिखाएँ।',
+  },
   'ins.group.psu': { en: 'Public sector insurers', te: 'ప్రభుత్వ రంగ బీమా సంస్థలు', hi: 'सार्वजनिक क्षेत्र की बीमा कंपनियाँ' },
 }

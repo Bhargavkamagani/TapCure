@@ -21,6 +21,7 @@ from ..services import booking_quota
 from ..services.hospital_location import sync_hospital_affiliations
 from ..services import notifications as notify
 from ..services import storage
+from ..services import hospital_profile
 from ..services import suspension
 
 router = APIRouter(prefix="/hospitals", tags=["hospitals"])
@@ -41,7 +42,8 @@ def list_hospitals(me: User = Depends(require_permission("hospital", "read")), d
         pass  # platform owner sees every hospital
     elif role == ROLE_PATIENT:
         # Patients are global marketplace users — browse every live hospital.
-        stmt = stmt.where(Hospital.status == "active", Hospital.is_active.is_(True))
+        # Only hospitals that finished "Complete your profile" (2026-11-10).
+        stmt = stmt.where(*hospital_profile.visible_to_patients())
     else:
         # Hospital staff are confined to their own hospital.
         stmt = stmt.where(Hospital.hospital_id == me.hospital_id)
@@ -237,6 +239,7 @@ def upload_hospital_logo(hospital_id: UUID, file: UploadFile = File(...), me: Us
     storage.require_image(file)
     url, _ = storage.save_upload("hospitals", hospital_id, file)
     h.logo_url = url
+    hospital_profile.mark_if_complete(db, h)
     db.commit()
     db.refresh(h)
     return h
@@ -250,6 +253,7 @@ def upload_hospital_photo(hospital_id: UUID, file: UploadFile = File(...), me: U
     storage.require_image(file)
     url, _ = storage.save_upload("hospitals", hospital_id, file)
     h.photo_url = url
+    hospital_profile.mark_if_complete(db, h)
     db.commit()
     db.refresh(h)
     return h
@@ -370,8 +374,13 @@ def update_settings(hospital_id: UUID, body: HospitalSettingsUpdate, me: User = 
     if not h.settings:
         h.settings = HospitalSettings(hospital_id=hospital_id)
         db.flush()
-    for k, v in body.model_dump(exclude_unset=True).items():
+    changes = body.model_dump(exclude_unset=True)
+    for k, v in changes.items():
         setattr(h.settings, k, v)
+    # Saving hours = the owner chose them (signup only stores a 24x7 default).
+    if changes.keys() & {"always_open", "working_days", "op_start_time", "op_end_time"}:
+        h.settings.hours_confirmed = True
+    hospital_profile.mark_if_complete(db, h)
     audit.log_activity(db, me.user_id, "hospital.update_settings", "hospital", {"hospital_id": hospital_id})
     db.commit()
     db.refresh(h.settings)

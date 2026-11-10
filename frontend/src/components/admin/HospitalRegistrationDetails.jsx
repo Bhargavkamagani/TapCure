@@ -82,6 +82,7 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
 
   const tm = data?.timings || {}
   const pending = data?.status === 'pending'
+  const services = (data?.services || []).filter((s) => String(s).trim().toLowerCase() !== 'general opd')
   const hasPin = data?.latitude != null && data?.longitude != null
 
   return (
@@ -181,6 +182,14 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
               </Section>
 
               <Section icon={Clock} title="Timings">
+                {/* Since 2026-11-10 signup doesn't ask for hours/days/consultation: a
+                    pending hospital only has the backend's defaults (24×7, all days,
+                    10 min), so don't show them as if the hospital chose them. */}
+                {pending ? (
+                  <p className="text-[13px] italic text-slate-400">
+                    Not set yet: the hospital adds opening hours, days and consultation time after approval.
+                  </p>
+                ) : (<>
                 <dl>
                   <Field
                     label="Opening hours"
@@ -198,17 +207,20 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
                     )
                   })}
                 </div>
+                </>)}
               </Section>
 
               <Section icon={Stethoscope} title="Services">
-                {data.services?.length ? (
+                {/* The "General OPD" every signup gets automatically is not a
+                    service the hospital picked (same rule as profile completion). */}
+                {services.length ? (
                   <div className="flex flex-wrap gap-1.5">
-                    {data.services.map((s) => (
+                    {services.map((s) => (
                       <span key={s} className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[13.5px] font-semibold text-emerald-700">{s}</span>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[13px] italic text-slate-400">None selected</p>
+                  <p className="text-[13px] italic text-slate-400">None yet</p>
                 )}
               </Section>
 

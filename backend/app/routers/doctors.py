@@ -36,6 +36,7 @@ from ..services import accounts
 from ..services import storage
 from ..services import suspension
 from ..services import audit
+from ..services import hospital_profile
 from ..services import session_cancellation
 from ..services.hospital_location import hospital_practice_fields
 from ..services.reception_scope import ensure_can_see_doctor, restrict
@@ -312,6 +313,9 @@ def list_doctors(
         # Patients browse every active doctor across all hospitals; an optional
         # hospital_id narrows to one hospital when they pick "Find Hospital" first.
         stmt = stmt.where(Doctor.status == "active")
+        # Not the doctors of a hospital still on "Complete your profile" (2026-11-10).
+        stmt = stmt.where(Doctor.hospital_id.in_(
+            select(Hospital.hospital_id).where(*hospital_profile.visible_to_patients())))
         if hospital_id:
             stmt = stmt.where(Doctor.hospital_id == hospital_id)
     else:

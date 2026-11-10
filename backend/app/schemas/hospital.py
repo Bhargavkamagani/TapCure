@@ -1,6 +1,6 @@
 """Schemas for Module 2 — Hospital & Department."""
 from uuid import UUID
-from datetime import time
+from datetime import datetime, time
 from decimal import Decimal
 from typing import Optional
 
@@ -100,6 +100,8 @@ class HospitalOut(BaseModel):
     letterhead_header_url: Optional[str] = None
     letterhead_footer_url: Optional[str] = None
     insurance_partners: list[str] = []
+    # NULL = profile not complete yet = hidden from patients (2026-11-10).
+    profile_completed_at: Optional[datetime] = None
 
     _insurers_out = field_validator("insurance_partners", mode="before")(_insurer_codes_out)
     # Signed only when the ref really is a hospital image (storage.media_url).
@@ -204,6 +206,7 @@ class HospitalSettingsOut(BaseModel):
     hospital_id: UUID
     working_days: str = ""
     always_open: bool = False
+    hours_confirmed: bool = False
     op_start_time: Optional[time] = None
     op_end_time: Optional[time] = None
     lunch_start: Optional[time] = None

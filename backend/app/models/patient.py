@@ -16,7 +16,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from sqlalchemy import (
-    Boolean, Date, DateTime, ForeignKey, Numeric, String, Text, UniqueConstraint,
+    JSON, Boolean, Date, DateTime, ForeignKey, Numeric, String, Text, UniqueConstraint,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -63,6 +63,12 @@ class Patient(Base):
     emergency_contact_name: Mapped[Optional[str]] = mapped_column(String(100))
     emergency_contact_phone: Mapped[Optional[str]] = mapped_column(String(15))
     preferred_language: Mapped[str] = mapped_column(String(50), default="English")
+    # The patient's own health insurance / govt schemes (2026-11-10, migration
+    # b8c0ffee0008): [{"code": "star_health", "policy_no": "..."}], codes from
+    # services/insurers.py. A login has one patients row PER HOSPITAL, so saving
+    # writes every row of that login (routers/patients.update_patient). Used only
+    # to show "Accepts your insurance" — never blocks a booking.
+    insurances: Mapped[list] = mapped_column(JSON, default=list)
     is_registered: Mapped[bool] = mapped_column(Boolean, default=False)  # verified vs walk-in
     registration_source: Mapped[str] = mapped_column(String(12), default="walkin")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
@@ -111,6 +117,8 @@ class FamilyMember(Base):
     gender: Mapped[Optional[str]] = mapped_column(String(8))
     blood_group: Mapped[Optional[str]] = mapped_column(String(5))
     photo_url: Mapped[Optional[str]] = mapped_column(String(500))   # profile photo (uploaded)
+    # Same shape as Patient.insurances: each family member can have their own.
+    insurances: Mapped[list] = mapped_column(JSON, default=list)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 

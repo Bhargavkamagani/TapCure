@@ -6,8 +6,8 @@
  *                        until a real logo file is added (see below)
  *   InsuranceLogos       a row of small badges + "+N more" — card top-right
  *   InsuranceList        full grouped list — hospital page / admin views
- *   InsurancePicker      search + collapsible groups of tick boxes — hospital
- *                        signup and hospital Profile
+ *   InsurancePicker      chips + common suggestions + type-to-search —
+ *                        hospital Profile and Complete your profile
  *   InsuranceFilter      a <select> for patient search pages
  *
  * Hospitals store CODES only; names come from the backend list, so a rename
@@ -19,7 +19,7 @@
  * "try the file and see" avoids ~70 missing-file requests on every page.)
  */
 import { useEffect, useMemo, useState } from 'react'
-import { CheckCircle2, ChevronDown, Search, ShieldCheck, X } from 'lucide-react'
+import { BadgeCheck, Search, ShieldCheck, X } from 'lucide-react'
 import { discoveryApi } from '../../api'
 import { useI18n } from '../../i18n/index.jsx'
 
@@ -135,10 +135,12 @@ export function InsuranceList({ codes, showDisclaimer = true, emptyText }) {
 
 // ---- picker (hospital signup + Profile) ----
 export function InsurancePicker({ value, onChange, state = '' }) {
+  // 2026-11-10: no more full lists of ~70 schemes. A few common ones for this
+  // hospital's state are offered as one-tap suggestions; anything else is found
+  // by typing (same idea as "Add services"). Picked ones show as chips on top.
   const { t } = useI18n()
   const { groups, byCode, loading } = useInsurers(state)
   const [q, setQ] = useState('')
-  const [open, setOpen] = useState({ government: true })
   const picked = new Set(value || [])
   const term = q.trim().toLowerCase()
 
@@ -146,70 +148,125 @@ export function InsurancePicker({ value, onChange, state = '' }) {
     const next = picked.has(code) ? (value || []).filter((c) => c !== code) : [...(value || []), code]
     onChange(next)
   }
-  const visible = groups.map((g) => ({
-    ...g,
-    items: term ? g.items.filter((i) => `${i.name} ${i.state || ''} ${i.code}`.toLowerCase().includes(term)) : g.items,
-  }))
+  const all = groups.flatMap((g) => g.items)
+  const mine = String(state || '').trim().toLowerCase()
+  // Suggestions: national schemes + this state's scheme, then the first health insurers.
+  const gov = (groups.find((g) => g.key === 'government')?.items || [])
+    .filter((i) => !i.state || (mine && i.state.toLowerCase() === mine))
+  const health = (groups.find((g) => g.key === 'health')?.items || []).slice(0, 4)
+  const suggested = [...gov.slice(0, 5), ...health].filter((i) => !picked.has(i.code))
+  const results = term
+    ? all.filter((i) => !picked.has(i.code) && `${i.name} ${i.state || ''} ${i.code}`.toLowerCase().includes(term)).slice(0, 10)
+    : []
+
+  const row = (i) => (
+    <button type="button" key={i.code} onClick={() => { toggle(i.code); setQ('') }}
+      className="flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-2 py-2 text-left transition-colors hover:border-brand-blue">
+      <InsurerBadge insurer={byCode[i.code] || i} size="sm" className="!ring-0" />
+      <span className="min-w-0 leading-tight">
+        <span className="block text-[12.5px] font-semibold text-slate-700">{i.name}</span>
+        {i.state && <span className="block text-[11px] text-slate-400">{i.state}</span>}
+      </span>
+    </button>
+  )
 
   if (loading) return <p className="text-[13px] text-slate-400">Loading insurances…</p>
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 focus-within:border-brand-blue">
-        <Search className="h-4 w-4 shrink-0 text-slate-400" />
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t('ins.search')}
-          className="w-full bg-transparent py-2.5 text-sm outline-none placeholder:text-slate-400" />
-        {q && <button type="button" onClick={() => setQ('')} aria-label="Clear search" className="text-slate-300 hover:text-slate-500"><X className="h-4 w-4" /></button>}
-      </div>
-
       {picked.size > 0 && (
         <div className="flex flex-wrap items-center gap-1.5">
           {(value || []).map((c) => byCode[c] && (
             <button type="button" key={c} onClick={() => toggle(c)} title="Remove"
-              className="inline-flex items-center gap-1.5 rounded-full border border-brand-green bg-brand-greenLight py-1 pl-1 pr-2 text-[11.5px] font-semibold text-slate-700">
+              className="inline-flex items-center gap-1.5 rounded-full border border-brand-green bg-brand-greenLight py-1 pl-1 pr-2 text-[12px] font-semibold text-slate-700">
               <InsurerBadge insurer={byCode[c]} size="xs" className="!ring-0" />{byCode[c].name}<X className="h-3 w-3 text-slate-400" />
             </button>
           ))}
-          <button type="button" onClick={() => onChange([])} className="text-[11.5px] font-semibold text-slate-400 hover:text-red-500">Clear all</button>
+          <button type="button" onClick={() => onChange([])} className="text-[12px] font-semibold text-slate-400 hover:text-red-500">Clear all</button>
         </div>
       )}
 
-      {visible.map((g) => {
-        const isOpen = term ? g.items.length > 0 : !!open[g.key]
-        const count = groups.find((x) => x.key === g.key)?.items.filter((i) => picked.has(i.code)).length || 0
-        if (term && !g.items.length) return null
-        return (
-          <div key={g.key} className="rounded-xl border border-slate-200">
-            <button type="button" onClick={() => setOpen((o) => ({ ...o, [g.key]: !o[g.key] }))}
-              className="flex w-full items-center justify-between px-3.5 py-2.5 text-left">
-              <span className="text-[13px] font-semibold text-slate-700">
-                {t(`ins.group.${g.key}`)} <span className="font-normal text-slate-400">({g.items.length})</span>
-                {count > 0 && <span className="ml-2 rounded-full bg-brand-green px-2 py-0.5 text-[10.5px] font-bold text-white">{count} selected</span>}
-              </span>
-              <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-            </button>
-            {isOpen && (
-              <div className="grid grid-cols-1 gap-1.5 border-t border-slate-100 p-2.5 sm:grid-cols-2">
-                {g.items.map((i) => {
-                  const on = picked.has(i.code)
-                  return (
-                    <button type="button" key={i.code} onClick={() => toggle(i.code)} aria-pressed={on}
-                      className={`relative flex items-center gap-2 rounded-lg border px-2 py-2 text-left transition-colors ${on ? 'border-brand-green bg-brand-greenLight' : 'border-slate-200 hover:border-brand-blue'}`}>
-                      <InsurerBadge insurer={byCode[i.code] || i} size="sm" className="!ring-0" />
-                      <span className="min-w-0 pr-4 leading-tight">
-                        <span className="block text-[11.5px] font-semibold text-slate-700">{i.name}</span>
-                        {i.state && <span className="block text-[10.5px] text-slate-400">{i.state}</span>}
-                      </span>
-                      {on && <CheckCircle2 className="absolute right-1.5 top-1.5 h-3.5 w-3.5 text-brand-green" />}
-                    </button>
-                  )
-                })}
-              </div>
-            )}
-          </div>
-        )
-      })}
-      {term && visible.every((g) => !g.items.length) && <p className="text-[12.5px] text-slate-400">No insurance or scheme matches “{q.trim()}”.</p>}
+      <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 focus-within:border-brand-blue">
+        <Search className="h-4 w-4 shrink-0 text-slate-400" />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={`${t('ins.search')} (${all.length})`}
+          aria-label="Search insurance and schemes"
+          className="w-full bg-transparent py-2.5 text-sm outline-none placeholder:text-slate-400" />
+        {q && <button type="button" onClick={() => setQ('')} aria-label="Clear search" className="text-slate-300 hover:text-slate-500"><X className="h-4 w-4" /></button>}
+      </div>
+
+      {term ? (
+        results.length
+          ? <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">{results.map(row)}</div>
+          : <p className="text-[12.5px] text-slate-400">No insurance or scheme matches “{q.trim()}”.</p>
+      ) : suggested.length > 0 && (
+        <div>
+          <p className="mb-1.5 text-[12px] font-semibold text-slate-500">Common ones — tap to add, or type to find others</p>
+          <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">{suggested.map(row)}</div>
+        </div>
+      )}
     </div>
+  )
+}
+
+// ---- the patient's own insurance (Phase 2, 2026-11-10) ----
+/** Edits a patient's / family member's insurances: [{code, policy_no}].
+ *  The same suggest-and-search picker, then an optional policy number each. */
+export function MyInsuranceEditor({ value, onChange, state = '' }) {
+  const { t } = useI18n()
+  const { byCode } = useInsurers()
+  const items = value || []
+  const codes = items.map((i) => i.code)
+  const setCodes = (next) => onChange(next.map((c) => items.find((i) => i.code === c) || { code: c, policy_no: '' }))
+  const setPolicy = (code, policy_no) => onChange(items.map((i) => (i.code === code ? { ...i, policy_no } : i)))
+  return (
+    <div className="flex flex-col gap-3">
+      <InsurancePicker value={codes} onChange={setCodes} state={state} />
+      {items.length > 0 && (
+        <div className="grid gap-2">
+          {items.map((i) => byCode[i.code] && (
+            <label key={i.code} className="flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
+              <InsurerBadge insurer={byCode[i.code]} size="sm" className="!ring-0" />
+              <span className="min-w-[120px] flex-1 text-[13px] font-semibold text-slate-700">{byCode[i.code].name}</span>
+              <input value={i.policy_no || ''} maxLength={40} onChange={(e) => setPolicy(i.code, e.target.value)}
+                placeholder={t('ins.my.policy')} aria-label={`${byCode[i.code].name} – ${t('ins.my.policy')}`}
+                className="w-full rounded-lg border border-slate-200 px-2.5 py-1.5 text-[13px] outline-none focus:border-brand-blue sm:w-56" />
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Codes of the person's insurances that this hospital accepts. */
+export function acceptedOf(hospitalCodes, insurances) {
+  const h = new Set(hospitalCodes || [])
+  return (insurances || []).map((i) => i.code).filter((c) => h.has(c))
+}
+
+/** Green "✓ Accepts your Star Health" badge; nothing when there is no match.
+ *  `overlay`: solid badge for the top-left corner of a hospital photo. */
+export function AcceptsYourBadge({ hospitalCodes, insurances, className = '', overlay = false }) {
+  const { t } = useI18n()
+  const { byCode } = useInsurers()
+  const match = acceptedOf(hospitalCodes, insurances)
+  if (!match.length) return null
+  const first = byCode[match[0]]?.name || match[0]
+  const name = match.length > 1 ? `${first} +${match.length - 1}` : first
+  if (overlay) {
+    return (
+      // Just "Accepts your insurance": a patient may hold several, and names
+      // don't fit on a photo. The names are in the tooltip and on the hospital page.
+      <span title={t('ins.accepts', { name })}
+        className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-emerald-600 py-1 pl-1 pr-3 text-[12.5px] font-bold text-white shadow-md ring-2 ring-white ${className}`}>
+        <BadgeCheck className="h-5 w-5 shrink-0 fill-white text-emerald-600" strokeWidth={2.5} />
+        {t('ins.acceptsYours')}
+      </span>
+    )
+  }
+  return (
+    <span className={`inline-flex w-fit items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[12.5px] font-semibold text-emerald-700 ring-1 ring-emerald-200 ${className}`}>
+      <ShieldCheck className="h-3.5 w-3.5" />{t('ins.accepts', { name })}
+    </span>
   )
 }
 

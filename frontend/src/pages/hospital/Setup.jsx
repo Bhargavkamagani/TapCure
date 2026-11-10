@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Check, Plus, Camera, Clock, Stethoscope, MapPin, Phone, Pencil, X, ArrowRight } from 'lucide-react'
+import { Check, Plus, Camera, Clock, Stethoscope, MapPin, Phone, Pencil, X, ArrowRight, ShieldCheck } from 'lucide-react'
 import Wordmark from '../../components/common/Wordmark.jsx'
 import { hospitalsApi, departmentsApi, fileUrl } from '../../api'
 import { SPECIALIZATIONS, SERVICE_OPTIONS } from '../../data/authData.js'
 import { useAuth } from '../../context/AuthContext.jsx'
-import { useHospitalSetup, rememberHours, remember, LATER_KEY } from '../../components/hospital/HospitalSetupStatus.jsx'
+import { InsurancePicker, InsuranceList } from '../../components/common/Insurance.jsx'
+import { useHospitalSetup, rememberHours, remember, LATER_KEY, pickedServices } from '../../components/hospital/HospitalSetupStatus.jsx'
 
 /**
  * Complete your profile — what a hospital owner sees after approval (2026-11-10).
@@ -60,7 +61,7 @@ export default function HospitalSetup() {
   const setup = useHospitalSetup()
   const { user } = useAuth()
   const { hospital, settings, departments, steps, loading } = setup
-  const [edit, setEdit] = useState(null)     // 'hours' | 'services' | null
+  const [edit, setEdit] = useState(null)     // 'hours' | 'services' | 'insurance' | null
   const [busy, setBusy] = useState(null)     // 'logo' | 'photo' | 'save'
   const [error, setError] = useState(null)
   const [live, setLive] = useState(false)
@@ -70,6 +71,12 @@ export default function HospitalSetup() {
   const [hours, setHours] = useState(null)   // { always, days, open, close }
   const [picked, setPicked] = useState([])
   const [query, setQuery] = useState('')    // search over all services
+  // Insurance & schemes accepted (2026-11-10): optional, not one of the 3 steps.
+  // null until the hospital loads, then a copy of what is saved.
+  const [insurers, setInsurers] = useState(null)
+  useEffect(() => {
+    if (hospital && insurers === null) setInsurers(hospital.insurance_partners || [])
+  }, [hospital, insurers])
 
   useEffect(() => {
     if (!settings || hours) return
@@ -86,8 +93,10 @@ export default function HospitalSetup() {
   if (loading) return <div className="grid min-h-screen place-items-center bg-[#EEF5F4]"><div className="h-10 w-10 animate-spin rounded-full border-[3px] border-teal-600/20 border-t-teal-600" /></div>
   if (!hospital) return <p className="p-8 text-slate-500">No hospital linked to this account.</p>
 
-  const have = departments.filter((d) => d.is_active !== false).map((d) => d.name)
-  const haveSet = new Set(have.map(norm))
+  // The auto "General OPD" is hidden here and not counted (see pickedServices),
+  // but still blocks picking a duplicate of it.
+  const have = pickedServices(departments).map((d) => d.name)
+  const haveSet = new Set(departments.filter((d) => d.is_active !== false).map((d) => norm(d.name)))
   const services = [...have, ...picked]
   const photo = hospital.photo_url && !bad.photo
   const logo = hospital.logo_url && !bad.logo
@@ -143,6 +152,10 @@ export default function HospitalSetup() {
         })
         if (hours.always) rememberHours(hospital.hospital_id)
       }
+      const savedIns = hospital.insurance_partners || []
+      if (insurers && (insurers.length !== savedIns.length || insurers.some((c) => !savedIns.includes(c)))) {
+        setup.setHospital(await hospitalsApi.update(hospital.hospital_id, { insurance_partners: insurers }))
+      }
       for (const name of picked) await departmentsApi.create({ hospital_id: hospital.hospital_id, name, code: '', floor: '', description: '' })
       setPicked([])
       await setup.refresh()
@@ -162,7 +175,7 @@ export default function HospitalSetup() {
       </div>
 
       <div className="mx-auto mt-8 max-w-[600px] text-center">
-        {live ? (
+        {live && hospital.profile_completed_at ? (
           <>
             <p className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-[13px] font-bold text-emerald-700"><i className="h-2 w-2 animate-pulse rounded-full bg-emerald-500 motion-reduce:animate-none" /> Live</p>
             <h1 className="mt-3 text-[28px] font-extrabold tracking-[-0.02em] text-brand-navy sm:text-[32px]">{hospital.name} is live!</h1>
@@ -171,7 +184,7 @@ export default function HospitalSetup() {
         ) : (
           <>
             <h1 className="text-[28px] font-extrabold tracking-[-0.02em] text-brand-navy sm:text-[32px]">{firstName ? `Welcome, ${firstName}!` : 'Welcome!'}</h1>
-            <p className="mt-1.5 text-[16px] text-slate-500">This is how patients see {hospital.name}. We filled in what you gave us at sign-up. Just tap the empty parts.</p>
+            <p className="mt-1.5 text-[16px] text-slate-500">This is how patients will see {hospital.name}. We filled in what you gave us at sign-up. Just tap the empty parts.</p>
             {fromSignup.length > 0 && (
               <div className="mt-4 flex flex-wrap justify-center gap-2" aria-label="Already filled from your sign-up">
                 {fromSignup.map(([k, v]) => (
@@ -333,6 +346,37 @@ export default function HospitalSetup() {
                 </div>
                 <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder={`Search all ${SPECIALIZATIONS.length} services…`} aria-label="Search services"
                   className="mt-3 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[14.5px] text-brand-navy placeholder:text-slate-400 focus:border-teal-500 focus:outline-none" />
+              </div>
+            )}
+          </div>
+
+          {/* insurance & schemes — optional, saved with the rest */}
+          <div className="mt-4 border-t border-slate-100 pt-4">
+            {edit !== 'insurance' && (insurers?.length ? (
+              <div className="flex items-start gap-2.5">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-teal-50 text-teal-600"><ShieldCheck className="h-[18px] w-[18px]" /></span>
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <InsuranceList codes={insurers} showDisclaimer={false} />
+                  {!live && <button type="button" onClick={() => setEdit('insurance')} className="mt-1 rounded-xl px-2 py-1.5 text-[14px] font-bold text-teal-700 hover:bg-teal-50">Change</button>}
+                </div>
+              </div>
+            ) : (
+              !live && <AddSpot icon={ShieldCheck} onClick={() => setEdit('insurance')}>Add insurance &amp; schemes you accept (optional)</AddSpot>
+            ))}
+
+            {edit === 'insurance' && (
+              <div className="rounded-2xl bg-slate-50 p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <b className="flex items-center gap-2 text-[15px] text-brand-navy"><ShieldCheck className="h-4 w-4 text-teal-600" /> Which insurance &amp; schemes do you accept?</b>
+                  <span className="flex items-center gap-3">
+                    <span className="text-[13.5px] font-semibold text-slate-500">{(insurers || []).length} selected</span>
+                    <button type="button" onClick={() => setEdit(null)} className="rounded-lg bg-teal-600 px-3 py-1.5 text-[13.5px] font-bold text-white">Done</button>
+                  </span>
+                </div>
+                <p className="mt-1 text-[13px] text-slate-500">Patients see these on your hospital card and can search by them.</p>
+                <div className="mt-3">
+                  <InsurancePicker value={insurers || []} onChange={setInsurers} state={hospital.state} />
+                </div>
               </div>
             )}
           </div>

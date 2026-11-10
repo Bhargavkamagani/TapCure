@@ -193,7 +193,13 @@ def remote_booking_open(db: Session, hospital_id: UUID) -> tuple[bool, str]:
     date stops taking online bookings until it pays. Walk-ins keep working.
     """
     from . import billing  # billing builds on this module
+    from ..models.hospital import Hospital as _Hospital
 
+    # Hidden from patients until "Complete your profile" is done (2026-11-10);
+    # a direct link must not book it either.
+    h = db.get(_Hospital, hospital_id)
+    if h is not None and h.profile_completed_at is None:
+        return False, "This hospital isn't taking online bookings yet. Please visit the hospital directly."
     if billing.unpaid_invoice(db, hospital_id) is not None:
         return False, "This hospital isn't taking online bookings right now. Please visit the hospital directly."
     sub = current_subscription(db, hospital_id)

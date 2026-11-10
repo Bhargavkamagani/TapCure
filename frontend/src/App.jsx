@@ -191,6 +191,7 @@ function App() {
             <Route path="prescriptions" element={<PatientPrescriptions />} />
             <Route path="doctors" element={<PatientDoctors />} />
             <Route path="hospitals" element={<PatientHospitals />} />
+            <Route path="hospitals/:hospitalId" element={<PublicHospitalProfile inDashboard />} />
             <Route path="clinics" element={<Navigate to="/patient-dashboard/hospitals" replace />} />
             <Route path="health-records" element={<PatientHealthRecords />} />
             <Route path="payments" element={<PatientPayments />} />

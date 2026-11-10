@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session, selectinload
 from ..database import get_db
 from ..services import health_news as news_service
 from ..services import insurers as insurer_list
+from ..services import hospital_profile
 from ..services import scheduling as sch
 from ..services.storage import media_url
 from ..models.doctor import Doctor, DoctorAffiliation, DoctorSchedule
@@ -135,8 +136,7 @@ def _doctor_out(row: Doctor, hospitals: dict[int, Hospital], include_schedules: 
             affiliation.hospital_id is None
             or (
                 affiliation.hospital_id in hospitals
-                and hospitals[affiliation.hospital_id].status == "active"
-                and hospitals[affiliation.hospital_id].is_active
+                and hospital_profile.is_visible(hospitals[affiliation.hospital_id])
             )
         )
     ]
@@ -186,7 +186,8 @@ def _hospital_out(row: Hospital, doctor_count: int = 0) -> dict:
 def _active_hospitals(db: Session) -> list[Hospital]:
     return list(db.scalars(
         select(Hospital)
-        .where(Hospital.status == "active", Hospital.is_active.is_(True))
+        # Hidden until "Complete your profile" is done (2026-11-10).
+        .where(*hospital_profile.visible_to_patients())
         .order_by(Hospital.name)
     ).all())
 
@@ -299,7 +300,7 @@ def public_cities(db: Session = Depends(get_db)):
     """
     hospital_cities = db.scalars(
         select(Hospital.city).where(
-            Hospital.status == "active", Hospital.is_active.is_(True), Hospital.city != ""
+            *hospital_profile.visible_to_patients(), Hospital.city != ""
         ).distinct()
     ).all()
     practice_cities = db.scalars(
@@ -383,8 +384,7 @@ def public_hospital(hospital_id: UUID, db: Session = Depends(get_db)):
     hospital = db.scalar(
         select(Hospital).where(
             Hospital.hospital_id == hospital_id,
-            Hospital.status == "active",
-            Hospital.is_active.is_(True),
+            *hospital_profile.visible_to_patients(),
         )
     )
     if not hospital:

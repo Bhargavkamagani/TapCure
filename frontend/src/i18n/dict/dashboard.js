@@ -444,6 +444,7 @@ export const dashboardT = {
   'ppage.open': { en: 'Open', te: 'తెరిచి ఉంది', hi: 'खुला' },
   'ppage.closed': { en: 'Closed', te: 'మూసివేయబడింది', hi: 'बंद' },
   'ppage.nDoctors': { en: '{n} doctors', te: '{n} డాక్టర్లు', hi: '{n} डॉक्टर' },
+  'ppage.viewDetails': { en: 'View Full Details', te: 'పూర్తి వివరాలు చూడండి', hi: 'पूरी जानकारी देखें' },
   'ppage.viewDoctors': { en: 'View Doctors', te: 'డాక్టర్లను చూడండి', hi: 'डॉक्टर देखें' },
 
   // ---------- Health Records ----------

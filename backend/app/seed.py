@@ -19,6 +19,7 @@ from .models import (
     Subscription, User,
 )
 from .config import settings
+from .database import utcnow
 from .rbac import (
     ALL_PERMISSIONS, ROLE_DESCRIPTIONS, ROLE_DOCTOR, ROLE_HOSPITAL_ADMIN,
     ROLE_PATIENT, ROLE_PHARMACIST, ROLE_RECEPTIONIST, ROLE_SUPER_ADMIN, permissions_for,
@@ -96,6 +97,7 @@ def seed(db: Session) -> bool:
         name="City Care Hospital", short_code="CCH", city="Bengaluru",
         state="Karnataka", pincode="560001", phone="08012345678",
         email="contact@citycare.com",
+        profile_completed_at=utcnow(),   # demo tenant: visible to patients
     )
     hospital.settings = HospitalSettings(
         op_start_time=time(9, 0), op_end_time=time(17, 0),
