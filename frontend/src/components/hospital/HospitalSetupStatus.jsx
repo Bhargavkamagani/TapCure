@@ -22,6 +22,14 @@ export const remember = (store, key) => { try { store.setItem(key, '1') } catch 
 export const rememberHours = (id) => remember(localStorage, hoursKey(id))
 export const skippedForNow = () => read(sessionStorage, LATER_KEY) === '1'
 
+// Signup always creates a "General OPD" (code OPD) so doctors and tokens have a
+// department to hang off. It is not a service the owner picked, so it does not
+// count towards "services done" (2026-11-10) — otherwise every new hospital
+// starts at 1 of 3 and is never sent to "Complete your profile".
+export const isAutoOpd = (d) => d?.code === 'OPD' && (d?.name || '').trim().toLowerCase() === 'general opd'
+export const pickedServices = (departments) =>
+  (departments || []).filter((d) => d.is_active !== false && !isAutoOpd(d))
+
 /** `enabled` false skips every request (the super admin in a hospital console). */
 export function useHospitalSetup(enabled = true) {
   const [state, setState] = useState({ loading: true, hospital: null, settings: null, departments: [] })
@@ -49,8 +57,10 @@ export function useHospitalSetup(enabled = true) {
   const departments = state.departments || []
   const steps = {
     photo: Boolean(hospital?.logo_url || hospital?.photo_url),
-    hours: Boolean(settings && (!settings.always_open || read(localStorage, hoursKey(hospital?.hospital_id)) === '1')),
-    services: departments.some((d) => d.is_active !== false),
+    // On the server since 2026-11-10 (hours_confirmed); the browser note is the
+    // fallback for a backend without that column.
+    hours: Boolean(settings && (settings.hours_confirmed ?? (!settings.always_open || read(localStorage, hoursKey(hospital?.hospital_id)) === '1'))),
+    services: pickedServices(departments).length > 0,
   }
   const done = Object.values(steps).filter(Boolean).length
   // Only judge once everything loaded; a failed settings call is not "not done".
@@ -58,6 +68,8 @@ export function useHospitalSetup(enabled = true) {
   return {
     ...state, departments, setHospital: (h) => setState((s) => ({ ...s, hospital: h })), steps, done, refresh,
     complete: known && done === 3,
+    // Patients see the hospital only once the server marked it complete.
+    visible: Boolean(hospital?.profile_completed_at),
     incomplete: known && done < 3,
     // nothing filled at all: a hospital that has just been approved
     fresh: known && done === 0,
@@ -72,7 +84,8 @@ export function SetupNudge({ done }) {
       <div className="min-w-[200px] flex-1">
         <p className="text-[14px] text-slate-700">
           <b className="text-amber-700">Profile {done} of 3 done.</b>{' '}
-          {missing === 1 ? 'One more step so patients can find and book you.' : `${missing} more steps so patients can find and book you.`}
+          {missing === 1 ? 'One more step to go.' : `${missing} more steps to go.`}{' '}
+          Patients can find and book your hospital only after your profile is complete.
         </p>
         <div className="mt-2 h-2 overflow-hidden rounded-full bg-amber-100">
           <i className="block h-full rounded-full bg-amber-500 transition-all" style={{ width: `${(done / 3) * 100}%` }} />

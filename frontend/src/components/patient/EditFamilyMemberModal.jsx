@@ -4,11 +4,12 @@ import { X, Bell, Camera } from 'lucide-react'
 import { Avatar, ToolButton } from '../hospital/ui.jsx'
 import { TextInput, SelectInput, Banner } from '../common/FormControls.jsx'
 import { patientsApi, fileUrl } from '../../api'
+import { MyInsuranceEditor } from '../common/Insurance.jsx'
 import { useI18n } from '../../i18n/index.jsx'
 import { RELATIONS, GENDERS, BLOOD, PHONE_RE, relationTone } from '../../lib/family.js'
 import { joinName, nameFields, nameParts } from '../../lib/personName.js'
 
-const blank = { first_name: '', last_name: '', relation: '', gender: '', dob: '', blood_group: '', phone: '', notify_to: 'account' }
+const blank = { first_name: '', last_name: '', relation: '', gender: '', dob: '', blood_group: '', phone: '', notify_to: 'account', insurances: [] }
 
 /**
  * Add / edit a family member, using the same modal shell as the patient's own
@@ -37,6 +38,7 @@ export default function EditFamilyMemberModal({ member, patientId, accountPhone,
       first_name: nameParts(member).first, last_name: nameParts(member).last, relation: member.relation || '', gender: member.gender || '',
       dob: member.dob || '', blood_group: member.blood_group || '', phone: member.phone || '',
       notify_to: member.notify_to || 'account',
+      insurances: (member.insurances || []).map((i) => ({ ...i, policy_no: i.policy_no || '' })),
     })
     setPhotoUrl(isNew ? null : member.photo_url || null)
     setPhotoFile(null)
@@ -113,6 +115,8 @@ export default function EditFamilyMemberModal({ member, patientId, accountPhone,
         blood_group: form.blood_group || null,
         phone: phone || null,
         notify_to: phone ? form.notify_to : 'account',
+        // Their own insurance (2026-11-10), for "Accepts your insurance".
+        insurances: (form.insurances || []).map((i) => ({ code: i.code, policy_no: (i.policy_no || '').trim() || null })),
       }
       let saved = isNew
         ? await patientsApi.addFamily({ patient_id: patientId, ...body })
@@ -228,6 +232,12 @@ export default function EditFamilyMemberModal({ member, patientId, accountPhone,
                 </span>
               </label>
             </div>
+          </div>
+
+          {/* This member's own insurance (optional) */}
+          <div className="sm:col-span-2">
+            <p className="mb-1.5 text-[13px] font-semibold text-brand-navy">{t('ins.my.title')}</p>
+            <MyInsuranceEditor value={form.insurances} onChange={(insurances) => setForm((f) => ({ ...f, insurances }))} />
           </div>
         </div>
 

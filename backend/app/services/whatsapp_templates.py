@@ -391,6 +391,23 @@ def almost_turn_params(who: str, wait_min, ahead, token_code: str, doctor: str,
     ]
 
 
+# ---------------------------------------------------------------------------
+# tapcure_pilot_reminder — "Hello {{1}}, your TapCure free trial for {{2}} {{3}}. ..."
+#   NEW (2026-11-10), needs approval. Empty setting = not sent.
+# ---------------------------------------------------------------------------
+def pilot_reminder_name() -> str:
+    return (settings.whatsapp_pilot_reminder_template or "").strip()
+
+
+def pilot_reminder_params(who: str, hospital: str, status_text: str) -> list[str]:
+    """[admin name, hospital, status] e.g. ["Satya", "satya sai", "ends in 7 days (3 December)"]."""
+    return [
+        clean_param(who, fallback="there", limit=80),
+        clean_param(hospital, fallback="your hospital", limit=100),
+        clean_param(status_text, fallback="ends soon", limit=120),
+    ]
+
+
 # Event types published to the Lambda sender on the SQS transport. Keep in step
 # with the payload keys in `notifications.send_whatsapp`.
 MEDICINE_REMINDER_EVENT = "medicine_reminder"
@@ -432,6 +449,9 @@ CONSULTATION_COMPLETE_EVENT = "consultation_complete"
 CONSULTATION_COMPLETE_PAYLOAD_KEYS = [
     "recipient_name", "visit_date", "consultation_time", "doctor_name", "hospital", "token",
 ]
+
+PILOT_REMINDER_EVENT = "pilot_reminder"
+PILOT_REMINDER_PAYLOAD_KEYS = ["recipient_name", "hospital", "status"]
 
 PRESCRIPTION_READY_EVENT = "prescription_ready"
 PRESCRIPTION_READY_PAYLOAD_KEYS = [

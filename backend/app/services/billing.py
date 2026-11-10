@@ -321,6 +321,9 @@ def _month_end(db: Session, key: str) -> dict:
             (charged if charge_invoice(db, inv) else failed).append(inv.invoice_number)
     reminded = remind_unpaid(db, today)
     db.commit()
+    for hid in sorted(hospital_ids):
+        quota.pilot_reminders(db, hid)
+    db.commit()
     return {"month": key, "invoices": made, "yearly_renewals": renewed, "autopay_charged": charged,
             "autopay_failed": failed, "reminders_sent": reminded}
 

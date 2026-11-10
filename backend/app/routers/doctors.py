@@ -11,11 +11,11 @@ from decimal import Decimal
 from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session, joinedload, selectinload
 
 from ..database import get_db, utcnow
-from ..deps import ensure_same_tenant, require_permission, require_role
+from ..deps import ensure_same_tenant, require_permission, require_role, require_staff
 from ..models import (
     Appointment, Department, Doctor, DoctorAffiliation, DoctorBreak, DoctorDelayLog, DoctorDocument,
     DoctorHoliday, DoctorLeaveRequest, DoctorSchedule, DoctorStatus, Hospital,
@@ -36,6 +36,7 @@ from ..services import accounts
 from ..services import storage
 from ..services import suspension
 from ..services import audit
+from ..services import hospital_profile
 from ..services import session_cancellation
 from ..services.hospital_location import hospital_practice_fields
 from ..services.reception_scope import ensure_can_see_doctor, restrict
@@ -276,6 +277,14 @@ def _affiliation(db: Session, affiliation_id: UUID, doctor_id: UUID | None = Non
 
 
 # ========================================================= Doctors ==========
+def _hide_login_email(me: User, rows, schema):
+    """A doctor's login email is half of their credentials — staff screens need
+    it, a patient browsing doctors does not. Blank it for PATIENT callers."""
+    if not (me.role and me.role.name == ROLE_PATIENT):
+        return rows
+    return [schema.model_validate(d).model_copy(update={"login_email": None}) for d in rows]
+
+
 @router.get("/doctors", response_model=list[DoctorOut])
 def list_doctors(
     hospital_id: UUID | None = Query(None),
@@ -304,6 +313,9 @@ def list_doctors(
         # Patients browse every active doctor across all hospitals; an optional
         # hospital_id narrows to one hospital when they pick "Find Hospital" first.
         stmt = stmt.where(Doctor.status == "active")
+        # Not the doctors of a hospital still on "Complete your profile" (2026-11-10).
+        stmt = stmt.where(Doctor.hospital_id.in_(
+            select(Hospital.hospital_id).where(*hospital_profile.visible_to_patients())))
         if hospital_id:
             stmt = stmt.where(Doctor.hospital_id == hospital_id)
     else:
@@ -314,7 +326,7 @@ def list_doctors(
     if q:
         stmt = stmt.where(Doctor.specialization.ilike(f"%{q}%"))
     stmt = stmt.order_by(Doctor.doctor_id).offset((page - 1) * size).limit(size)
-    return db.scalars(stmt).all()
+    return _hide_login_email(me, db.scalars(stmt).all(), DoctorOut)
 
 
 # NOTE: static path — must stay above "/doctors/{doctor_id}".
@@ -323,6 +335,7 @@ def doctors_duty_today(
     on_date: date | None = Query(None, alias="date"),
     hospital_id: UUID | None = Query(None),
     me: User = Depends(require_permission("doctor", "read")),
+    _staff: User = Depends(require_staff),
     db: Session = Depends(get_db),
 ):
     """Today's roster for the front desk — each doctor plus WHY they're off.
@@ -482,7 +495,34 @@ def get_doctor(doctor_id: UUID, me: User = Depends(require_permission("doctor", 
     d = _doctor(db, doctor_id)
     ensure_same_tenant(me, d.hospital_id)
     ensure_can_see_doctor(db, me, d.doctor_id)
-    return d
+    return _hide_login_email(me, [d], DoctorDetail)[0]
+
+
+def _assert_doctor_room(db: Session, me: User, hospital_id: UUID, adding: Doctor | None = None) -> None:
+    """The plan's doctor limit (the pricing cards: Starter 1, Smart Hospital 1,
+    Pro 3 + extra doctors). Checked only when a doctor is ADDED or turned back
+    on — doctors already working are never removed. TapCure (Super Admin) sets
+    up hospitals by hand and is not held to it."""
+    if me.role and me.role.name == ROLE_SUPER_ADMIN:
+        return
+    from ..services import booking_quota
+    limit, plan_name = booking_quota.doctor_limit(db, hospital_id)
+    if limit is None:
+        return
+    stmt = select(func.count(Doctor.doctor_id)).where(
+        Doctor.hospital_id == hospital_id,
+        Doctor.is_self_registered.is_(False),
+        Doctor.status.not_in(("inactive", "suspended")),
+    )
+    if adding is not None:
+        stmt = stmt.where(Doctor.doctor_id != adding.doctor_id)
+    if (db.scalar(stmt) or 0) >= limit:
+        hint = ("Contact TapCure to add an extra doctor to your plan."
+                if plan_name == "Pro" else "Upgrade your plan in Plan & Bookings to add more doctors.")
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            f"Your {plan_name} plan includes {limit} doctor{'s' if limit != 1 else ''}. {hint}",
+        )
 
 
 @router.post("/doctors", response_model=DoctorOut, status_code=201)
@@ -494,6 +534,7 @@ def create_doctor(body: DoctorCreate, me: User = Depends(require_permission("doc
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid department_id")
     if body.user_id and not db.get(User, body.user_id):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid user_id")
+    _assert_doctor_room(db, me, body.hospital_id)
     d = Doctor(**body.model_dump())
     d.presence = DoctorStatus(status="off_duty")
     db.add(d)
@@ -513,6 +554,7 @@ def onboard_doctor(body: DoctorOnboard, me: User = Depends(require_permission("d
     hospital_id = me.hospital_id
     if body.department_id and not db.get(Department, body.department_id):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Invalid department_id")
+    _assert_doctor_room(db, me, hospital_id)
 
     body.email = accounts.normalize_email(body.email)
     if accounts.email_taken(db, body.email):
@@ -591,6 +633,8 @@ def update_doctor(doctor_id: UUID, body: DoctorUpdate, me: User = Depends(requir
         elif _fee_owned_by_hospital(db, d):
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Consultation fee is set by the hospital")
     status_change = _check_status_change(me, d, fields)
+    if status_change == "reactivate":
+        _assert_doctor_room(db, me, d.hospital_id, adding=d)
     for k, v in fields.items():
         setattr(d, k, v)
     if status_change == "deactivate":
@@ -654,7 +698,7 @@ def view_doctor_signature(doctor_id: UUID, me: User = Depends(require_permission
     """A short-lived link to the doctor's own signature, for their profile preview."""
     d = _doctor(db, doctor_id)
     _own_doctor_only(me, d)
-    return {"url": storage.public_url(d.signature_url) if d.signature_url else None}
+    return {"url": storage.media_url(d.signature_url, "signatures")}
 
 
 @router.delete("/doctors/{doctor_id}/signature", response_model=DoctorOut)

@@ -90,7 +90,7 @@ def build(db: Session, hospital: Hospital, *, on_date: Optional[date] = None,
             "name": d.name,
             "specialization": d.specialization,
             # Public already (Find Doctors shows it); a link the TV can open.
-            "photo_url": storage.public_url(d.profile_photo_url),
+            "photo_url": storage.media_url(d.profile_photo_url, "doctors"),
             "duty": {"state": state.get("state"), "label": state.get("label"), "hours": state.get("hours", "")},
             "now_serving": current.display_code if current else None,
             # Changes every time a token is called (or recalled into the room), so

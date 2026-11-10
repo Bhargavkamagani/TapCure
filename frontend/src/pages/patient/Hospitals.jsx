@@ -1,14 +1,15 @@
 import { useMemo, useState, useEffect } from 'react'
 import { translitName } from '../../lib/translit.js'
 import { Link } from 'react-router-dom'
-import { Building2, MapPin, Phone, Users, Navigation, LocateFixed, X, Search } from 'lucide-react'
+import { Building2, MapPin, Phone, Users, Navigation, LocateFixed, X, Search, ShieldCheck } from 'lucide-react'
 import { Card, PageHeading } from '../../components/hospital/ui.jsx'
 import { usePatientCtx } from '../../context/PatientContext.jsx'
-import { fileUrl, discoveryApi } from '../../api'
+import { fileUrl, discoveryApi, patientsApi } from '../../api'
 import { useI18n } from '../../i18n/index.jsx'
 import { shortPlace } from '../../lib/shortPlace.js'
 import { haversineKm, travelMinutesBetween, getCurrentPosition } from '../../lib/geo.js'
 import { cityKey, sameCity } from '../../lib/cityMatch.js'
+import { InsuranceLogos, InsuranceFilter, useInsurers, AcceptsYourBadge, acceptedOf } from '../../components/common/Insurance.jsx'
 
 /** A coordinate is usable only if it's a finite, non-zero number. */
 const validCoord = (v) => v != null && v !== '' && Number.isFinite(Number(v)) && Number(v) !== 0
@@ -65,6 +66,22 @@ function Hospitals() {
   // City picker, same as the Doctors directory. Empty = every city.
   const [cityFilter, setCityFilter] = useState('')
   const [cities, setCities] = useState([])
+  // Insurance filter (2026-11-03): one insurer/scheme code, '' = any.
+  const [insurance, setInsurance] = useState('')
+  const { byCode: insurers } = useInsurers()
+  // Whose insurance to match (Phase 2, 2026-11-10): the family member the visit
+  // is for (?for=), else the patient's own.
+  const [memberIns, setMemberIns] = useState(null)
+  useEffect(() => {
+    if (!bookingFor || !patient?.patient_id) { setMemberIns(null); return undefined }
+    let on = true
+    patientsApi.family(patient.patient_id)
+      .then((list) => on && setMemberIns((list || []).find((m) => String(m.member_id) === bookingFor)?.insurances || []))
+      .catch(() => on && setMemberIns(null))
+    return () => { on = false }
+  }, [bookingFor, patient?.patient_id])
+  const myIns = memberIns ?? (patient?.insurances || [])
+  const [onlyMine, setOnlyMine] = useState(false)
   // The patient's own city, used to float local hospitals to the top.
   const homeCity = cityKey(patient?.city)
 
@@ -110,6 +127,8 @@ function Hospitals() {
     // City picker, matched with the Doctors page's own rule (lib/cityMatch.js)
     // so "Hyderabad" also keeps "Hyderabad, Telangana".
     if (cityFilter) list = list.filter((c) => sameCity(c.city, cityFilter))
+    if (insurance) list = list.filter((c) => (c.insurance_partners || []).includes(insurance))
+    if (onlyMine && myIns.length) list = list.filter((c) => acceptedOf(c.insurance_partners, myIns).length > 0)
 
     /* Typed search, the same shape as the Doctors page. Matches the name, the
        city, the state and the address, so "Peruru", "Andhra" and "jeevan" all
@@ -146,7 +165,7 @@ function Hospitals() {
       })
     }
     return list
-  }, [hospitalsById, doctorsById, origin, radius, query, cityFilter, homeCity, lang])
+  }, [hospitalsById, doctorsById, origin, radius, query, cityFilter, insurance, onlyMine, myIns, homeCity, lang])
 
   return (
     <div className="flex flex-col gap-5">
@@ -182,10 +201,18 @@ function Hospitals() {
             {cities.map((c) => <option key={c} value={c}>{translitName(c, lang)}</option>)}
           </select>
         </div>
+        <InsuranceFilter value={insurance} onChange={setInsurance}
+          className="border-t border-slate-100 px-2 sm:border-l sm:border-t-0 sm:pl-3" />
       </div>
 
       {/* Near-me controls */}
       <div className="flex flex-wrap items-center gap-3">
+        {myIns.length > 0 && (
+          <button type="button" onClick={() => setOnlyMine((v) => !v)} aria-pressed={onlyMine}
+            className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[13px] font-semibold transition-colors ${onlyMine ? 'border-emerald-500 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-white text-slate-600 hover:border-emerald-400'}`}>
+            <ShieldCheck className="h-4 w-4" />{t('ins.onlyMine')}
+          </button>
+        )}
         {!origin ? (
           <button
             onClick={useMyLocation}
@@ -224,15 +251,17 @@ function Hospitals() {
           {/* Say WHICH filter emptied the list, and offer the way out. "No
               hospitals yet" would be a lie when the typed word is the reason. */}
           <p className="text-[15px] font-bold text-brand-navy">
-            {query.trim() || cityFilter
+            {insurance && !query.trim() && !cityFilter
+              ? t('ins.noMatch', { name: insurers[insurance]?.name || insurance })
+              : query.trim() || cityFilter
               ? t('px.noHospitalsMatch', { q: query.trim() || translitName(cityFilter, lang) })
               : origin && radius !== 'any'
               ? t('px.noHospitalsWithin', { n: radius })
               : t('ppage.noHospitals')}
           </p>
-          {(query.trim() || cityFilter) && (
+          {(query.trim() || cityFilter || insurance) && (
             <button
-              onClick={() => { setQuery(''); setCityFilter('') }}
+              onClick={() => { setQuery(''); setCityFilter(''); setInsurance('') }}
               className="mt-3 rounded-xl bg-brand-blue px-4 py-2 text-[13px] font-semibold text-white hover:bg-brand-blueDark"
             >
               {t('pm.clearSearch')}
@@ -250,13 +279,19 @@ function Hospitals() {
               <div className="relative h-[210px] w-full shrink-0 overflow-hidden">
                 <HospitalPicture hospital={c} />
                 <span className="absolute right-3 top-3"><OpenBadge active={c.is_active} /></span>
+                {/* "Accepts your insurance" — top left, like a seal (2026-11-10). */}
+                <AcceptsYourBadge overlay hospitalCodes={c.insurance_partners} insurances={myIns} className="absolute left-3 top-3" />
                 <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1 text-[13px] font-semibold text-brand-navy shadow-sm">
                   <Users className="h-3.5 w-3.5 text-brand-blue" />{t('ppage.nDoctors', { n: c.doctorCount })}
                 </span>
               </div>
               <div className="flex flex-1 flex-col p-5 pt-4">
               <div className="min-w-0 leading-tight">
-                <p className="truncate text-[16px] font-bold text-brand-navy" title={c.name}>{translitName(c.name, lang)}</p>
+                {/* Insurers accepted: small logos, top right (2026-11-03). */}
+                <div className="flex items-start justify-between gap-2">
+                  <p className="min-w-0 truncate text-[16px] font-bold text-brand-navy" title={c.name}>{translitName(c.name, lang)}</p>
+                  <InsuranceLogos codes={c.insurance_partners} className="mt-0.5" />
+                </div>
                 {lang !== 'en' && <p className="text-[13px] text-slate-400">{c.name}</p>}
                 <p className="mt-1 flex items-center gap-1 text-[13px] text-slate-500" title={[c.address, c.city].filter(Boolean).join(', ')}>
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" />
@@ -275,12 +310,21 @@ function Hospitals() {
                 <p className="mt-2 flex items-center gap-1.5 text-[13.5px] text-slate-500"><Phone className="h-3.5 w-3.5 text-slate-400" />{c.phone}</p>
               )}
 
-              <Link
-                to={`/patient-dashboard/doctors?hospital=${c.hospital_id}${forParam}`}
-                className="mt-4 w-full rounded-xl border border-brand-blue py-2 text-center text-[13px] font-semibold text-brand-blue transition-colors hover:bg-brand-blueLight/40"
-              >
-                {t('ppage.viewDoctors')}
-              </Link>
+              {/* Full details like the landing page's Find Hospitals (2026-11-10). */}
+              <div className="mt-4 grid grid-cols-2 gap-2">
+                <Link
+                  to={`/patient-dashboard/hospitals/${c.hospital_id}`}
+                  className="rounded-xl bg-brand-blue py-2 text-center text-[13px] font-semibold text-white transition hover:brightness-110"
+                >
+                  {t('ppage.viewDetails')}
+                </Link>
+                <Link
+                  to={`/patient-dashboard/doctors?hospital=${c.hospital_id}${forParam}`}
+                  className="rounded-xl border border-brand-blue py-2 text-center text-[13px] font-semibold text-brand-blue transition-colors hover:bg-brand-blueLight/40"
+                >
+                  {t('ppage.viewDoctors')}
+                </Link>
+              </div>
               </div>
             </Card>
           ))}

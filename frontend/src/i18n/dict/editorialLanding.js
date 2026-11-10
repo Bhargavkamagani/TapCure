@@ -17,6 +17,7 @@ export const editorialLandingT = {
   'land.nav.doctors': { en: 'Find Doctors', te: 'వైద్యులను కనుగొనండి', hi: 'डॉक्टर खोजें' },
   'land.nav.hospitals': { en: 'Find Hospitals', te: 'ఆసుపత్రులను కనుగొనండి', hi: 'अस्पताल खोजें' },
   'land.nav.articles': { en: 'Health Articles', te: 'ఆరోగ్య వ్యాసాలు', hi: 'स्वास्थ्य लेख' },
+  'land.nav.insurance': { en: 'Insurance', te: 'బీమా', hi: 'बीमा' },
   'land.nav.login': { en: 'Log In / Sign Up', te: 'లాగిన్ / నమోదు', hi: 'लॉग इन / साइन अप' },
   'land.nav.menu': { en: 'Menu', te: 'మెనూ', hi: 'मेन्यू' },
   // Nav shortcut to the sixty-second health calculators (#health).

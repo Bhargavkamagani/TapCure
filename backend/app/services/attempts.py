@@ -33,6 +33,11 @@ from fastapi import HTTPException, status
 
 # key -> list of attempt timestamps, newest last
 _HITS: dict[str, list[float]] = {}
+# key -> time the block ends. Kept separately (2026-11-02) so a block lasts the
+# full `block_seconds` it announces. Before, the block quietly lifted as soon as
+# the OLDEST attempt aged out of the window — "try again in 15 minutes" could
+# mean three. When it ends, the caller starts with a fresh count.
+_BLOCKED: dict[str, float] = {}
 
 
 @dataclass(frozen=True)
@@ -63,6 +68,12 @@ PASSWORD_RESET = Limit(times=5, per_seconds=30 * 60, block_seconds=30 * 60)
 # hour still stops a script making hundreds.
 REGISTER = Limit(times=15, per_seconds=60 * 60, block_seconds=30 * 60)
 CONTACT_FORM = Limit(times=3, per_seconds=60 * 60, block_seconds=60 * 60)
+# Per IP, per voice endpoint. /voice/transcribe, /extract and /tts are public
+# (the voice sign-up runs before login) and every call is billed by Deepgram,
+# Groq or Cartesia. One voice sign-up is ~10-15 calls in total; sixty per
+# endpoint in ten minutes leaves room for retries and a shared hospital wifi,
+# and stops a script turning our API keys into someone else's free service.
+VOICE_PUBLIC = Limit(times=60, per_seconds=10 * 60, block_seconds=10 * 60)
 
 
 def _prune(key: str, window: int, now: float) -> list[float]:
@@ -85,17 +96,39 @@ def check(action: str, who: str | None, limit: Limit) -> None:
         return
     now = time.time()
     key = f"{action}:{who.strip().lower()}"
-    hits = _prune(key, max(limit.per_seconds, limit.block_seconds), now)
+
+    until = _BLOCKED.get(key)
+    if until is not None:
+        if now < until:
+            _raise_blocked(until - now)
+        # Block served in full: start the caller from zero.
+        _BLOCKED.pop(key, None)
+        _HITS.pop(key, None)
+        return
+
+    hits = _prune(key, limit.per_seconds, now)
     if len(hits) >= limit.times:
-        retry_after = int(limit.block_seconds - (now - hits[-1]))
-        if retry_after > 0:
-            minutes = max(1, round(retry_after / 60))
-            raise HTTPException(
-                status.HTTP_429_TOO_MANY_REQUESTS,
-                f"Too many attempts. Please try again in about {minutes} minute"
-                f"{'s' if minutes != 1 else ''}.",
-                headers={"Retry-After": str(retry_after)},
-            )
+        # The block runs from the attempt that used up the allowance.
+        until = hits[-1] + limit.block_seconds
+        if until > now:
+            _BLOCKED[key] = until
+            _raise_blocked(until - now)
+
+
+def _raise_blocked(seconds_left: float) -> None:
+    retry_after = max(1, int(seconds_left + 0.999))
+    minutes = max(1, round(retry_after / 60))
+    raise HTTPException(
+        status.HTTP_429_TOO_MANY_REQUESTS,
+        # A dict, not a string, so the app can count down the exact time;
+        # the frontend's error handler shows `message` like any other error.
+        {
+            "message": f"Too many attempts. Please try again in about {minutes} minute"
+                       f"{'s' if minutes != 1 else ''}.",
+            "retry_after": retry_after,
+        },
+        headers={"Retry-After": str(retry_after)},
+    )
 
 
 def record(action: str, who: str | None) -> None:
@@ -108,4 +141,6 @@ def record(action: str, who: str | None) -> None:
 def clear(action: str, who: str | None) -> None:
     """Forget this caller's attempts — called when they finally succeed."""
     if who:
-        _HITS.pop(f"{action}:{who.strip().lower()}", None)
+        key = f"{action}:{who.strip().lower()}"
+        _HITS.pop(key, None)
+        _BLOCKED.pop(key, None)

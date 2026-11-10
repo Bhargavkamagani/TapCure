@@ -59,7 +59,9 @@ Thumbs.db
 # Unwanted backend folders
 backend/tests/
 backend/perf/
-backend/scripts/
+backend/scripts/*
+# ...except the superadmin creator, which every server/clone needs
+!backend/scripts/create_superadmin.py
 
 # Unwanted backend files
 backend/sync_permissions.py

@@ -254,8 +254,11 @@ def _send(db: Session, phone: str, message: str, course: MedicineCourse,
     copy of the notification record (and is what SMS actually sends).
     """
     row = db.scalar(select(HospitalSettings).where(HospitalSettings.hospital_id == course.hospital_id))
-    use_whatsapp = bool(row and row.whatsapp_enabled)
-    refs = {"hospital_id": course.hospital_id, "patient_id": course.patient_id}
+    from . import booking_quota
+    # A Starter plan has no WhatsApp alerts (the pricing cards): fall back like
+    # a hospital that turned WhatsApp off.
+    use_whatsapp = bool(row and row.whatsapp_enabled) and booking_quota.whatsapp_allowed(db, course.hospital_id)
+    refs ={"hospital_id": course.hospital_id, "patient_id": course.patient_id}
     if use_whatsapp:
         who, whose = greeting_for(patient, member, to_member)
         n = notify.send_whatsapp(

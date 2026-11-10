@@ -21,7 +21,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from ..database import Base, UUIDType, new_uuid, utcnow
 
-SUBSCRIPTION_STATUSES = ("trial", "active", "expired", "cancelled", "suspended")
+SUBSCRIPTION_STATUSES = ("not_started", "trial", "active", "expired", "cancelled", "suspended")
 BILLING_CYCLES = ("monthly", "annually")
 INVOICE_STATUSES = ("draft", "sent", "paid", "overdue", "void")
 

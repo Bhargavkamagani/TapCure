@@ -444,6 +444,7 @@ export const dashboardT = {
   'ppage.open': { en: 'Open', te: 'తెరిచి ఉంది', hi: 'खुला' },
   'ppage.closed': { en: 'Closed', te: 'మూసివేయబడింది', hi: 'बंद' },
   'ppage.nDoctors': { en: '{n} doctors', te: '{n} డాక్టర్లు', hi: '{n} डॉक्टर' },
+  'ppage.viewDetails': { en: 'View Full Details', te: 'పూర్తి వివరాలు చూడండి', hi: 'पूरी जानकारी देखें' },
   'ppage.viewDoctors': { en: 'View Doctors', te: 'డాక్టర్లను చూడండి', hi: 'डॉक्टर देखें' },
 
   // ---------- Health Records ----------
@@ -461,8 +462,8 @@ export const dashboardT = {
   'ppage.noAllergies': { en: 'No known allergies.', te: 'తెలిసిన అలెర్జీలు లేవు.', hi: 'कोई ज्ञात एलर्जी नहीं।' },
 
   // ---------- Payments ----------
-  // 'ppage.paymentsTitle': { en: 'Payments', te: 'చెల్లింపులు', hi: 'भुगतान' },
-  // 'ppage.paymentsSubtitle': { en: 'Your platform fees, consultation and lab payments.', te: 'మీ ప్లాట్‌ఫామ్ ఫీజులు, సంప్రదింపు మరియు ల్యాబ్ చెల్లింపులు.', hi: 'आपके प्लेटफॉर्म शुल्क, परामर्श और लैब भुगतान।' },
+  'ppage.paymentsTitle': { en: 'Payments', te: 'చెల్లింపులు', hi: 'भुगतान' },
+  'ppage.paymentsSubtitle': { en: 'Your consultation and lab payments.', te: 'మీ సంప్రదింపు మరియు ల్యాబ్ చెల్లింపులు.', hi: 'आपके परामर्श और लैब भुगतान।' },
   'ppage.totalSpent': { en: 'Total Spent', te: 'మొత్తం ఖర్చు', hi: 'कुल खर्च' },
   'ppage.thisMonth': { en: 'This Month', te: 'ఈ నెల', hi: 'इस महीने' },
   'ppage.transactions': { en: 'Transactions', te: 'లావాదేవీలు', hi: 'लेन-देन' },

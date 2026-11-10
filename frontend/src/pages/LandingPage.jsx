@@ -35,6 +35,7 @@ const NAV_LINKS = [
   { key: 'doctors', i18n: 'land.nav.doctors', to: '/search?type=doctors' },
   { key: 'hospitals', i18n: 'land.nav.hospitals', to: '/search?type=hospitals' },
   { key: 'articles', i18n: 'land.nav.articles', to: '/health-articles' },
+  { key: 'insurance', i18n: 'land.nav.insurance', to: '/insurance' },
 ]
 
 const ROLES = ['patient', 'doctor', 'hospital']

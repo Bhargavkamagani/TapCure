@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import { BadgeCheck, Building2, MapPin, Phone, Stethoscope, Users } from 'lucide-react'
+import { ArrowLeft, BadgeCheck, Building2, MapPin, Phone, ShieldCheck, Stethoscope, Users } from 'lucide-react'
 import StaticPageShell from '../../components/landing/StaticPageShell.jsx'
 import HospitalMap from '../../components/common/HospitalMap.jsx'
 import { discoveryApi, fileUrl } from '../../api'
@@ -9,8 +9,14 @@ import { beginBooking } from '../../lib/bookingIntent.js'
 import { useI18n } from '../../i18n/index.jsx'
 import { translitName, translitDegrees } from '../../lib/translit.js'
 import { specialtyLabel } from '../../data/symptomSpecialty.js'
+import { InsuranceList } from '../../components/common/Insurance.jsx'
 
-export default function PublicHospitalProfile() {
+/**
+ * `inDashboard` (2026-11-10): the same full details inside the patient console
+ * (/patient-dashboard/hospitals/:hospitalId), without the public site's header
+ * and footer, with a way back to the patient's hospital list.
+ */
+export default function PublicHospitalProfile({ inDashboard = false }) {
   const { hospitalId } = useParams()
   const navigate = useNavigate()
   const { user } = useAuth()
@@ -36,16 +42,23 @@ export default function PublicHospitalProfile() {
     affiliationId: doctor.affiliation_id,
   })
 
+  const Shell = inDashboard ? 'div' : StaticPageShell
+  const listPath = inDashboard ? '/patient-dashboard/hospitals' : '/search?type=hospitals'
   return (
-    <StaticPageShell>
-      <main className="mx-auto max-w-6xl px-4 pb-20 pt-10 sm:px-6 lg:px-8">
+    <Shell>
+      <main className={inDashboard ? 'w-full pb-10' : 'mx-auto max-w-6xl px-4 pb-20 pt-10 sm:px-6 lg:px-8'}>
+        {inDashboard && (
+          <Link to={listPath} className="mb-4 inline-flex items-center gap-1.5 text-[14px] font-semibold text-teal-700 hover:underline">
+            <ArrowLeft className="h-4 w-4" />{t('pclinic.browseHospitals')}
+          </Link>
+        )}
         {loading ? (
           <div className="h-[420px] animate-pulse rounded-[2rem] border border-white/60 bg-white/60" />
         ) : error || !data ? (
           <div className="rounded-3xl border border-red-200 bg-red-50 p-10 text-center">
             <h1 className="font-serif text-3xl">{t('pclinic.unavailableTitle')}</h1>
             <p className="mt-2 text-sm text-red-700">{error ? t(error) : ''}</p>
-            <Link to="/search?type=hospitals" className="mt-5 inline-block text-sm font-semibold text-teal-700 underline">{t('pclinic.browseHospitals')}</Link>
+            <Link to={listPath} className="mt-5 inline-block text-sm font-semibold text-teal-700 underline">{t('pclinic.browseHospitals')}</Link>
           </div>
         ) : (
           <>
@@ -66,6 +79,14 @@ export default function PublicHospitalProfile() {
                   {data.phone && <a href={`tel:${data.phone}`} className="flex items-center gap-2 hover:text-sage-deep"><Phone className="h-4 w-4 text-sage-deep" />{data.phone}</a>}
                 </div>
               </div>
+            </section>
+
+            {/* Insurers / schemes accepted — full list (2026-11-03). */}
+            <section className="mt-6 rounded-3xl border border-white/60 bg-white/70 p-6 shadow-sm backdrop-blur">
+              <h2 className="mb-3 flex items-center gap-2 text-lg font-bold text-foreground">
+                <ShieldCheck className="h-5 w-5 text-sage-deep" />{t('ins.accepted')}
+              </h2>
+              <InsuranceList codes={data.insurance_partners} />
             </section>
 
             {data.latitude != null && data.longitude != null && (
@@ -104,6 +125,6 @@ export default function PublicHospitalProfile() {
           </>
         )}
       </main>
-    </StaticPageShell>
+    </Shell>
   )
 }

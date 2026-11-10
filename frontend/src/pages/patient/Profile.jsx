@@ -11,6 +11,69 @@ import { realEmail } from '../../lib/patientDisplay.js'
 import { toMobile } from '../../lib/phone.js'
 import { nameFields, nameParts } from '../../lib/personName.js'
 import DeleteAccountFlow from '../../components/patient/DeleteAccountFlow.jsx'
+import { MyInsuranceEditor, InsurerBadge, useInsurers } from '../../components/common/Insurance.jsx'
+
+/** "My Insurance" (Phase 2, 2026-11-10): the patient's own insurances, used to
+ *  show "Accepts your insurance" on hospitals. Saved to every hospital record
+ *  of this login by the backend. */
+function MyInsuranceCard({ patient, setPatient }) {
+  const { t } = useI18n()
+  const { byCode } = useInsurers()
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState([])
+  const [saving, setSaving] = useState(false)
+  const [note, setNote] = useState(null)
+  const saved = patient.insurances || []
+
+  const start = () => { setDraft(saved.map((i) => ({ ...i, policy_no: i.policy_no || '' }))); setNote(null); setEditing(true) }
+  const save = async () => {
+    setSaving(true); setNote(null)
+    try {
+      const updated = await patientsApi.update(patient.patient_id, {
+        insurances: draft.map((i) => ({ code: i.code, policy_no: (i.policy_no || '').trim() || null })),
+      })
+      setPatient((p) => ({ ...p, ...updated }))
+      setEditing(false)
+      setNote({ ok: true, text: t('ins.my.saved') })
+    } catch (e) {
+      setNote({ ok: false, text: e.message || 'Could not save.' })
+    } finally { setSaving(false) }
+  }
+
+  return (
+    <Card className="p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="text-[15px] font-bold text-brand-navy">{t('ins.my.title')}</h3>
+          <p className="mt-0.5 text-[13px] text-slate-500">{t('ins.my.hint')}</p>
+        </div>
+        {!editing && <ToolButton icon={Pencil} onClick={start}>{saved.length ? t('ins.my.edit') : t('ins.my.add')}</ToolButton>}
+      </div>
+      {editing ? (
+        <div className="mt-4">
+          <MyInsuranceEditor value={draft} onChange={setDraft} />
+          <div className="mt-4 flex justify-end gap-2">
+            <ToolButton onClick={() => setEditing(false)}>{t('pcommon.cancel')}</ToolButton>
+            <ToolButton tone="primary" onClick={save} disabled={saving}>{saving ? t('pcommon.saving') : t('ppage.saveChanges')}</ToolButton>
+          </div>
+        </div>
+      ) : saved.length ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {saved.map((i) => byCode[i.code] && (
+            <span key={i.code} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white py-1.5 pl-1.5 pr-3 text-[13px]">
+              <InsurerBadge insurer={byCode[i.code]} size="sm" className="!ring-0" />
+              <span className="font-semibold text-slate-700">{byCode[i.code].name}</span>
+              {i.policy_no && <span className="text-slate-400">· {i.policy_no}</span>}
+            </span>
+          ))}
+        </div>
+      ) : (
+        <p className="mt-3 text-[13px] text-slate-400">{t('ins.my.none')}</p>
+      )}
+      {note && <p className={`mt-3 text-[13px] font-medium ${note.ok ? 'text-emerald-600' : 'text-red-600'}`}>{note.text}</p>}
+    </Card>
+  )
+}
 
 /** Display-only name for a stored language value; the value itself is unchanged. */
 function langLabel(t, l) {
@@ -232,7 +295,7 @@ function Profile() {
         )}
         <div className="leading-tight">
           <p className="text-[18px] font-extrabold text-brand-navy">{translitName(patient.name, lang)}</p>
-          <p className="text-[13px] text-slate-500">{realEmail(patient) || patient.phone}</p>
+          {realEmail(patient) && <p className="text-[13px] text-slate-500">{realEmail(patient)}</p>}
           <p className="text-[13.5px] text-slate-400">{patient.phone}</p>
         </div>
         <span className={`ml-auto rounded-full px-3 py-1 text-[13px] font-semibold ${patient.is_registered ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
@@ -268,6 +331,8 @@ function Profile() {
 
         </Card>
       </div>
+
+      <MyInsuranceCard patient={patient} setPatient={setPatient} />
 
       {/* Delete my account — required by Google Play and the App Store. */}
       <Card className="flex flex-wrap items-center gap-4 border-red-100 p-5">

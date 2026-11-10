@@ -30,7 +30,7 @@ from sqlalchemy.orm import Session
 from ..database import lock_key, utcnow
 from ..models import (
     Appointment, ApptCancellationLog, BookingMonth, Notification, Patient, Plan,
-    Role, Subscription, Token, User,
+    RevisitPass, Role, Subscription, Token, User,
 )
 from ..rbac import ROLE_HOSPITAL_ADMIN
 from . import notifications as notify
@@ -40,49 +40,52 @@ _IST = timezone(timedelta(hours=5, minutes=30), "IST")
 # The plan catalog. Prices are monthly in ₹; annual = 10 months' price.
 # included: free online bookings a month (-1 = no quota).
 # limit: the most a month's base + overage can come to (None = no overage).
-# All prices set to ₹0 for now (2026-10-27) — the real ones are set later.
-# Previous: starter 499 (fee 4, limit 999), smart_hospital 999 (fee 3, limit 1999),
-# pro 1999 (fee 2, limit 4999, extra_doctor_fee 599), hospital 4999, PACK_PRICE 250.
+# Real prices billed again from 2026-11-02 (were ₹0 from 2026-10-27).
 CATALOG = {
     "pilot": dict(name="Pilot", price=0, doctors=-1, included=-1, fee=0, limit=None,
                   upgrade_to="smart_hospital", pilot_days=30),
-    "starter": dict(name="Starter", price=0, doctors=1, included=50, fee=0, limit=0,
+    "starter": dict(name="Starter", price=499, doctors=1, included=50, fee=4, limit=999,
                     upgrade_to="smart_hospital"),
-    "smart_hospital": dict(name="Smart Hospital", price=0, doctors=1, included=200, fee=0, limit=0,
+    "smart_hospital": dict(name="Smart Hospital", price=999, doctors=1, included=200, fee=3, limit=1999,
                          upgrade_to="pro"),
-    "pro": dict(name="Pro", price=0, doctors=3, included=600, fee=0, limit=0,
-                upgrade_to=None, extra_doctor_fee=0, extra_doctor_bookings=200, max_extra_doctors=3),
-    "hospital": dict(name="Hospital", price=0, doctors=-1, included=-1, fee=0, limit=None,
+    "pro": dict(name="Pro", price=1999, doctors=3, included=600, fee=2, limit=4999,
+                upgrade_to=None, extra_doctor_fee=599, extra_doctor_bookings=200, max_extra_doctors=3),
+    "hospital": dict(name="Hospital", price=4999, doctors=-1, included=-1, fee=0, limit=None,
                      upgrade_to=None),
 }
 PLAN_ORDER = ("pilot", "starter", "smart_hospital", "pro", "hospital")
 
-# What the screens SHOW while the prices are ₹0: X's, one per digit of the old
-# price (2026-10-27). Billing uses the numbers above; this is display only.
+# Display labels for the prices above (same numbers, formatted). Keep both in
+# step; the frontend mirror is lib/planPrice.js.
 PRICE_SHOWN = {
-    "starter": dict(price="₹0xx", fee="₹0", limit="₹0xx"),
-    "smart_hospital": dict(price="₹0xx", fee="₹0", limit="₹0,xxx"),
-    "pro": dict(price="₹0,xxx", fee="₹0", limit="₹0,xxx"),
-    "hospital": dict(price="₹0,xxx"),
+    "starter": dict(price="₹499", fee="₹4", limit="₹999"),
+    "smart_hospital": dict(price="₹999", fee="₹3", limit="₹1,999"),
+    "pro": dict(price="₹1,999", fee="₹2", limit="₹4,999"),
+    "hospital": dict(price="₹4,999"),
 }
-PACK_SHOWN = "₹0xx"
+PACK_SHOWN = "₹250"
 
 
 def _shown(code: str, field: str, value) -> str:
     return PRICE_SHOWN.get(code, {}).get(field) or f"₹{value:,}"
 
-# Booking pack: placeholder price until the owner confirms it.
+# Booking pack: 100 extra bookings for this month.
 PACK_SIZE = 100
-PACK_PRICE = 0
+PACK_PRICE = 250
 
 # Plans a hospital can put itself on. Hospital is priced per hospital, so the
 # TapCure team sets that one up.
 SELF_SERVE_PLANS = ("starter", "smart_hospital", "pro")
 
+HALF_SHARE = 0.5
 NEAR_SHARE = 0.8
 REMOTE_SOURCES = ("app", "whatsapp", "csc")
 ALERT_TYPES = ("almost_turn", "travel_alert")
 LIVE_STATUSES = ("trial", "active")
+# A new hospital's free pilot before the admin clicks "Start free trial"
+# (2026-11-09). Not live: online booking stays closed, nothing is billed, and
+# the hospital console shows only the Plan page until they choose.
+NOT_STARTED = "not_started"
 
 
 # ---------------------------------------------------------------- months ----
@@ -124,7 +127,7 @@ def ensure_catalog_plans(db: Session) -> dict[str, Plan]:
         p.price_monthly = spec["price"]
         p.price_annually = spec["price"] * 10
         p.max_doctors = spec["doctors"]
-        p.whatsapp_enabled = code != "starter"
+        p.whatsapp_enabled = spec.get("whatsapp", True)
         p.is_active = True
     db.flush()
     return rows
@@ -145,8 +148,10 @@ def lock_hospital_plan(db: Session, hospital_id: UUID) -> None:
 def end_live_subscriptions(db: Session, hospital_id: UUID, reason: str) -> None:
     """Cancel EVERY live subscription of a hospital, not just the newest, so a
     stray second one left by an older bug can't keep being billed."""
+    # A not-started pilot is ended too: picking a paid plan instead of the free
+    # trial uses up the trial offer.
     for old in db.scalars(select(Subscription).where(Subscription.hospital_id == hospital_id,
-                                                     Subscription.status.in_(LIVE_STATUSES))).all():
+                                                     Subscription.status.in_(LIVE_STATUSES + (NOT_STARTED,)))).all():
         old.status = "cancelled"
         old.cancelled_at = utcnow()
         old.cancel_reason = reason
@@ -188,7 +193,13 @@ def remote_booking_open(db: Session, hospital_id: UUID) -> tuple[bool, str]:
     date stops taking online bookings until it pays. Walk-ins keep working.
     """
     from . import billing  # billing builds on this module
+    from ..models.hospital import Hospital as _Hospital
 
+    # Hidden from patients until "Complete your profile" is done (2026-11-10);
+    # a direct link must not book it either.
+    h = db.get(_Hospital, hospital_id)
+    if h is not None and h.profile_completed_at is None:
+        return False, "This hospital isn't taking online bookings yet. Please visit the hospital directly."
     if billing.unpaid_invoice(db, hospital_id) is not None:
         return False, "This hospital isn't taking online bookings right now. Please visit the hospital directly."
     sub = current_subscription(db, hospital_id)
@@ -214,7 +225,8 @@ def count_bookings(db: Session, hospital_id: UUID, key: str | None = None) -> di
         )
     ).all()
     if not appts:
-        return {"counted": 0, "online": 0, "walkin_with_alerts": 0, "not_counted_hospital_cancelled": 0}
+        return {"counted": 0, "online": 0, "walkin_with_alerts": 0, "not_counted_hospital_cancelled": 0,
+                "not_counted_free_revisit": 0}
 
     ids = [a.appointment_id for a in appts]
     alerted = set(db.scalars(
@@ -231,6 +243,14 @@ def count_bookings(db: Session, hospital_id: UUID, key: str | None = None) -> di
         )
     ).all())
 
+    # A free revisit is a visit the patient already paid for — it must not use up
+    # the hospital's booking quota a second time (online or at the desk).
+    free_revisits = set(db.scalars(
+        select(RevisitPass.redeemed_appointment_id).where(
+            RevisitPass.redeemed_appointment_id.in_(ids), RevisitPass.status == "redeemed",
+        )
+    ).all())
+
     cancelled = [a.appointment_id for a in appts if a.status == "cancelled"]
     cancelled_by: dict[int, int | None] = {}
     if cancelled:
@@ -244,10 +264,15 @@ def count_bookings(db: Session, hospital_id: UUID, key: str | None = None) -> di
     ).all())
 
     seen: set[tuple] = set()
-    online = walkin = hospital_cancelled = 0
+    online = walkin = hospital_cancelled = free_revisit = 0
     for a in appts:
+        if a.appointment_id in free_revisits:
+            free_revisit += 1
+            continue
         remote = a.source in REMOTE_SOURCES and a.appointment_type != "walkin"
-        if not remote and not a.queue_alerts and a.appointment_id not in alerted:
+        if not remote:
+            # Walk-ins are free and unlimited on every plan (the pricing cards
+            # promise it) — even one who asked for WhatsApp queue alerts.
             continue
         if a.status == "cancelled":
             by = cancelled_by.get(a.appointment_id)
@@ -263,11 +288,71 @@ def count_bookings(db: Session, hospital_id: UUID, key: str | None = None) -> di
         else:
             walkin += 1
     return {"counted": online + walkin, "online": online, "walkin_with_alerts": walkin,
-            "not_counted_hospital_cancelled": hospital_cancelled}
+            "not_counted_hospital_cancelled": hospital_cancelled, "not_counted_free_revisit": free_revisit}
+
+
+# ------------------------------------------------------ plan features ----
+def _live_spec(db: Session, hospital_id: UUID | None) -> tuple[Subscription | None, dict | None]:
+    """The hospital's current catalog plan while it is running, else (None, None)."""
+    if hospital_id is None:
+        return None, None
+    sub = current_subscription(db, hospital_id)
+    spec = _spec(sub)
+    if spec is None or sub.status not in LIVE_STATUSES:
+        return None, None
+    return sub, spec
+
+
+def whatsapp_allowed(db: Session, hospital_id: UUID | None) -> bool:
+    """Whether this hospital's plan includes WhatsApp alerts for patients.
+
+    Every plan has them today (Starter too, since 2026-11-02). A plan can be
+    switched off by adding whatsapp=False to its CATALOG entry."""
+    _, spec = _live_spec(db, hospital_id)
+    return True if spec is None else spec.get("whatsapp", True)
+
+
+def doctor_limit(db: Session, hospital_id: UUID | None) -> tuple[int | None, str]:
+    """(How many doctors the plan allows, plan name) — None = no limit.
+
+    Pro adds the extra doctors the hospital pays for. The pilot, Hospital, and
+    hospitals with no catalog plan have no limit."""
+    sub, spec = _live_spec(db, hospital_id)
+    if spec is None or spec["doctors"] < 0:
+        return None, spec["name"] if spec else ""
+    extra = int(sub.extra_doctors or 0) if sub.plan.code == "pro" else 0
+    return spec["doctors"] + extra, spec["name"]
 
 
 # --------------------------------------------------------------- summary ----
-def _options(spec: dict, code: str, allowance: int, used: int) -> list[dict]:
+def pack_room(spec: dict, packs_amount: float) -> bool:
+    """Whether one more booking pack still fits under the plan's monthly limit.
+
+    The cards promise "the bill never goes above its limit": plan + packs +
+    extra bookings stay at or under it. Extra bookings are already capped in
+    month_usage; a pack is a fixed charge, so it is refused once it would
+    cross the limit (pay-per-booking still works and stops at the limit)."""
+    if spec.get("limit") is None:
+        return True
+    return spec["price"] + float(packs_amount or 0) + PACK_PRICE <= spec["limit"]
+
+
+def _upgrade_option(spec: dict, code: str) -> dict | None:
+    nxt = spec.get("upgrade_to")
+    if nxt:
+        n = CATALOG[nxt]
+        return {"choice": "upgrade", "plan": nxt,
+                "title": f"Upgrade to {n['name']} ({_shown(nxt, 'price', n['price'])}/month)",
+                "detail": f"{n['included']} free bookings a month" +
+                          (f", up to {n['doctors']} doctors" if n["doctors"] > 1 else "")}
+    if code == "pro":
+        return {"choice": "upgrade", "plan": "hospital",
+                "title": f"Move to Hospital (from {_shown('hospital', 'price', CATALOG['hospital']['price'])}/month)",
+                "detail": "Custom booking volume. Our team will contact you."}
+    return None
+
+
+def _options(spec: dict, code: str, allowance: int, used: int, packs_amount: float = 0) -> list[dict]:
     opts = []
     nxt = spec.get("upgrade_to")
     if nxt:
@@ -280,8 +365,9 @@ def _options(spec: dict, code: str, allowance: int, used: int) -> list[dict]:
         opts.append({"choice": "upgrade", "plan": "hospital",
                      "title": f"Move to Hospital (from {_shown('hospital', 'price', CATALOG['hospital']['price'])}/month)",
                      "detail": "Custom booking volume. Our team will contact you."})
-    opts.append({"choice": "pack", "title": f"Buy a booking pack ({PACK_SIZE} bookings for {PACK_SHOWN or PACK_PRICE})",
-                 "detail": "Added to this month only"})
+    if pack_room(spec, packs_amount):
+        opts.append({"choice": "pack", "title": f"Buy a booking pack ({PACK_SIZE} bookings for {PACK_SHOWN or PACK_PRICE})",
+                     "detail": "Added to this month only"})
     opts.append({"choice": "pay_per_booking", "title": f"Pay per booking ({_shown(code, 'fee', spec['fee'])} each)",
                  "detail": f"This month's bill never goes above {_shown(code, 'limit', spec['limit'])}"})
     return opts
@@ -313,6 +399,11 @@ def summary(db: Session, hospital_id: UUID) -> dict:
         "pack": {"size": PACK_SIZE, "price": PACK_PRICE},
     }
     out["autopay"] = billing.autopay_status(db, hospital_id)
+    if sub.status == NOT_STARTED:
+        # New hospital: it picks the free trial or a paid plan first.
+        out.update(unlimited=True, state="choose", options=[], plan_choices=plan_choices(),
+                   trial_days=CATALOG["pilot"]["pilot_days"])
+        return out
     if sub.status == "suspended":
         # Stopped by TapCure on purpose: only TapCure can restart it.
         out.update(unlimited=True, state="suspended", options=[], plan_choices=[])
@@ -353,7 +444,9 @@ def summary(db: Session, hospital_id: UUID) -> dict:
     out.update(
         unlimited=False, included=spec["included"], allowance=allowance, remaining=max(0, allowance - used),
         over=over, fee=spec["fee"], limit=spec["limit"], state=state,
-        options=_options(spec, code, allowance, used) if state in ("near", "full", "over_chosen") else [],
+        options=(_options(spec, code, allowance, used, u["packs"]) if state in ("near", "full", "over_chosen")
+                 # "Upgrade anytime" (the cards): offered even with bookings to spare.
+                 else [o for o in [_upgrade_option(spec, code)] if o]),
     )
     return out
 
@@ -464,12 +557,38 @@ def choose_plan(db: Session, me: User, hospital_id: UUID, code: str) -> dict:
 
 
 def start_pilot(db: Session, hospital_id: UUID) -> Subscription | None:
-    """Every new hospital starts on the free Pilot. Its 30 days only begin on the
-    first live OPD day, so a hospital still waiting for approval loses nothing.
-    Does nothing if the hospital already has a subscription."""
+    """Every new hospital is offered the free Pilot. Since 2026-11-09 it is saved
+    NOT STARTED: the admin sees the Plan page at first login and the pilot only
+    starts when they click "Start free trial" (start_trial). Its 30 days then
+    begin on the first live OPD day. Does nothing if the hospital already has a
+    subscription."""
     if current_subscription(db, hospital_id) is not None:
         return None
-    return assign_plan(db, hospital_id, "pilot")
+    sub = assign_plan(db, hospital_id, "pilot")
+    sub.status = NOT_STARTED
+    db.flush()
+    return sub
+
+
+def start_trial(db: Session, me: User, hospital_id: UUID) -> dict:
+    """The admin clicked "Start free trial". Only once, and only before any
+    other plan was chosen."""
+    lock_hospital_plan(db, hospital_id)
+    sub = current_subscription(db, hospital_id)
+    code = sub.plan.code if sub and sub.plan else None
+    if code == "pilot" and sub.status == "trial":
+        return {"message": "Your free trial is on."}  # a repeat / double-click
+    if code != "pilot" or sub.status != NOT_STARTED:
+        raise ValueError("The free trial can only be started once, before choosing a plan.")
+    today = datetime.now(_IST).date()
+    sub.status = "trial"
+    sub.start_date = today
+    sub.end_date = today + timedelta(days=CATALOG["pilot"]["pilot_days"])
+    sub.trial_end_date = None  # set on the first live OPD day
+    db.flush()
+    _month_row(db, hospital_id, month_key())
+    return {"message": "Your free trial is on. Your 30 free days start on your first OPD day "
+                       "(the first token you issue). Online bookings are open."}
 
 
 REPEAT_WINDOW = timedelta(minutes=2)
@@ -518,6 +637,10 @@ def record_choice(db: Session, me: User, hospital_id: UUID, choice: str, packs: 
         return {"message": f"Moved to {CATALOG[target]['name']}."}
     if choice == "pack":
         packs = max(1, min(int(packs or 1), 20))
+        have = float(row.pack_amount or 0)
+        if any(not pack_room(spec, have + i * PACK_PRICE) for i in range(packs)):
+            raise ValueError("A booking pack would take this month's bill over your plan's limit. "
+                             "Choose pay per booking instead — it stops at the limit.")
         row.pack_bookings = (row.pack_bookings or 0) + packs * PACK_SIZE
         row.pack_amount = float(row.pack_amount or 0) + packs * PACK_PRICE
         row.choice = "pack"
@@ -542,10 +665,41 @@ def _hospital_admins(db: Session, hospital_id: UUID) -> list[User]:
     ).all()
 
 
+def _tell_admins(db: Session, hospital_id: UUID, title: str, msg: str) -> None:
+    for u in _hospital_admins(db, hospital_id):
+        notify.send_staff_in_app(db, u.user_id, msg, ntype="booking_quota", title=title, hospital_id=hospital_id)
+
+
+def _already_told(db: Session, hospital_id: UUID, title: str, since: datetime | None = None) -> bool:
+    """Whether this notice already went to this hospital (since `since`, if given).
+    The notifications table is the record, so no extra column is needed."""
+    stmt = select(Notification.notification_id).where(
+        Notification.hospital_id == hospital_id, Notification.type == "booking_quota",
+        Notification.title == title,
+    )
+    if since is not None:
+        stmt = stmt.where(Notification.created_at >= since)
+    return db.scalar(stmt.limit(1)) is not None
+
+
+HALF_TITLE = "Half of your online bookings used"
+
+
 def after_booking(db: Session, hospital_id: UUID) -> None:
-    """Send the 80% / used-up notice to the hospital admins, once each a month."""
+    """Tell the hospital admins at 50%, 80% and 100% of the month's online
+    bookings — each once a month."""
     s = summary(db, hospital_id)
-    if s.get("unlimited") or s["state"] not in ("near", "full"):
+    if s.get("unlimited"):
+        return
+    if s["state"] == "ok":
+        if s["allowance"] and s["used"] >= s["allowance"] * HALF_SHARE:
+            since = _month_bounds_utc(s["month"])[0]
+            if not _already_told(db, hospital_id, HALF_TITLE, since):
+                _tell_admins(db, hospital_id, HALF_TITLE,
+                             f"You've used {s['used']} of your {s['allowance']} online bookings this month. "
+                             "You can see your usage or upgrade anytime in Plan & Bookings.")
+        return
+    if s["state"] not in ("near", "full"):
         return
     row = _month_row(db, hospital_id, s["month"])
     if s["state"] == "near" and row.warned_near_at is None:
@@ -561,3 +715,99 @@ def after_booking(db: Session, hospital_id: UUID) -> None:
         return
     for u in _hospital_admins(db, hospital_id):
         notify.send_staff_in_app(db, u.user_id, msg, ntype="booking_quota", title=title, hospital_id=hospital_id)
+
+
+# ------------------------------------------------------- pilot reminders ----
+# (days left at or below which the notice goes, title). Each goes once per pilot.
+PILOT_NOTICES = ((0, "Free pilot ends today"), (1, "Free pilot ends tomorrow"),
+                 (3, "Free pilot ends in 3 days"), (7, "Free pilot ends in 7 days"))
+PILOT_ENDED_TITLE = "Free pilot has ended"
+_LAST_PILOT_CHECK: dict = {}
+
+
+def pilot_reminders(db: Session, hospital_id: UUID) -> str | None:
+    """Tell the hospital admins 7, 3 and 1 day before the free pilot ends, and
+    when it has ended — in-app, once each. Returns the title sent, if any.
+
+    Only the most urgent notice that is due is sent: a pilot found already
+    over does not get the 7/3/1-day notices after the fact."""
+    sub = current_subscription(db, hospital_id)
+    if sub is None or sub.plan is None or sub.plan.code != "pilot" or sub.status not in LIVE_STATUSES:
+        return None
+    _start_pilot_clock(db, sub)
+    if sub.trial_end_date is None:
+        return None
+    end = sub.trial_end_date
+    days_left = (end - datetime.now(_IST).date()).days
+    when = f"{end.day} {end:%B}"
+    if days_left < 0:
+        title = PILOT_ENDED_TITLE
+        msg = (f"Your 30-day free pilot ended on {when}. Patients can't book online right now — "
+               "walk-ins still work. Choose a plan in Plan & Bookings to turn online bookings back on.")
+        wa_status = f"ended on {when}. Online bookings are paused, walk-ins still work"
+    else:
+        due = [(d, t) for d, t in PILOT_NOTICES if days_left <= d]
+        if not due:
+            return None
+        title = due[0][1]
+        ends = f"today ({when})" if days_left == 0 else f"on {when}"
+        msg = (f"Your free pilot ends {ends}. Choose a plan in Plan & Bookings so patients "
+               "can keep booking online. Your data stays safe either way.")
+        wa_status = ("ends today" if days_left == 0 else "ends tomorrow" if days_left == 1
+                     else f"ends in {days_left} days") + f" ({when})"
+    if _already_told(db, hospital_id, title):
+        return None
+    _tell_admins(db, hospital_id, title, msg)
+    _whatsapp_admins_pilot(db, hospital_id, title, wa_status)
+    return title
+
+
+def _whatsapp_admins_pilot(db: Session, hospital_id: UUID, title: str, status_text: str) -> None:
+    """The same pilot notice on WhatsApp, to each hospital admin's phone (or the
+    hospital's phone when no admin has one), once per number.
+
+    Off until the `tapcure_pilot_reminder` template is approved and
+    WHATSAPP_PILOT_REMINDER_TEMPLATE is set: an unapproved name is accepted by
+    the provider with HTTP 200 and then silently dropped.
+    """
+    from ..config import settings
+    from ..models import Hospital
+    from . import whatsapp_templates as wt
+
+    template = wt.pilot_reminder_name()
+    if not template:
+        return
+    hospital = db.get(Hospital, hospital_id)
+    hname = hospital.name if hospital else ""
+    targets: list[tuple[str, str]] = []
+    for u in _hospital_admins(db, hospital_id):
+        phone = (u.phone or "").strip()
+        if phone and phone not in [p for p, _ in targets]:
+            targets.append((phone, u.name or ""))
+    if not targets and hospital and (hospital.phone or "").strip():
+        targets.append((hospital.phone.strip(), ""))
+    for phone, who in targets:
+        params = wt.pilot_reminder_params(who, hname, status_text)
+        # audience='staff' with no recipient keeps this delivery row out of the
+        # bell, which already shows the in-app copy of the same notice.
+        notify.send_whatsapp(
+            db, phone,
+            f"Hello {params[0]}, your TapCure free trial for {params[1]} {params[2]}. "
+            "Choose a plan in Plan & Bookings so patients can keep booking online.",
+            ntype="pilot_reminder", title=title,
+            template_name=template, template_params=params,
+            language_code=settings.whatsapp_default_lang,
+            event_type=wt.PILOT_REMINDER_EVENT,
+            hospital_id=hospital_id, audience="staff",
+        )
+
+
+def pilot_reminders_throttled(db: Session, hospital_id: UUID, min_gap_seconds: int = 600) -> None:
+    """For busy callers (the notification bell polls): check a hospital at most
+    every ten minutes per process."""
+    import time
+    now = time.time()
+    if now - _LAST_PILOT_CHECK.get(hospital_id, 0) < min_gap_seconds:
+        return
+    _LAST_PILOT_CHECK[hospital_id] = now
+    pilot_reminders(db, hospital_id)

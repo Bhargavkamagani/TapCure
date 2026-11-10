@@ -11,6 +11,7 @@ import HospitalMap from '../../components/common/HospitalMap.jsx'
 import ChangeAddressModal from '../../components/hospital/ChangeAddressModal.jsx'
 import { hospitalsApi, fileUrl } from '../../api'
 import { digitsOnly } from '../../lib/phone.js'
+import { InsurancePicker } from '../../components/common/Insurance.jsx'
 
 const EMPTY = {
   name: '', phone: '', email: '', address: '',
@@ -289,6 +290,64 @@ function FreeRevisitCard({ hospitalId }) {
 }
 
 
+/** Insurance companies + government schemes this hospital accepts (2026-11-03).
+ *  Ticked from the one list (no typing); saved on its own. Patients see these
+ *  as small logos on the hospital card and can filter by them. */
+function InsuranceCard({ hospital, setHospital }) {
+  const [codes, setCodes] = useState(hospital.insurance_partners || [])
+  const [saving, setSaving] = useState(false)
+  const [note, setNote] = useState(null)
+  const saved = hospital.insurance_partners || []
+  const dirty = codes.length !== saved.length || codes.some((c) => !saved.includes(c))
+
+  const save = async () => {
+    setSaving(true)
+    setNote(null)
+    try {
+      const h = await hospitalsApi.update(hospital.hospital_id, { insurance_partners: codes })
+      setHospital(h)
+      setCodes(h.insurance_partners || [])
+      const n = (h.insurance_partners || []).length
+      setNote({ type: 'success', text: n ? `Saved. Patients now see ${n} accepted insurance${n > 1 ? 's' : ''} on your hospital card.` : 'Saved. No insurances are shown for this hospital.' })
+    } catch (e) {
+      setNote({ type: 'error', text: e.message || 'Could not save the insurances.' })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <Card className="p-5">
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-[16px] font-bold text-brand-navy">Insurance &amp; Schemes Accepted</h3>
+          <p className="mt-1 text-[12.5px] text-slate-500">
+            Tick every insurance company and government scheme your hospital accepts. Patients see
+            them on your hospital card and can search by them. TapCure only shows this list —
+            claims and approvals stay with your insurance desk.
+          </p>
+        </div>
+        <ToolButton type="button" icon={Save} tone="primary" onClick={save} disabled={saving || !dirty}>
+          {saving ? 'Saving…' : 'Save'}
+        </ToolButton>
+      </div>
+      <div className="mt-4">
+        <InsurancePicker value={codes} onChange={(v) => { setCodes(v); setNote(null) }} state={hospital.state} />
+      </div>
+      {note && (
+        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[12.5px] font-medium ${
+          note.type === 'error'
+            ? 'border-rose-200 bg-rose-50 text-rose-700'
+            : 'border-emerald-200 bg-emerald-50 text-emerald-700'
+        }`}>
+          {note.text}
+        </div>
+      )}
+    </Card>
+  )
+}
+
+
 /** Hospital photo: the picture patients see on the Find Hospitals cards. */
 function HospitalPhotoField({ hospital, setHospital }) {
   const [busy, setBusy] = useState(false)
@@ -548,6 +607,7 @@ function HospitalProfile() {
       {/* Opening days/hours — saved separately; doctors' sessions must fit them. */}
       <OpeningHoursCard hospitalId={hospital.hospital_id} />
       <FreeRevisitCard hospitalId={hospital.hospital_id} />
+      <InsuranceCard hospital={hospital} setHospital={setHospital} />
       <LetterheadCard hospital={hospital} setHospital={setHospital} />
 
       {editingAddress && (

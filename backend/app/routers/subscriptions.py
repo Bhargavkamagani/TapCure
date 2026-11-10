@@ -122,6 +122,7 @@ def booking_usage(hospital_id: UUID | None = Query(None), me: User = Depends(req
     choices to offer once the free bookings run low."""
     hid = _hospital_for(me, hospital_id)
     out = quota.summary(db, hid)
+    quota.pilot_reminders(db, hid)
     db.commit()  # first look of the month creates its row / starts the pilot clock
     return out
 
@@ -132,6 +133,18 @@ def booking_choice(body: BookingChoiceRequest, me: User = Depends(require_permis
     hid = _hospital_for(me, body.hospital_id)
     try:
         res = quota.record_choice(db, me, hid, body.choice, body.packs)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc))
+    db.commit()
+    return {**res, "usage": quota.summary(db, hid)}
+
+
+@router.post("/subscriptions/trial/start")
+def start_trial(me: User = Depends(require_permission("subscription", "update")), db: Session = Depends(get_db)):
+    """New hospital admin clicked "Start free trial" on the Plan page."""
+    hid = _hospital_for(me, None)
+    try:
+        res = quota.start_trial(db, me, hid)
     except ValueError as exc:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc))
     db.commit()

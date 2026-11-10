@@ -41,6 +41,7 @@ import { relLabel } from '../../components/patient/personLabels.js'
 import { englishSymptomNote, toEnglishText } from '../../lib/englishText.js'
 import { dashboardT } from '../../i18n/dict/dashboard.js'
 import { realEmail } from '../../lib/patientDisplay.js'
+import { acceptedOf, useInsurers } from '../../components/common/Insurance.jsx'
 
 /* Common complaints offered as one-tap chips so nobody has to type on a phone. */
 const QUICK_REASONS = ['pflow.r1', 'pflow.r2', 'pflow.r3', 'pflow.r4', 'pflow.r5', 'pflow.r6']
@@ -510,6 +511,11 @@ function BookAppointment() {
     ? { ...affiliation, latitude: affiliation.latitude, longitude: affiliation.longitude }
     : hospital
   const feeAmount = Number(affiliation?.consultation_fee ?? doctor?.consultation_fee ?? 0)
+  // "This hospital accepts your Star Health" (insurance Phase 2, 2026-11-10).
+  // Information only; it never blocks or changes the booking.
+  const { byCode: insurerByCode } = useInsurers()
+  const personIns = selectedIsSelf ? (patient?.insurances || []) : (selectedPerson?.insurances || [])
+  const insMatch = acceptedOf(hospital?.insurance_partners, personIns)
   // A free revisit with this doctor, for this person, still valid on the chosen
   // date: the server will charge ₹0, so the summary must not say ₹{fee}.
   const [myPasses, setMyPasses] = useState([])
@@ -1627,6 +1633,15 @@ function BookAppointment() {
         )}
         */}
       </div>
+
+      {insMatch.length > 0 && (
+        <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-[13.5px] font-medium text-emerald-800">
+          {t('ins.bookNote', {
+            hospital: translitName(hospital?.name, lang),
+            name: insMatch.map((c) => insurerByCode[c]?.name || c).join(', '),
+          })}
+        </div>
+      )}
 
       {reachNotice}
       {tightNotice}

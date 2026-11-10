@@ -7,7 +7,7 @@ from typing import List, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 
-from ..services.storage import public_url
+from ..services.storage import media_validator, public_url
 from .person import NamePartsIn, NamePartsOut
 
 Weekday = Literal["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -90,7 +90,8 @@ class DoctorUpdate(NamePartsIn):
     experience_years: Optional[int] = None
     consultation_fee: Optional[Decimal] = None
     bio: Optional[str] = None
-    profile_photo_url: Optional[str] = None
+    # No profile_photo_url: only POST /doctors/{id}/photo sets it (a typed path
+    # could point at any private file and come back as a signed link).
     languages: Optional[str] = None
     status: Optional[Literal["active", "inactive", "on_leave", "suspended"]] = None
     is_available_today: Optional[bool] = None
@@ -127,7 +128,7 @@ class DoctorOut(NamePartsOut):
     # Any active weekly session at an active practice (Doctor.has_timings).
     has_timings: bool = True
 
-    _media_photo = field_validator("profile_photo_url", mode="before")(public_url)
+    _media_photo = field_validator("profile_photo_url", mode="before")(media_validator("doctors"))
 
 
 class DutyOut(BaseModel):

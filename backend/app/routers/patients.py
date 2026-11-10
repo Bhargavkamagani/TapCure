@@ -350,14 +350,37 @@ def update_patient(patient_id: UUID, body: PatientUpdate, me: User = Depends(req
     if new_phone is not None:
         owner = db.get(User, p.user_id) if p.user_id else None
         if owner:
-            # Linked to a login, so the number has to move on both tables at
-            # once — that single writer owns every copy of it.
+            # Linked to a login, and patients sign in by OTP to this number: who
+            # holds the number holds the account. Staff (reception, admin,
+            # doctor) and the patient themselves could move it here with no OTP
+            # to anyone — the next login on the new number got the whole history.
+            # Only the Super Admin may, as an audited support case. No screen
+            # sends a phone here, so the app loses nothing.
+            if new_phone.strip() != (owner.phone or "").strip():
+                if not (me.role and me.role.name == ROLE_SUPER_ADMIN):
+                    raise HTTPException(
+                        status.HTTP_403_FORBIDDEN,
+                        "This patient signs in with their mobile number. It can't be changed from here.",
+                    )
+                audit.log_activity(db, me.user_id, "patient.phone_change", "patient",
+                                   {"patient_id": str(p.patient_id), "user_id": str(owner.user_id)})
+            # The number has to move on both tables at once — that single
+            # writer owns every copy of it.
             accounts.change_phone(db, owner, new_phone)
         else:
             # A walk-in registered at the desk has no user account to carry the
             # number, so this row IS the record. Same validation, same clash
             # check, just nothing else to keep in step.
             p.phone = accounts.set_walkin_phone(db, p, new_phone)
+    if "insurances" in data:
+        # One login has a patients row per hospital: keep the insurance the same
+        # on all of them, like the phone (2026-11-10).
+        ins = data.pop("insurances") or []
+        rows = [p]
+        if p.user_id:
+            rows = db.scalars(select(Patient).where(Patient.user_id == p.user_id)).all() or [p]
+        for row in rows:
+            row.insurances = ins
     for k, v in data.items():
         setattr(p, k, v)
     db.commit()
@@ -417,7 +440,9 @@ def add_family(body: FamilyMemberCreate, me: User = Depends(require_permission("
     # A patient may carry at most 5 dependents (active ones).
     if sum(1 for fm in p.family_members if fm.is_active) >= 5:
         raise HTTPException(status.HTTP_409_CONFLICT, "You can add up to 5 family members")
-    m = FamilyMember(**body.model_dump())
+    fields = body.model_dump()
+    fields["insurances"] = fields.get("insurances") or []
+    m = FamilyMember(**fields)
     _assert_notify_target(m)
     db.add(m)
     db.commit()
@@ -432,7 +457,7 @@ def update_family(member_id: UUID, body: FamilyMemberUpdate, me: User = Depends(
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Family member not found")
     _assert_access(db, me, m.patient)
     for k, v in body.model_dump(exclude_unset=True).items():
-        setattr(m, k, v)
+        setattr(m, k, (v or []) if k == "insurances" else v)
     _assert_notify_target(m)
     db.commit()
     db.refresh(m)
@@ -808,7 +833,8 @@ def _vital_out(db: Session, v: PatientVital) -> VitalsOut:
 
 
 @router.get("/vitals/recent", response_model=list[VitalsOut])
-def recent_vitals(limit: int = Query(50, ge=1, le=200), me: User = Depends(require_permission("patient", "read")), db: Session = Depends(get_db)):
+def recent_vitals(limit: int = Query(50, ge=1, le=200), me: User = Depends(require_permission("patient", "read")),
+                  _staff: User = Depends(require_staff), db: Session = Depends(get_db)):
     """The hospital's vitals log — most recent readings recorded by this hospital's
     staff, newest first, each tagged with the patient's name/UHID. Powers the
     receptionist 'Vitals & Measurements' page."""

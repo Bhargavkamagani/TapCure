@@ -30,9 +30,9 @@ const PLANS = [
   { key: 'pilot', free: true, monthly: 0, cta: 'tc.price.pilot.cta',
     tiles: ['∞', '∞', '₹0', '₹0'], highlights: [['every', true], ['whatsapp', true], ['noPay', true]] },
   { key: 'starter', monthly: 0, shown: ['₹499', '₹4,990', '₹5,988'],
-    tiles: ['1', '100', '₹4', '₹999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['upgrade', true]] },
+    tiles: ['1', '50', '₹4', '₹999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['upgrade', true]] },
   { key: 'smart', monthly: 0, popular: true, shown: ['₹999', '₹9,990', '₹11,988'],
-    tiles: ['2', '250', '₹3', '₹1,999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['upgrade', true]] },
+    tiles: ['1', '200', '₹3', '₹1,999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['upgrade', true]] },
   { key: 'pro', monthly: 0, shown: ['₹1,999', '₹19,990', '₹23,988'],
     tiles: ['3', '600', '₹2', '₹4,999'], highlights: [['core', true], ['freeRevisit', true], ['whatsapp', true], ['addDoc', true]] },
 ]

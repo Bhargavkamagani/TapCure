@@ -9,6 +9,7 @@ from ..deps import ensure_same_tenant, require_permission
 from ..models import Department, Hospital, User
 from ..schemas.hospital import DepartmentCreate, DepartmentOut, DepartmentUpdate
 from ..services import audit
+from ..services import hospital_profile
 
 router = APIRouter(prefix="/departments", tags=["departments"])
 
@@ -60,6 +61,7 @@ def create_department(body: DepartmentCreate, me: User = Depends(require_permiss
     d = Department(**body.model_dump())
     db.add(d)
     audit.log_activity(db, me.user_id, "department.create", "department")
+    hospital_profile.mark_if_complete(db, db.get(Hospital, body.hospital_id))
     db.commit()
     db.refresh(d)
     return d
@@ -73,6 +75,7 @@ def update_department(department_id: UUID, body: DepartmentUpdate, me: User = De
         _ensure_unique_name(db, d.hospital_id, body.name, exclude_id=d.department_id)
     for k, v in body.model_dump(exclude_unset=True).items():
         setattr(d, k, v)
+    hospital_profile.mark_if_complete(db, db.get(Hospital, d.hospital_id))
     db.commit()
     db.refresh(d)
     return d

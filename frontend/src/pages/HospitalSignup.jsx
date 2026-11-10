@@ -10,7 +10,7 @@ import { MODERN_FONT } from '../components/landing/ModernChrome.jsx'
 import { useI18n } from '../i18n/index.jsx'
 import { authApi } from '../api'
 import { toMobile } from '../lib/phone.js'
-import { geocodeAddress, getCurrentPosition } from '../lib/geo.js'
+import { geocodeAddress, getCurrentPosition, reverseGeocode } from '../lib/geo.js'
 import { searchPlaces } from '../lib/places.js'
 import { validateHospitalRegNo, MAX_REG_NO, REG_NO_PLACEHOLDER } from '../lib/regNumber.js'
 import { emailTypoError } from '../lib/emailTypos.js'
@@ -594,6 +594,7 @@ function HospitalSignup() {
   const [near, setNear] = useState(null)
   const [dragged, setDragged] = useState(false)
   const skipFly = useRef(false)
+  const spotFill = useRef(null)   // the state/pincode lookup started by pick()
 
   // Opens at the top (the router keeps the footer's scroll position) and names the tab.
   useEffect(() => { window.scrollTo(0, 0) }, [])
@@ -609,12 +610,40 @@ function HospitalSignup() {
     setErrors((cur) => ({ ...cur, [k]: undefined }))
     if (step === 'where' && !dragged && ['address', 'area', 'city', 'pincode'].includes(k)) setPinSource('typed')
   }
+  // State, pincode and city from the pin's spot (2026-11-10), so the owner does
+  // not pick the State again. Fills ONLY empty boxes — never overwrites what was
+  // typed or chosen. Gives up quietly after 4 s; the boxes then stay as they were.
+  const fillFromSpot = async (lat, lng) => {
+    if (!Number.isFinite(Number(lat)) || !Number.isFinite(Number(lng))) return null
+    const r = await Promise.race([
+      reverseGeocode(lat, lng).catch(() => null),
+      new Promise((res) => setTimeout(() => res(null), 4000)),
+    ])
+    if (!r) return null
+    const state = r.state ? toState(r.state) : ''
+    const pincode = toPincode(r.pincode || '')
+    const city = (r.city || '').trim()
+    setF((cur) => ({
+      ...cur,
+      state: cur.state || state,
+      pincode: PINCODE_RE.test(cur.pincode) ? cur.pincode : (PINCODE_RE.test(pincode) ? pincode : cur.pincode),
+      city: cur.city || city,
+    }))
+    setErrors((cur) => ({
+      ...cur,
+      ...(state && { state: undefined }),
+      ...(PINCODE_RE.test(pincode) && { pincode: undefined }),
+      ...(city && { city: undefined }),
+    }))
+    return { state, pincode: PINCODE_RE.test(pincode) ? pincode : '', city }
+  }
   // The owner dragged the pin to the exact spot: keep it, and don't fly the map.
   const movePin = (lat, lng) => {
     skipFly.current = true
     mapPin.current = { latitude: lat, longitude: lng }
     setF((cur) => ({ ...cur, latitude: lat, longitude: lng }))
     setPinSource('map'); setGeo('idle'); setDragged(true)
+    fillFromSpot(lat, lng)
   }
   const go = (s) => { setErrors({}); setSubmitError(null); setStep(s); window.scrollTo({ top: 0 }) }
 
@@ -624,6 +653,10 @@ function HospitalSignup() {
     setF((cur) => ({ ...cur, ...p, state: toState(p.state), pincode: toPincode(p.pincode) }))
     setPinSource('map'); setGeo('idle'); setDragged(false)
     go('confirm')
+    // Map gave no state or pincode: look them up from the spot while the owner
+    // reads the confirm card; "Yes" waits for it (max 4 s).
+    if (!p.state || !PINCODE_RE.test(toPincode(p.pincode))) spotFill.current = fillFromSpot(p.latitude, p.longitude)
+    else spotFill.current = null
   }
   const startManual = () => {
     mapPin.current = null
@@ -649,6 +682,7 @@ function HospitalSignup() {
         if (g && !(g.approximate && mapPin.current)) {
           setF((cur) => ({ ...cur, latitude: g.lat, longitude: g.lng }))
           setGeo(g.approximate ? 'approx' : 'found')
+          fillFromSpot(g.lat, g.lng)
         } else setGeo(g ? 'found' : 'none')
       } catch { if (live) setGeo('none') }
     }, 900)
@@ -676,9 +710,20 @@ function HospitalSignup() {
 
   const submitWhere = (e) => { e.preventDefault(); if (check(['name', 'address', 'city', 'state', 'pincode'])) go('owner') }
   // A map pick without a state or a good pincode goes to the address step to add them.
-  const confirmYes = () => {
-    if (f.state && PINCODE_RE.test(f.pincode)) go('owner')
-    else { go('where'); check(['state', 'pincode']) }
+  const [confirming, setConfirming] = useState(false)
+  const confirmYes = async () => {
+    let found = null
+    if (spotFill.current) {
+      setConfirming(true)
+      found = await spotFill.current
+      spotFill.current = null
+      setConfirming(false)
+    }
+    // `f` here is from before the lookup, so add what it found.
+    const state = f.state || found?.state || ''
+    const pinOk = PINCODE_RE.test(f.pincode) || Boolean(found?.pincode)
+    if (state && pinOk) go('owner')
+    else { go('where'); check([...(state ? [] : ['state']), ...(pinOk ? [] : ['pincode'])]) }
   }
   const submitOwner = (e) => { e.preventDefault(); if (check(['first', 'last', 'mobile', 'email'])) go('verify') }
 
@@ -894,7 +939,7 @@ function HospitalSignup() {
               </div>
               <div className="mt-6 flex gap-3">
                 <button type="button" onClick={() => { mapPin.current = null; setPinSource(null); setDragged(false); setF(EMPTY); go('find') }} className={btnGhost}>{tx('searchAgain')}</button>
-                <button type="button" onClick={confirmYes} className={btnMain}>{tx('yes')}</button>
+                <button type="button" onClick={confirmYes} disabled={confirming} className={btnMain}>{confirming ? '…' : tx('yes')}</button>
               </div>
             </div>
           )}

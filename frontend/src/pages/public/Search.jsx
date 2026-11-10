@@ -10,6 +10,7 @@ import { useI18n } from '../../i18n/index.jsx'
 import { translitName, translitDegrees } from '../../lib/translit.js'
 import { specialtyLabel } from '../../data/symptomSpecialty.js'
 import { shortPlace as placeOf } from '../../lib/shortPlace.js'
+import { InsuranceLogos, useInsurers } from '../../components/common/Insurance.jsx'
 
 /**
  * Find Doctors / Find Hospitals — on the landing page's look (StaticPageShell
@@ -175,6 +176,8 @@ function HospitalCard({ hospital }) {
         <h3 className="flex items-center gap-1.5 text-[18px] font-semibold text-[#0B2150]">
           <span className="truncate">{translitName(hospital.name, lang)}</span>
           <BadgeCheck className="h-4 w-4 shrink-0 text-[#0A9A96]" aria-label={t('psearch.verifiedHospital')} />
+          {/* Insurers accepted: small logos, top right (2026-11-03). */}
+          <InsuranceLogos codes={hospital.insurance_partners} className="ml-auto pl-1" />
         </h3>
         {place && (
           <p className="truncate text-[15.5px] font-medium text-[#0A9A96]" title={[hospital.address, hospital.city].filter(Boolean).join(', ')}>
@@ -205,6 +208,8 @@ export default function PublicSearch() {
   const query = params.get('q') || ''
   const city = params.get('city') || ''
   const specialty = params.get('specialty') || ''
+  const insurance = params.get('insurance') || ''
+  const { groups: insurerGroups } = useInsurers()
   const type = params.get('type') === 'clinics' ? 'hospitals' : params.get('type') || 'all'  // old links said clinics
   // A speciality NAMED in the box ("dentist") wins over a symptom guess.
   const suggestion = useMemo(() => specialtyFromText(query) || matchSpecialties(query)[0]?.specialty || '', [query])
@@ -220,12 +225,13 @@ export default function PublicSearch() {
       specialty: specialty || suggestion,
       symptom: Boolean(suggestion && !specialty),
       type,
+      insurance,
     })
       .then((result) => { if (active) setData(result || { doctors: [], hospitals: [] }) })
       .catch((err) => { if (active) setError(err.message || 'psearch.unavailable') })
       .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
-  }, [query, city, specialty, suggestion, type, retryNonce])
+  }, [query, city, specialty, suggestion, type, insurance, retryNonce])
 
   const update = (key, value) => {
     const next = new URLSearchParams(params)
@@ -287,6 +293,14 @@ export default function PublicSearch() {
           <select aria-label={t('psearch.specialty')} value={specialty} onChange={(event) => update('specialty', event.target.value)} className={`${field} min-h-[44px] rounded-full px-4 text-[15px]`}>
             <option value="">{t('psearch.allSpecialties')}</option>
             {(data.specialties || []).map((item) => <option key={item} value={item}>{specialtyLabel(item, lang)}</option>)}
+          </select>
+          <select aria-label={t('ins.filterLabel')} value={insurance} onChange={(event) => update('insurance', event.target.value)} className="max-w-[220px] rounded-full border border-teal-100 bg-white/70 px-5 py-2.5 text-[15px] outline-none">
+            <option value="">{t('ins.filterAny')}</option>
+            {insurerGroups.map((g) => (
+              <optgroup key={g.key} label={t(`ins.group.${g.key}`)}>
+                {g.items.map((i) => <option key={i.code} value={i.code}>{i.name}</option>)}
+              </optgroup>
+            ))}
           </select>
         </div>
 

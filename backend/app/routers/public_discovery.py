@@ -13,8 +13,10 @@ from sqlalchemy.orm import Session, selectinload
 
 from ..database import get_db
 from ..services import health_news as news_service
+from ..services import insurers as insurer_list
+from ..services import hospital_profile
 from ..services import scheduling as sch
-from ..services.storage import public_url
+from ..services.storage import media_url
 from ..models.doctor import Doctor, DoctorAffiliation, DoctorSchedule
 from ..models.hospital import Hospital
 
@@ -134,8 +136,7 @@ def _doctor_out(row: Doctor, hospitals: dict[int, Hospital], include_schedules: 
             affiliation.hospital_id is None
             or (
                 affiliation.hospital_id in hospitals
-                and hospitals[affiliation.hospital_id].status == "active"
-                and hospitals[affiliation.hospital_id].is_active
+                and hospital_profile.is_visible(hospitals[affiliation.hospital_id])
             )
         )
     ]
@@ -151,7 +152,7 @@ def _doctor_out(row: Doctor, hospitals: dict[int, Hospital], include_schedules: 
         # Stored as "s3://bucket/key" on servers using S3: a browser can't open
         # that, so the landing page showed no photos while the logged-in
         # screens (which go through DoctorOut's public_url) did.
-        "profile_photo_url": public_url(row.profile_photo_url),
+        "profile_photo_url": media_url(row.profile_photo_url, "doctors"),
         "languages": row.languages,
         "status": row.status,
         "is_available_today": row.is_available_today,
@@ -172,18 +173,21 @@ def _hospital_out(row: Hospital, doctor_count: int = 0) -> dict:
         "state": row.state,
         "pincode": row.pincode,
         "phone": row.phone,
-        "logo_url": public_url(row.logo_url),
-        "photo_url": public_url(row.photo_url),
+        "logo_url": media_url(row.logo_url, "hospitals"),
+        "photo_url": media_url(row.photo_url, "hospitals"),
         "latitude": row.latitude,
         "longitude": row.longitude,
         "doctor_count": doctor_count,
+        # Codes; names/badges come from GET /public/insurers.
+        "insurance_partners": insurer_list.known(row.insurance_partners),
     }
 
 
 def _active_hospitals(db: Session) -> list[Hospital]:
     return list(db.scalars(
         select(Hospital)
-        .where(Hospital.status == "active", Hospital.is_active.is_(True))
+        # Hidden until "Complete your profile" is done (2026-11-10).
+        .where(*hospital_profile.visible_to_patients())
         .order_by(Hospital.name)
     ).all())
 
@@ -204,13 +208,21 @@ def discover(
     specialty: str = Query("", max_length=100),
     symptom: bool = Query(False),
     type: str = Query("all", pattern="^(all|doctors|hospitals|clinics)$"),  # clinics = old name
+    # One insurer code (GET /public/insurers): only hospitals that accept it,
+    # and only doctors at those hospitals. Unknown code -> nothing matches.
+    insurance: str = Query("", max_length=60),
     db: Session = Depends(get_db),
 ):
     if type == "clinics":
         type = "hospitals"
-    hospitals = _active_hospitals(db)
+    all_hospitals = _active_hospitals(db)
+    all_by_id = {row.hospital_id: row for row in all_hospitals}
+    all_doctors = [row for row in _active_doctors(db) if row.hospital_id in all_by_id]
+    insurance_code = insurance.strip().lower()
+    hospitals = ([row for row in all_hospitals if insurance_code in (row.insurance_partners or [])]
+                 if insurance_code else all_hospitals)
     hospital_by_id = {row.hospital_id: row for row in hospitals}
-    doctors = [row for row in _active_doctors(db) if row.hospital_id in hospital_by_id]
+    doctors = [row for row in all_doctors if row.hospital_id in hospital_by_id]
     term = _text(q).lower()
     city_term = _text(city).lower()
     specialty_term = _text(specialty).lower()
@@ -252,8 +264,9 @@ def discover(
     return {
         "doctors": [] if type == "hospitals" else [_doctor_out(row, hospital_by_id) for row in matched_doctors],
         "hospitals": [] if type == "doctors" else [_hospital_out(row, doctor_counts.get(row.hospital_id, 0)) for row in matched_hospitals],
-        "cities": sorted({_text(row.city) for row in hospitals if _text(row.city)}),
-        "specialties": sorted({_text(row.specialization) for row in doctors if _text(row.specialization)}),
+        # Dropdown choices stay complete even while the insurance filter is on.
+        "cities": sorted({_text(row.city) for row in all_hospitals if _text(row.city)}),
+        "specialties": sorted({_text(row.specialization) for row in all_doctors if _text(row.specialization)}),
     }
 
 
@@ -287,7 +300,7 @@ def public_cities(db: Session = Depends(get_db)):
     """
     hospital_cities = db.scalars(
         select(Hospital.city).where(
-            Hospital.status == "active", Hospital.is_active.is_(True), Hospital.city != ""
+            *hospital_profile.visible_to_patients(), Hospital.city != ""
         ).distinct()
     ).all()
     practice_cities = db.scalars(
@@ -303,6 +316,25 @@ def public_cities(db: Session = Depends(get_db)):
 
     names = {_clean_city(c) for c in [*hospital_cities, *practice_cities]}
     return {"cities": sorted(n for n in names if n)}
+
+
+@router.get("/insurers")
+def public_insurers(state: str = Query("", max_length=100)):
+    """Every insurer and government scheme, in 4 groups — the only list the app
+    uses. `state` (a hospital's state) puts that state's schemes first."""
+    return {"groups": insurer_list.grouped(state)}
+
+
+@router.get("/insurers/hospital-counts")
+def public_insurer_hospital_counts(db: Session = Depends(get_db)):
+    """How many live hospitals accept each insurer/scheme, for the public
+    Insurance page (2026-11-03). Only codes with at least one hospital appear;
+    the page shows the rest as "No hospitals yet"."""
+    counts: dict[str, int] = {}
+    for row in _active_hospitals(db):
+        for code in set(insurer_list.known(row.insurance_partners)):
+            counts[code] = counts.get(code, 0) + 1
+    return {"counts": counts}
 
 
 @router.get("/health-news")
@@ -352,8 +384,7 @@ def public_hospital(hospital_id: UUID, db: Session = Depends(get_db)):
     hospital = db.scalar(
         select(Hospital).where(
             Hospital.hospital_id == hospital_id,
-            Hospital.status == "active",
-            Hospital.is_active.is_(True),
+            *hospital_profile.visible_to_patients(),
         )
     )
     if not hospital:
@@ -381,7 +412,7 @@ def public_hospital(hospital_id: UUID, db: Session = Depends(get_db)):
             "qualification": doctor.qualification,
             "experience_years": doctor.experience_years,
             "consultation_fee": affiliation.consultation_fee if affiliation else doctor.consultation_fee,
-            "profile_photo_url": public_url(doctor.profile_photo_url),
+            "profile_photo_url": media_url(doctor.profile_photo_url, "doctors"),
             "affiliation_id": affiliation.affiliation_id if affiliation else None,
             # Timings at THIS hospital. A doctor with no practice here (a solo
             # doctor only anchored to it) books at their own hospital, so for

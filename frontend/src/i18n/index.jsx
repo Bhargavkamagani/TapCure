@@ -22,6 +22,7 @@ import { landingExtraT } from './dict/landingExtra.js'
 import { shellT } from './dict/shell.js'
 import { tcPricingT } from './dict/tcPricing.js'
 import { accountDeleteT } from './dict/accountDelete.js'
+import { insuranceT } from './dict/insurance.js'
 
 /**
  * Lightweight i18n for the patient-facing surfaces. The selected language is
@@ -152,7 +153,7 @@ const coreT = {
 }
 
 // Core (navbar/hero/lifeline/auth) merged with the Phase-2 landing + dashboard dicts.
-const T = { ...coreT, ...landingT, ...editorialLandingT, ...tcLandingT, ...tcFaqT, ...tcLeaveNowT, ...tcHeroT, ...tcLedgerT, ...dashboardT, ...symptomT, ...patientMiscT, ...nutritionT, ...legalTermsT, ...legalPrivacyT, ...legalRefundT, ...staticPagesT, ...staticFaqT, ...publicPagesT, ...authExtraT, ...patientExtraT, ...landingExtraT, ...shellT, ...tcPricingT, ...accountDeleteT }
+const T = { ...coreT, ...landingT, ...editorialLandingT, ...tcLandingT, ...tcFaqT, ...tcLeaveNowT, ...tcHeroT, ...tcLedgerT, ...dashboardT, ...symptomT, ...patientMiscT, ...nutritionT, ...legalTermsT, ...legalPrivacyT, ...legalRefundT, ...staticPagesT, ...staticFaqT, ...publicPagesT, ...authExtraT, ...patientExtraT, ...landingExtraT, ...shellT, ...tcPricingT, ...accountDeleteT, ...insuranceT }
 
 const Ctx = createContext(null)
 

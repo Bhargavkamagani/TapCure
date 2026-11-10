@@ -226,12 +226,25 @@ def send_sms(db: Session, phone: str, message: str, *, ntype: str = "general", t
     return n
 
 
+# Patient alerts that only plans with WhatsApp include (the pricing cards:
+# Starter has none). OTPs and cancellations are not on this list — a patient
+# must always be able to sign in and must always hear that a visit is off.
+PLAN_ALERT_TYPES = {"booking", "almost_turn", "travel_alert", "consult_done", "rx_ready", "reminder"}
+
+
 def send_whatsapp(db: Session, phone: str, message: str, *, ntype: str = "general", title: str = "",
                   template_name: str | None = None, template_params: list[str] | None = None,
                   otp_code: str | None = None, language_code: str | None = None,
                   event_type: str | None = None,
                   **refs) -> Notification:
     n = _notification(db, channel="whatsapp", ntype=ntype, title=title, message=message, **refs)
+
+    if ntype in PLAN_ALERT_TYPES and not otp_code:
+        from . import booking_quota  # imports this module; lazy to avoid a cycle
+        if not booking_quota.whatsapp_allowed(db, refs.get("hospital_id")):
+            n.status = "skipped"  # not in this hospital's plan; nothing is sent or billed
+            n.sent_at = None
+            return n
 
     if notification_events.is_sqs_enabled():
         resolved_event_type = event_type or ("otp_login" if otp_code else "appointment_confirmed")
@@ -267,6 +280,9 @@ def send_whatsapp(db: Session, phone: str, message: str, *, ntype: str = "genera
                 payload = {key: str(value) for key, value in zip(keys, template_params or [])}
             elif resolved_event_type == whatsapp_templates.DOCTOR_DAILY_EVENT:
                 keys = whatsapp_templates.DOCTOR_DAILY_PAYLOAD_KEYS
+                payload = {key: str(value) for key, value in zip(keys, template_params or [])}
+            elif resolved_event_type == whatsapp_templates.PILOT_REMINDER_EVENT:
+                keys = whatsapp_templates.PILOT_REMINDER_PAYLOAD_KEYS
                 payload = {key: str(value) for key, value in zip(keys, template_params or [])}
             elif resolved_event_type == whatsapp_templates.DOCTOR_DAY_COMPLETE_EVENT:
                 keys = whatsapp_templates.DOCTOR_DAY_COMPLETE_PAYLOAD_KEYS
