@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useRef, createContext, useContext } from 
 import { useI18n } from '../../i18n/index.jsx'
 import TypeLoop from './TypeLoop.jsx'
 import { useNavigate } from 'react-router-dom'
-import { ShieldCheck, Zap, BarChart3, Lock } from 'lucide-react'
+import { CircleCheck, Timer, Apple, Lock } from 'lucide-react'
 import { FOODS, MEALS, PLANS, REDUCE, SCHEDULES } from '../../lib/nutritionPlans.js'
 
 /**
@@ -1152,9 +1152,9 @@ function TcLedger() {
 
               <ul className="hx-trust">
                 {[
-                  [ShieldCheck, 'tc.lg.trust1.t', 'tc.lg.trust1.d'],
-                  [Zap, 'tc.lg.trust2.t', 'tc.lg.trust2.d'],
-                  [BarChart3, 'tc.lg.trust3.t', 'tc.lg.trust3.d'],
+                  [CircleCheck, 'tc.lg.trust1.t', 'tc.lg.trust1.d'],
+                  [Timer, 'tc.lg.trust2.t', 'tc.lg.trust2.d'],
+                  [Apple, 'tc.lg.trust3.t', 'tc.lg.trust3.d'],
                   [Lock, 'tc.lg.trust4.t', 'tc.lg.trust4.d'],
                 ].map(([Icon, title, note]) => (
                   <li key={title}>

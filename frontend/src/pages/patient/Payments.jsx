@@ -43,7 +43,7 @@ function Payments() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-[12px] font-semibold text-slate-400">
+              <tr className="text-[13px] font-semibold text-slate-400">
                 <th className="pb-3 pr-3">{t('ppage.colDate')}</th>
                 <th className="pb-3 pr-3">{t('ppage.colDescription')}</th>
                 <th className="pb-3 pr-3">{t('ppage.colToken')}</th>

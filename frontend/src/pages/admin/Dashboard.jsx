@@ -33,13 +33,13 @@ function Kpi({ icon: Icon, label, value, sub, tone = 'blue' }) {
   return (
     <div className="rounded-2xl border border-slate-100 bg-white p-4 shadow-card">
       <div className="flex items-start justify-between gap-2">
-        <p className="text-[12.5px] font-semibold text-slate-500">{label}</p>
+        <p className="text-[13.5px] font-semibold text-slate-500">{label}</p>
         <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${tones[tone]}`}>
           <Icon className="h-4.5 w-4.5" />
         </span>
       </div>
       <p className="mt-2 text-[26px] font-extrabold leading-none tabular-nums text-brand-navy">{value}</p>
-      {sub && <p className="mt-1.5 text-[12px] text-slate-400">{sub}</p>}
+      {sub && <p className="mt-1.5 text-[13px] text-slate-400">{sub}</p>}
     </div>
   )
 }
@@ -64,12 +64,12 @@ function QueueCard({ icon: Icon, title, count, blurb, cta, to, tone }) {
         <p className="text-[15px] font-bold text-brand-navy">
           {title}
           {!empty && (
-            <span className={`ml-2 rounded-full px-2 py-0.5 text-[11.5px] font-extrabold ${tone.badge}`}>{count}</span>
+            <span className={`ml-2 rounded-full px-2 py-0.5 text-[13px] font-extrabold ${tone.badge}`}>{count}</span>
           )}
         </p>
-        <p className="mt-0.5 text-[12.5px] text-slate-500">{empty ? 'Nothing waiting — all clear.' : blurb}</p>
+        <p className="mt-0.5 text-[13.5px] text-slate-500">{empty ? 'Nothing waiting — all clear.' : blurb}</p>
       </div>
-      <span className="flex shrink-0 items-center gap-1 text-[12.5px] font-semibold text-brand-blue">
+      <span className="flex shrink-0 items-center gap-1 text-[13.5px] font-semibold text-brand-blue">
         {empty ? 'Open' : cta} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
       </span>
     </button>
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-left">
               <thead>
-                <tr className="border-b border-slate-100 text-[11.5px] uppercase tracking-wide text-slate-400">
+                <tr className="border-b border-slate-100 text-[12px] uppercase tracking-wide text-slate-400">
                   <th className="px-4 py-3 font-semibold">Hospital</th>
                   <th className="px-4 py-3 font-semibold">City</th>
                   <th className="px-4 py-3 font-semibold">Status</th>
@@ -208,11 +208,11 @@ export default function AdminDashboard() {
                   <tr key={h.hospital_id} className="border-t border-slate-50 hover:bg-slate-50/70">
                     <td className="px-4 py-3">
                       <p className="font-semibold text-brand-navy">{h.name}</p>
-                      <p className="text-[11.5px] text-slate-400">{h.short_code}</p>
+                      <p className="text-[13px] text-slate-400">{h.short_code}</p>
                     </td>
                     <td className="px-4 py-3 text-slate-500">{h.city || '—'}</td>
                     <td className="px-4 py-3">
-                      <span className={`rounded-full px-2 py-0.5 text-[11.5px] font-semibold capitalize ${STATUS_PILL[h.status] || 'bg-slate-100 text-slate-600'}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-[13px] font-semibold capitalize ${STATUS_PILL[h.status] || 'bg-slate-100 text-slate-600'}`}>
                         {h.status || 'unknown'}
                       </span>
                     </td>
@@ -227,7 +227,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Previous footnote:
-        <p className="mt-3 flex items-center gap-1.5 text-[12px] text-slate-400">
+        <p className="mt-3 flex items-center gap-1.5 text-[13px] text-slate-400">
           <Users className="h-3.5 w-3.5" />
           Booking fees are TapCure&apos;s earnings for {monthLabel}. Consultation fees belong to the hospital — see a hospital&apos;s own page for those.
         </p> */}

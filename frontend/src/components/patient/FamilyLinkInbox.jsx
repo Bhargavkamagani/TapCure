@@ -43,14 +43,14 @@ export default function FamilyLinkInbox({ onChanged }) {
         <button
           disabled={busy === id}
           onClick={() => act(id, onYes)}
-          className="flex items-center gap-1.5 rounded-xl bg-brand-green px-4 py-2 text-[12px] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-xl bg-brand-green px-4 py-2 text-[13px] font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           <Check className="h-3.5 w-3.5" /> {t('ppage.linkAccept')}
         </button>
         <button
           disabled={busy === id}
           onClick={() => act(id, onNo)}
-          className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-[12px] font-bold text-slate-500 transition-colors hover:text-red-500 disabled:opacity-50"
+          className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2 text-[13px] font-bold text-slate-500 transition-colors hover:text-red-500 disabled:opacity-50"
         >
           <X className="h-3.5 w-3.5" /> {t('ppage.linkDecline')}
         </button>

@@ -26,7 +26,7 @@ export default function TravelChip({ minutes, origin, className = '' }) {
   return (
     <span
       title={origin ? t('cmn.travellingFrom', { origin }) : t('cmn.travelTime')}
-      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+      className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[13px] font-semibold ${
         far ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'
       } ${className}`}
     >

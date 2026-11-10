@@ -75,8 +75,8 @@ function PharmacyLayout() {
               <Headphones className="h-4 w-4" />
             </span>
             <div className="leading-tight">
-              <p className="text-[12px] font-bold text-white">Need Help?</p>
-              <Link to="/contact" className="text-[10px] text-teal-200/70 hover:text-teal-100">Contact Support</Link>
+              <p className="text-[13px] font-bold text-white">Need Help?</p>
+              <Link to="/contact" className="text-[13px] text-teal-200/70 hover:text-teal-100">Contact Support</Link>
             </div>
           </div>
         </div>
@@ -109,17 +109,17 @@ function PharmacyLayout() {
             )}
             <div className="leading-tight">
               <span className="block text-[14px] font-bold text-brand-navy">{hospital?.name || 'My Hospital'}</span>
-              <span className="flex items-center gap-1 text-[11px] text-slate-400">
+              <span className="flex items-center gap-1 text-[13px] text-slate-400">
                 <MapPin className="h-3 w-3 shrink-0" />
                 {[hospital?.city, hospital?.state].filter(Boolean).join(', ') || 'Pharmacy'}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2.5">
-            <Avatar name={user?.name || 'Pharmacist'} className="h-9 w-9 text-[12px]" />
+            <Avatar name={user?.name || 'Pharmacist'} className="h-9 w-9 text-[13px]" />
             <span className="hidden text-left leading-tight sm:block">
               <span className="block text-[13px] font-bold text-brand-navy">{user?.name || 'Pharmacist'}</span>
-              <span className="block text-[11px] text-slate-400">{ROLE_LABEL[user?.role_name] || 'Pharmacy'}</span>
+              <span className="block text-[13px] text-slate-400">{ROLE_LABEL[user?.role_name] || 'Pharmacy'}</span>
             </span>
           </div>
         </header>

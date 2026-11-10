@@ -95,8 +95,8 @@ export default function DoctorVerifications() {
                     </span>
                     <div>
                       <p className="text-[15px] font-bold text-brand-navy">Dr. {d.name}</p>
-                      <p className="text-[12px] font-semibold text-brand-blue">{d.specialization}{d.qualification ? ` · ${d.qualification}` : ''}</p>
-                      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-[12px] text-slate-500">
+                      <p className="text-[13px] font-semibold text-brand-blue">{d.specialization}{d.qualification ? ` · ${d.qualification}` : ''}</p>
+                      <div className="mt-1 flex flex-wrap gap-x-4 gap-y-0.5 text-[13px] text-slate-500">
                         <span className="flex items-center gap-1"><Phone className="h-3.5 w-3.5" /> {d.phone || '—'}</span>
                         <span className="flex items-center gap-1"><Mail className="h-3.5 w-3.5" /> {d.email || '—'}</span>
                         <span className="flex items-center gap-1"><Hash className="h-3.5 w-3.5" /> Reg: {d.registration_number || '—'}</span>
@@ -121,7 +121,7 @@ export default function DoctorVerifications() {
                 {/* Uploaded documents */}
                 <div className="mt-4 flex flex-wrap gap-2 border-t border-slate-100 pt-3">
                   {(d.documents || []).length === 0 ? (
-                    <span className="text-[12px] text-slate-400">No documents uploaded.</span>
+                    <span className="text-[13px] text-slate-400">No documents uploaded.</span>
                   ) : (
                     d.documents.map((doc) => (
                       <a
@@ -129,11 +129,11 @@ export default function DoctorVerifications() {
                         href={fileUrl(doc.file_url)}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[12px] font-semibold text-brand-navy transition-colors hover:border-brand-blue hover:bg-white"
+                        className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-[13px] font-semibold text-brand-navy transition-colors hover:border-brand-blue hover:bg-white"
                       >
                         <FileText className="h-4 w-4 text-brand-blue" />
                         {doc.label || doc.doc_type}
-                        <span className="text-[10px] font-normal text-slate-400">{doc.file_size_kb} KB</span>
+                        <span className="text-[13px] font-normal text-slate-400">{doc.file_size_kb} KB</span>
                         <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
                       </a>
                     ))

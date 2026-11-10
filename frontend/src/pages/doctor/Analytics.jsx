@@ -98,16 +98,16 @@ function Analytics() {
             {metrics.map((m) => (
               <Card key={m.label} className="text-center">
                 <p className="text-[22px] font-extrabold text-brand-navy">{m.value}</p>
-                <p className="mt-1 text-[12px] text-slate-500">{m.label}</p>
+                <p className="mt-1 text-[13px] text-slate-500">{m.label}</p>
               </Card>
             ))}
           </div>
 
           <Card>
             <h3 className="mb-1 flex items-center gap-2 text-[15px] font-bold text-brand-navy"><Activity className="h-5 w-5 text-brand-blue" /> Patient Visits Trend</h3>
-            <p className="mb-2 text-[12.5px] text-slate-400">Visits by weekday</p>
+            <p className="mb-2 text-[13.5px] text-slate-400">Visits by weekday</p>
             <LineChart data={trend} />
-            <div className="mt-1 flex justify-between text-[11px] text-slate-400">
+            <div className="mt-1 flex justify-between text-[13px] text-slate-400">
               {trend.map((d) => <span key={d.day}>{d.day}</span>)}
             </div>
           </Card>

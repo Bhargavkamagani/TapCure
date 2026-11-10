@@ -7,7 +7,7 @@ import { STOCK_STATUS, isAvailable, fmtExpiry } from './stockStatus.js'
 export function StockLine({ option }) {
   const st = STOCK_STATUS[option.status]
   return (
-    <span className="flex min-w-0 items-center gap-2 text-[12.5px]">
+    <span className="flex min-w-0 items-center gap-2 text-[13.5px]">
       <span className={`h-2 w-2 shrink-0 rounded-full ${st.dot}`} />
       <span className="truncate font-semibold text-brand-navy">
         {option.medicine_name}{option.strength ? ` · ${option.strength}` : ''}
@@ -87,13 +87,13 @@ export function StockPicker({ initialQuery, onPick, onCancel }) {
           className="w-full bg-transparent py-1 text-[13px] outline-none"
         />
         {onCancel && (
-          <button type="button" onClick={onCancel} className="text-[12px] font-semibold text-slate-400 hover:text-slate-600">Cancel</button>
+          <button type="button" onClick={onCancel} className="text-[13px] font-semibold text-slate-400 hover:text-slate-600">Cancel</button>
         )}
       </div>
       <div className="mt-1 max-h-48 overflow-auto">
-        {loading && !results.length && <p className="px-2 py-1.5 text-[12px] text-slate-400">Searching…</p>}
+        {loading && !results.length && <p className="px-2 py-1.5 text-[13px] text-slate-400">Searching…</p>}
         {!loading && q.trim().length >= 2 && !results.length && (
-          <p className="px-2 py-1.5 text-[12px] text-slate-500">Not in your stock list.</p>
+          <p className="px-2 py-1.5 text-[13px] text-slate-500">Not in your stock list.</p>
         )}
         {results.map((o) => {
           const expired = o.status === 'expired'
@@ -108,7 +108,7 @@ export function StockPicker({ initialQuery, onPick, onCancel }) {
             >
               <StockLine option={o} />
               {o.sameAs && (
-                <span className="mt-0.5 block text-[11px] font-semibold text-emerald-700">
+                <span className="mt-0.5 block text-[13px] font-semibold text-emerald-700">
                   same medicine as {o.sameAs}
                 </span>
               )}

@@ -48,12 +48,12 @@ function MetricCard({ label, unit, value, status }) {
   const card = status ? FLAG_CARD[status] : 'border-slate-100 bg-slate-50/60'
   return (
     <div className={`rounded-xl border px-3 py-2 ${card}`}>
-      <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="text-[12px] font-medium uppercase tracking-wide text-slate-400">{label}</p>
       <p className={`mt-0.5 text-[16px] font-extrabold leading-none ${tone}`}>
-        {value}<span className="ml-1 text-[10px] font-medium text-slate-400">{unit}</span>
+        {value}<span className="ml-1 text-[13px] font-medium text-slate-400">{unit}</span>
       </p>
       {status && status !== 'normal' && (
-        <p className={`mt-0.5 text-[9.5px] font-bold uppercase ${tone}`}>{FLAG_LABEL[status] ? t(FLAG_LABEL[status]) : status}</p>
+        <p className={`mt-0.5 text-[12px] font-bold uppercase ${tone}`}>{FLAG_LABEL[status] ? t(FLAG_LABEL[status]) : status}</p>
       )}
     </div>
   )
@@ -87,7 +87,7 @@ export const VITAL_CHIPS = [
 export function VitalChip({ icon: Icon, label, value, status }) {
   const tone = CHIP_TONE[status] || CHIP_TONE.normal
   return (
-    <span className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11.5px] font-semibold ${tone}`}>
+    <span className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[13px] font-semibold ${tone}`}>
       <Icon className="h-3.5 w-3.5 opacity-70" />
       <span className="opacity-70">{label}</span>
       <span className="font-extrabold">{value}</span>
@@ -143,7 +143,7 @@ export function VitalsSummaryCard({ vitals, patientName, className = '', compact
         <h3 className={`flex items-center gap-1.5 font-bold text-brand-navy ${compact ? 'text-[13.5px]' : 'text-[15px]'}`}>
           <span className={`flex items-center justify-center rounded-lg bg-rose-100 text-rose-500 ${compact ? 'h-6 w-6' : 'h-7 w-7'}`}><Activity className={compact ? 'h-3.5 w-3.5' : 'h-4 w-4'} /></span>{t('pm.currentPatientVitals')}</h3>
         {latest && (
-          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[10.5px] font-bold ${latest.abnormal ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
+          <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-bold ${latest.abnormal ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
             <span className={`h-1.5 w-1.5 rounded-full ${latest.abnormal ? 'bg-red-500' : 'bg-emerald-500'}`} />
             {latest.abnormal ? t('pm.needsAttention') : t('px.v.stable')}
           </span>
@@ -157,14 +157,14 @@ export function VitalsSummaryCard({ vitals, patientName, className = '', compact
           <div className={`flex flex-col items-center gap-1.5 text-center ${compact ? 'py-3' : 'py-6'}`}>
             <span className={`flex items-center justify-center rounded-xl bg-slate-100 text-slate-300 ${compact ? 'h-8 w-8' : 'h-11 w-11'}`}><HeartPulse className={compact ? 'h-4 w-4' : 'h-5 w-5'} /></span>
             <p className="text-[13px] font-semibold text-slate-500">{patientName ? t('px.v.noVitalsRecorded') : t('px.v.noPatient')}</p>
-            <p className="text-[11.5px] text-slate-400">{patientName ? t('px.v.nothingYet', { name: patientName }) : t('px.v.callPatient')}</p>
+            <p className="text-[13px] text-slate-400">{patientName ? t('px.v.nothingYet', { name: patientName }) : t('px.v.callPatient')}</p>
           </div>
         ) : (
           <>
             {patientName && (
               <p className="mb-2 flex items-center gap-2 text-[13.5px] font-bold text-brand-navy">
                 {patientName}
-                {latest.family_member_name && <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-semibold text-purple-600">{t('pm.forPerson', { name: latest.family_member_name })}</span>}
+                {latest.family_member_name && <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[13px] font-semibold text-purple-600">{t('pm.forPerson', { name: latest.family_member_name })}</span>}
               </p>
             )}
             <div className="flex flex-wrap gap-1.5">
@@ -173,18 +173,18 @@ export function VitalsSummaryCard({ vitals, patientName, className = '', compact
               ))}
             </div>
             <div className="mt-3 flex items-end justify-between gap-3">
-              <p className="flex items-center gap-1 text-[11px] text-slate-400">
+              <p className="flex items-center gap-1 text-[13px] text-slate-400">
                 <Clock className="h-3 w-3" /> {fmtDateTime(latest.recorded_at)}{latest.recorded_by_name ? ` · ${latest.recorded_by_name}` : ''}
               </p>
               {series.length >= 2 && (
                 <div className="shrink-0 text-right">
-                  <p className="mb-0.5 flex items-center justify-end gap-1 text-[9.5px] font-semibold uppercase tracking-wide text-slate-400">
+                  <p className="mb-0.5 flex items-center justify-end gap-1 text-[12px] font-semibold uppercase tracking-wide text-slate-400">
                     <TrendingUp className="h-3 w-3" />{t('pm.bpTrend')}</p>
                   <VitalsSparkline data={series} color={latest.abnormal ? '#ef4444' : '#2563eb'} />
                 </div>
               )}
             </div>
-            {latest.notes && <p className="mt-2.5 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[11.5px] text-slate-500">{latest.notes}</p>}
+            {latest.notes && <p className="mt-2.5 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[13px] text-slate-500">{latest.notes}</p>}
           </>
         )}
       </div>
@@ -194,17 +194,17 @@ export function VitalsSummaryCard({ vitals, patientName, className = '', compact
 
 export function VitalsView({ vitals }) {
   const { t } = useI18n()
-  if (vitals === null) return <p className="rounded-xl bg-slate-50 px-3 py-2.5 text-[12px] text-slate-400">{t('pm.loading')}</p>
-  if (!vitals.length) return <p className="rounded-xl bg-slate-50 px-3 py-2.5 text-[12px] text-slate-400">{t('pm.noVitals')}</p>
+  if (vitals === null) return <p className="rounded-xl bg-slate-50 px-3 py-2.5 text-[13px] text-slate-400">{t('pm.loading')}</p>
+  if (!vitals.length) return <p className="rounded-xl bg-slate-50 px-3 py-2.5 text-[13px] text-slate-400">{t('pm.noVitals')}</p>
   const latest = vitals[0]
   const cards = METRICS.map((m) => ({ m, value: m.val(latest) })).filter((c) => c.value != null && c.value !== '')
   return (
     <div>
       <div className="mb-1 flex items-center justify-between gap-2">
-        <p className="text-[11px] text-slate-400">{t('px.v.latestAt', { date: fmtDateTime(latest.recorded_at) })}{latest.recorded_by_name ? ` · ${t('px.v.byName', { name: latest.recorded_by_name })}` : ''}</p>
+        <p className="text-[13px] text-slate-400">{t('px.v.latestAt', { date: fmtDateTime(latest.recorded_at) })}{latest.recorded_by_name ? ` · ${t('px.v.byName', { name: latest.recorded_by_name })}` : ''}</p>
         <div className="flex items-center gap-1.5">
-          {latest.family_member_name && <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-semibold text-purple-600">{t('pm.forPerson', { name: latest.family_member_name })}</span>}
-          {latest.abnormal && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold text-red-600">{t('pm.needsAttention')}</span>}
+          {latest.family_member_name && <span className="rounded-full bg-purple-50 px-2 py-0.5 text-[13px] font-semibold text-purple-600">{t('pm.forPerson', { name: latest.family_member_name })}</span>}
+          {latest.abnormal && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[13px] font-bold text-red-600">{t('pm.needsAttention')}</span>}
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2">
@@ -213,14 +213,14 @@ export function VitalsView({ vitals }) {
             status={m.noflag ? null : latest.flags?.[m.key]} />
         ))}
       </div>
-      {latest.notes && <p className="mt-2 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[11.5px] text-slate-500">{latest.notes}</p>}
+      {latest.notes && <p className="mt-2 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[13px] text-slate-500">{latest.notes}</p>}
 
       {vitals.length > 1 && (
         <details className="mt-2.5">
-          <summary className="cursor-pointer text-[11.5px] font-semibold text-brand-blue">{t('px.v.earlier', { n: vitals.length - 1 })}</summary>
+          <summary className="cursor-pointer text-[13px] font-semibold text-brand-blue">{t('px.v.earlier', { n: vitals.length - 1 })}</summary>
           <ul className="mt-2 space-y-1.5">
             {vitals.slice(1).map((v) => (
-              <li key={v.vital_id} className="flex items-center justify-between rounded-lg border border-slate-100 px-2.5 py-1.5 text-[11.5px]">
+              <li key={v.vital_id} className="flex items-center justify-between rounded-lg border border-slate-100 px-2.5 py-1.5 text-[13px]">
                 <span className="text-slate-500">{fmtDateTime(v.recorded_at)}</span>
                 <span className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-slate-600">
                   {v.bp_systolic != null && <span className={FLAG_TEXT[v.flags?.bp] || ''}>BP {v.bp_systolic}/{v.bp_diastolic}</span>}
@@ -238,7 +238,7 @@ export function VitalsView({ vitals }) {
   )
 }
 
-const _field = 'w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[12.5px] text-brand-navy outline-none focus:border-brand-blue'
+const _field = 'w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[13.5px] text-brand-navy outline-none focus:border-brand-blue'
 const num = (s) => (s === '' || s == null ? undefined : Number(s))
 
 export function VitalsCaptureForm({ patientId, appointmentId, defaultFamilyMemberId, onDone, submitLabel }) {
@@ -312,10 +312,10 @@ export function VitalsCaptureForm({ patientId, appointmentId, defaultFamilyMembe
           <option value="pp">{t('pm.postMeal')}</option>
         </select>
       </div>
-      {liveBmi && <p className="text-[11.5px] font-semibold text-slate-500">{t('pm.bmi')} <span className="text-brand-navy">{liveBmi}</span> kg/m²</p>}
+      {liveBmi && <p className="text-[13px] font-semibold text-slate-500">{t('pm.bmi')} <span className="text-brand-navy">{liveBmi}</span> kg/m²</p>}
       <input className={_field} placeholder={t('pm.notesOptional')} value={f.notes} onChange={set('notes')} />
-      {err && <p className="rounded-lg bg-red-50 px-2 py-1 text-[11px] text-red-600">{err}</p>}
-      <button disabled={busy} className="w-full rounded-lg bg-brand-blue py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60">
+      {err && <p className="rounded-lg bg-red-50 px-2 py-1 text-[13px] text-red-600">{err}</p>}
+      <button disabled={busy} className="w-full rounded-lg bg-brand-blue py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60">
         {busy ? t('pcommon.saving') : (submitLabel || t('px.v.saveVitals'))}
       </button>
     </form>
@@ -335,7 +335,7 @@ export function VitalsModal({ patient, appointmentId, defaultFamilyMemberId, onC
             <Activity className="h-4 w-4 text-rose-500" />{t('pm.recordVitals')}</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X className="h-5 w-5" /></button>
         </div>
-        <p className="mb-3 text-[12.5px] text-slate-500">
+        <p className="mb-3 text-[13.5px] text-slate-500">
           {patient?.name}{patient?.uhid ? ` · ${patient.uhid}` : ''}
         </p>
         <VitalsCaptureForm patientId={patient.patient_id} appointmentId={appointmentId}

@@ -21,7 +21,7 @@ export const editorialLandingT = {
   'land.nav.login': { en: 'Log In / Sign Up', te: 'లాగిన్ / నమోదు', hi: 'लॉग इन / साइन अप' },
   'land.nav.menu': { en: 'Menu', te: 'మెనూ', hi: 'मेन्यू' },
   // Nav shortcut to the sixty-second health calculators (#health).
-  'land.nav.magic': { en: 'See The Magic', te: 'మ్యాజిక్ చూడండి', hi: 'जादू देखिए' },
+  'land.nav.magic': { en: 'Free Health Check', te: 'ఉచిత ఆరోగ్య పరీక్ష', hi: 'मुफ़्त हेल्थ चेक' },
   // Heading over the language chips in the mobile menu.
   'land.nav.language': { en: 'Language', te: 'భాష', hi: 'भाषा' },
   'land.nav.roleAction': { en: 'log in / sign up', te: 'లాగిన్ / నమోదు', hi: 'लॉग इन / साइन अप' },

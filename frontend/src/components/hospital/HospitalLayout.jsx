@@ -6,6 +6,7 @@ import GlassBackdrop from '../common/GlassBackdrop.jsx'
 import BookingQuotaPopup from './BookingQuotaPopup.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { subscriptionsApi } from '../../api'
+import { useHospitalSetup, SetupNudge, skippedForNow } from './HospitalSetupStatus.jsx'
 
 const PLAN_PATH = '/hospital-dashboard/plan'
 // Plan.jsx fires this after "Start free trial" / choosing a plan.
@@ -32,6 +33,7 @@ function HospitalLayout() {
   const { user } = useAuth()
   const { pathname } = useLocation()
   const isAdmin = user?.role_name === 'HOSPITAL_ADMIN'
+  const owner = isAdmin
   // null = still checking; true/false once known. Super admin is never gated.
   const [mustChoose, setMustChoose] = useState(isAdmin ? null : false)
 
@@ -48,10 +50,21 @@ function HospitalLayout() {
     return () => window.removeEventListener(PLAN_CHANGED_EVENT, checkPlan)
   }, [checkPlan])
 
+  const setup = useHospitalSetup(owner)
+  // Re-count when the owner moves between pages, so the bar notices a logo or
+  // hours added on the Profile page without a reload.
+  const { incomplete, refresh } = setup
+  useEffect(() => { if (incomplete) refresh() }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+
   if (mustChoose === null) {
     return <div className="flex h-screen w-screen items-center justify-center text-sm text-slate-400">Loading…</div>
   }
+  // 1) No plan chosen yet -> only the Plan page.
   if (mustChoose && pathname !== PLAN_PATH) return <Navigate to={PLAN_PATH} replace />
+  // 2) Then: only a hospital with nothing filled yet (just approved) is sent to
+  // "Complete your profile", until it is done or "Skip for now" is picked for
+  // this login. Hospitals already in use only get the small bar.
+  if (!mustChoose && owner && setup.fresh && !skippedForNow()) return <Navigate to="/hospital-setup" replace />
 
   return (
     <div className="glass-console relative flex h-screen w-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
@@ -69,6 +82,7 @@ function HospitalLayout() {
       <div className="flex min-w-0 flex-1 flex-col">
         <HospitalTopbar onMenu={() => setNavOpen(true)} />
         <main className="tc-surface flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-4">
+          {owner && !mustChoose && setup.incomplete && <SetupNudge done={setup.done} />}
           <Outlet />
         </main>
       </div>

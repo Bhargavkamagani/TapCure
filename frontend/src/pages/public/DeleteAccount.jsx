@@ -34,7 +34,7 @@ export default function DeleteAccount() {
             <h1 className="mt-2 text-[24px] font-extrabold text-brand-navy">{t('adel.pageTitle')}</h1>
             <p className="mb-5 mt-2 text-[14px] text-slate-600">{t('adel.pageDesc')}</p>
             <DeleteAccountFlow />
-            <p className="mt-5 text-[12.5px] text-slate-400">{t('adel.inApp')}</p>
+            <p className="mt-5 text-[13.5px] text-slate-400">{t('adel.inApp')}</p>
           </div>
         )}
       </main>

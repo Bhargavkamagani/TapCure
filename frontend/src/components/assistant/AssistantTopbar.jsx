@@ -69,7 +69,7 @@ function AssistantTopbar({ onMenu, dark, onToggleTheme }) {
         )}
         <div className="leading-tight">
           <span className="block text-[14px] font-bold text-brand-navy">{hospital?.name || 'My Hospital'}</span>
-          <span className="flex items-center gap-1 text-[11px] text-slate-400">
+          <span className="flex items-center gap-1 text-[13px] text-slate-400">
             <MapPin className="h-3 w-3 shrink-0" />
             {[hospital?.city, hospital?.state].filter(Boolean).join(', ') || 'Front desk'}
           </span>
@@ -77,7 +77,7 @@ function AssistantTopbar({ onMenu, dark, onToggleTheme }) {
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="hidden rounded-lg bg-slate-50 px-3 py-1.5 text-[12px] font-semibold text-slate-500 sm:block">
+        <span className="hidden rounded-lg bg-slate-50 px-3 py-1.5 text-[13px] font-semibold text-slate-500 sm:block">
           {today()}
         </span>
         <button
@@ -91,16 +91,16 @@ function AssistantTopbar({ onMenu, dark, onToggleTheme }) {
         <button onClick={() => navigate('/assistant-dashboard/notifications')} className="relative text-slate-400 hover:text-brand-blue">
           <Bell className="h-5 w-5" />
           {unread > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+            <span className="absolute -right-1.5 -top-1.5 flex h-[17px] min-w-[17px] items-center justify-center rounded-full bg-red-500 px-1 text-[13px] font-bold text-white">
               {unread}
             </span>
           )}
         </button>
         <div className="flex items-center gap-2.5 border-l border-slate-100 pl-4">
-          <Avatar name={user?.name || 'Front Desk'} src={RECEPTIONIST_AVATAR} className="h-9 w-9 bg-sky-50 text-[12px]" />
+          <Avatar name={user?.name || 'Front Desk'} src={RECEPTIONIST_AVATAR} className="h-9 w-9 bg-sky-50 text-[13px]" />
           <span className="hidden text-left leading-tight sm:block">
             <span className="block text-[13px] font-bold text-brand-navy">{user?.name || 'Front Desk'}</span>
-            <span className="block text-[11px] text-slate-400">Receptionist</span>
+            <span className="block text-[13px] text-slate-400">Receptionist</span>
           </span>
         </div>
       </div>

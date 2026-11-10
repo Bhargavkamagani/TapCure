@@ -67,6 +67,7 @@ const PatientHelp = lazy(() => import('./pages/patient/Help.jsx'))
 
 // Hospital console
 const HospitalLayout = lazy(() => import('./components/hospital/HospitalLayout.jsx'))
+const HospitalSetup = lazy(() => import('./pages/hospital/Setup.jsx'))
 const HospitalHome = lazy(() => import('./pages/hospital/Dashboard.jsx'))
 const OpQueue = lazy(() => import('./pages/hospital/OpQueue.jsx'))
 const Appointments = lazy(() => import('./pages/hospital/Appointments.jsx'))
@@ -197,6 +198,16 @@ function App() {
             <Route path="profile" element={<PatientProfile />} />
             <Route path="help" element={<PatientHelp />} />
           </Route>
+
+          {/* Complete your profile — a newly approved hospital's owner lands here */}
+          <Route
+            path="/hospital-setup"
+            element={
+              <RequireAuth roles={['HOSPITAL_ADMIN']} loginPath="/hospital-login">
+                <HospitalSetup />
+              </RequireAuth>
+            }
+          />
 
           {/* Hospital console — admin only */}
           <Route

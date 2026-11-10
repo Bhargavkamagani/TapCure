@@ -69,7 +69,7 @@ function HospitalTopbar({ onMenu }) {
         <Avatar name={user?.name || 'Admin'} className="h-9 w-9 text-sm" />
         <span className="leading-tight">
           <span className="block text-[15px] font-bold text-brand-navy">{user?.name || 'Admin'}</span>
-          <span className="block text-[11px] text-slate-400">
+          <span className="block text-[13px] text-slate-400">
             {ROLE_LABELS[user?.role_name] || 'Hospital Admin'}
           </span>
         </span>
@@ -84,7 +84,7 @@ function HospitalTopbar({ onMenu }) {
         >
           <Bell className="h-6 w-6" />
           {unread > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+            <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[13px] font-bold text-white">
               {unread}
             </span>
           )}
@@ -110,7 +110,7 @@ function HospitalTopbar({ onMenu }) {
           )}
           <span className="text-left leading-tight">
             <span className="block text-[13px] font-bold text-brand-navy">{hospital?.name || 'My Hospital'}</span>
-            <span className="block text-[11px] text-slate-400">Hospital Profile</span>
+            <span className="block text-[13px] text-slate-400">Hospital Profile</span>
           </span>
         </button>
       </div>

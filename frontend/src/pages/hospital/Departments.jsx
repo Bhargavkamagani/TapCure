@@ -63,7 +63,7 @@ function AddDepartmentModal({ hospitalId, existing, onClose, onAdded }) {
             })}
           </SelectInput>
           {allTaken && (
-            <p className="text-[12.5px] text-slate-500">Every department is already added. Reactivate a deactivated one from the list instead.</p>
+            <p className="text-[13.5px] text-slate-500">Every department is already added. Reactivate a deactivated one from the list instead.</p>
           )}
           <div className="grid grid-cols-2 gap-3">
             <TextInput placeholder="Code (e.g. PSY)" value={form.code} onChange={set('code')} />
@@ -144,7 +144,7 @@ function Departments() {
       {/* Two numbers don't need two stat cards and a whole band of the screen —
           a department list is meant to be read at a glance, and the counts were
           pushing the list itself below the fold. */}
-      <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+      <div className="flex flex-wrap items-center gap-2 text-[13px] font-semibold">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-blue-700">
           <Layers className="h-3.5 w-3.5" /> {departments.length} total
         </span>
@@ -181,7 +181,7 @@ function Departments() {
               </span>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-[15px] font-bold text-brand-navy">{d.name}</p>
-                <p className="mt-0.5 truncate text-[12.5px] text-slate-500">
+                <p className="mt-0.5 truncate text-[13.5px] text-slate-500">
                   {[d.code, d.floor ? `${d.floor} floor` : null, d.description].filter(Boolean).join(' · ') || '—'}
                 </p>
               </div>
@@ -189,7 +189,7 @@ function Departments() {
               {!d.is_active && (
                 <button
                   onClick={() => reactivate(d)}
-                  className="flex shrink-0 items-center gap-1 rounded-lg border border-green-200 px-2.5 py-1.5 text-[12px] font-semibold text-green-700 hover:bg-green-50"
+                  className="flex shrink-0 items-center gap-1 rounded-lg border border-green-200 px-2.5 py-1.5 text-[13px] font-semibold text-green-700 hover:bg-green-50"
                 >
                   <RotateCcw className="h-3.5 w-3.5" /> Reactivate
                 </button>

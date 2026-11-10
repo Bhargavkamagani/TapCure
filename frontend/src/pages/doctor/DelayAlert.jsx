@@ -57,7 +57,7 @@ function DelayAlert() {
             <p className="text-[13px] text-slate-600"><span className="font-bold text-brand-navy">{waiting} waiting patients</span> will be notified.</p>
           </div>
 
-          <label className="mb-1.5 block text-[12.5px] font-semibold text-slate-600">Estimated delay</label>
+          <label className="mb-1.5 block text-[13.5px] font-semibold text-slate-600">Estimated delay</label>
           <div className="mb-3 flex flex-wrap gap-2">
             {PRESETS.map((m) => (
               <button key={m} onClick={() => { setMinutes(m); setSent(false) }}
@@ -89,9 +89,9 @@ function DelayAlert() {
                   <span className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-100 text-purple-600"><Clock className="h-[18px] w-[18px]" /></span>
                   <div className="flex-1">
                     <p className="text-[13.5px] font-semibold text-brand-navy">+{d.delay_minutes} min delay{d.reason ? ` · ${d.reason}` : ''}</p>
-                    <p className="text-[12px] text-slate-500">{d.notified_patients ? 'Patients notified' : 'Not notified'}</p>
+                    <p className="text-[13px] text-slate-500">{d.notified_patients ? 'Patients notified' : 'Not notified'}</p>
                   </div>
-                  <span className="text-[12px] text-slate-400">{prettyDate(d.delay_date)}</span>
+                  <span className="text-[13px] text-slate-400">{prettyDate(d.delay_date)}</span>
                 </li>
               ))}
             </ul>

@@ -176,14 +176,14 @@ export default function AdminHospitals() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[15px] font-bold text-brand-navy">{h.name}</p>
-                  <p className="truncate text-[12.5px] text-slate-500">
+                  <p className="truncate text-[13.5px] text-slate-500">
                     {h.city || 'City not set'} · <span className="font-mono">{h.short_code}</span>
                   </p>
                 </div>
-                <span className="hidden shrink-0 items-center gap-1 text-[12px] font-semibold text-slate-400 md:inline-flex">
+                <span className="hidden shrink-0 items-center gap-1 text-[13px] font-semibold text-slate-400 md:inline-flex">
                   <Stethoscope className="h-3.5 w-3.5" /> {docCounts[h.hospital_id] || 0}
                 </span>
-                <span className={`hidden shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11.5px] font-bold sm:inline-flex ${st.pill}`}>
+                <span className={`hidden shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-bold sm:inline-flex ${st.pill}`}>
                   <StIcon className="h-3.5 w-3.5" /> {st.label}
                 </span>
                 <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -194,20 +194,20 @@ export default function AdminHospitals() {
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
                       <div className="mb-2 flex items-start justify-between gap-2">
-                        <p className="text-[11px] font-bold uppercase tracking-wide text-slate-400">Registration details</p>
+                        <p className="text-[12px] font-bold uppercase tracking-wide text-slate-400">Registration details</p>
                         <div className="flex flex-col items-end gap-1.5">
-                          <button type="button" onClick={() => setDetailsId(h.hospital_id)} className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand-blue hover:underline">
+                          <button type="button" onClick={() => setDetailsId(h.hospital_id)} className="inline-flex items-center gap-1 text-[13.5px] font-semibold text-brand-blue hover:underline">
                             <FileText className="h-3.5 w-3.5" /> View all details
                           </button>
                           <button
                             type="button"
                             onClick={() => toggleDoctors(h.hospital_id)}
                             aria-expanded={docsOpenId === h.hospital_id}
-                            className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand-blue hover:underline"
+                            className="inline-flex items-center gap-1 text-[13.5px] font-semibold text-brand-blue hover:underline"
                           >
                             <Users className="h-3.5 w-3.5" />
                             {docsOpenId === h.hospital_id ? 'Hide doctors' : 'View doctors'}
-                            <span className="rounded-full bg-brand-blueLight px-1.5 text-[11px] font-bold">{docCounts[h.hospital_id] || 0}</span>
+                            <span className="rounded-full bg-brand-blueLight px-1.5 text-[13px] font-bold">{docCounts[h.hospital_id] || 0}</span>
                           </button>
                         </div>
                       </div>
@@ -223,7 +223,7 @@ export default function AdminHospitals() {
                         <a
                           href={`https://www.google.com/maps?q=${h.latitude},${h.longitude}`}
                           target="_blank" rel="noreferrer"
-                          className="mt-2 inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand-blue hover:underline"
+                          className="mt-2 inline-flex items-center gap-1 text-[13.5px] font-semibold text-brand-blue hover:underline"
                         >
                           <MapPin className="h-3.5 w-3.5" /> View on map <ExternalLink className="h-3 w-3" />
                         </a>
@@ -231,14 +231,14 @@ export default function AdminHospitals() {
                     </div>
 
                     <div>
-                      <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">This month</p>
+                      <p className="mb-2 text-[12px] font-bold uppercase tracking-wide text-slate-400">This month</p>
                       <div className="grid grid-cols-3 gap-2">
                         <Stat icon={Ticket} label="Tokens" value={s.total_tokens || 0} />
                         <Stat icon={CheckCircle2} label="Completed" value={s.completed || 0} />
                         <Stat icon={IndianRupee} label="Hospital earned" value={inr(s.hospital_revenue)} />
                       </div>
                       {/* Patient booking fee removed. Previous row:
-                      <div className="mt-2 flex items-center justify-between rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-[12.5px]">
+                      <div className="mt-2 flex items-center justify-between rounded-lg border border-teal-200 bg-teal-50 px-3 py-2 text-[13.5px]">
                         <span className="text-teal-800">Booking fees to TapCure</span>
                         <span className="font-bold text-teal-900">{inr(s.platform_revenue)}</span>
                       </div> */}
@@ -396,7 +396,7 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
         </span>
         <div className="min-w-0 flex-1">
           <p className="truncate text-[14.5px] font-bold text-brand-navy">Doctors at {hospitalName}</p>
-          <p className="text-[12px] text-slate-500">
+          <p className="text-[13px] text-slate-500">
             {loading ? 'Loading…' : error ? 'Could not load' : `${list.length} doctor${list.length === 1 ? '' : 's'} registered`}
           </p>
         </div>
@@ -422,7 +422,7 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
                   type="button"
                   onClick={() => setStFilter(label)}
                   aria-pressed={active}
-                  className={`rounded-full px-3 py-1 text-[12px] font-semibold transition-colors ${
+                  className={`rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
                     active ? 'bg-brand-navy text-white' : 'border border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                   }`}
                 >
@@ -437,7 +437,7 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
                   placeholder="Search name, specialty, reg. no…"
-                  className="w-full rounded-lg border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-[12.5px] outline-none focus:border-brand-blue"
+                  className="w-full rounded-lg border border-slate-200 bg-white py-1.5 pl-8 pr-3 text-[13.5px] outline-none focus:border-brand-blue"
                 />
               </div>
             )}
@@ -465,7 +465,7 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
         {!loading && error && (
           <div className="flex items-center justify-between gap-3 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-[13px] text-red-700">
             Couldn&apos;t load the doctors for this hospital.
-            <button type="button" onClick={onRetry} className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-[12.5px] font-semibold hover:bg-red-50">
+            <button type="button" onClick={onRetry} className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-white px-3 py-1.5 text-[13.5px] font-semibold hover:bg-red-50">
               <RefreshCw className="h-3.5 w-3.5" /> Retry
             </button>
           </div>
@@ -479,7 +479,7 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
         )}
 
         {!loading && !error && list.length > 0 && shown.length === 0 && (
-          <p className="py-6 text-center text-[12.5px] text-slate-400">No doctors match this filter.</p>
+          <p className="py-6 text-center text-[13.5px] text-slate-400">No doctors match this filter.</p>
         )}
 
         {!loading && !error && shown.length > 0 && (
@@ -501,12 +501,12 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-[14px] font-bold text-brand-navy">{d.name}</span>
-                        <span className="block truncate text-[12px] font-medium text-brand-blue">{d.specialization || 'General Physician'}</span>
-                        <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10.5px] font-bold ${st.pill}`}>{st.label}</span>
+                        <span className="block truncate text-[13px] font-medium text-brand-blue">{d.specialization || 'General Physician'}</span>
+                        <span className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[13px] font-bold ${st.pill}`}>{st.label}</span>
                       </span>
                     </div>
 
-                    <div className="mt-3 flex flex-wrap gap-1.5 text-[11.5px] text-slate-600">
+                    <div className="mt-3 flex flex-wrap gap-1.5 text-[13px] text-slate-600">
                       {d.qualification && (
                         <span className="inline-flex items-center gap-1 rounded-md bg-slate-50 px-2 py-1">
                           <GraduationCap className="h-3 w-3 text-slate-400" /> {d.qualification}
@@ -523,7 +523,7 @@ function HospitalDoctors({ hospitalName, state, onView, onRetry, onClose }) {
                     </div>
 
                     <div className="mt-auto w-full pt-3">
-                      <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2.5 text-[11.5px]">
+                      <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2.5 text-[13px]">
                         <span className="truncate text-slate-400">
                           {d.registration_number ? `Reg. ${d.registration_number}` : 'Reg. no. not added'}
                         </span>
@@ -548,7 +548,7 @@ function Stat({ icon: Icon, label, value }) {
     <div className="rounded-lg border border-slate-200 bg-white px-2.5 py-2 text-center">
       <Icon className="mx-auto mb-1 h-3.5 w-3.5 text-slate-400" />
       <p className="text-[15px] font-extrabold leading-none tabular-nums text-brand-navy">{value}</p>
-      <p className="mt-1 text-[10.5px] text-slate-400">{label}</p>
+      <p className="mt-1 text-[13px] text-slate-400">{label}</p>
     </div>
   )
 }

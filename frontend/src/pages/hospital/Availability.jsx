@@ -141,7 +141,7 @@ function Availability() {
                   doctorId === d.doctor_id ? 'border-brand-blue bg-brand-blueLight text-brand-blue' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'
                 }`}
               >
-                <Avatar name={d.name || 'Doctor'} className="h-7 w-7 text-[10px]" />
+                <Avatar name={d.name || 'Doctor'} className="h-7 w-7 text-[13px]" />
                 {d.name}
               </button>
             ))}
@@ -150,7 +150,7 @@ function Availability() {
           <Card className="flex min-h-0 flex-1 flex-col">
             <div className="mb-3 flex items-center justify-between">
               <h3 className="text-[15px] font-bold text-brand-navy">Weekly Schedule — {selectedDoctor?.name || '—'}</h3>
-              <span className="rounded-full bg-brand-greenLight px-2.5 py-0.5 text-[11px] font-semibold text-brand-green">{total} sessions / week</span>
+              <span className="rounded-full bg-brand-greenLight px-2.5 py-0.5 text-[13px] font-semibold text-brand-green">{total} sessions / week</span>
             </div>
 
             {loadingSched ? (
@@ -165,7 +165,7 @@ function Availability() {
                         <div className="mb-3 flex items-center justify-between gap-2">
                           <h4 className={`text-[15px] font-bold ${open ? 'text-brand-navy' : 'text-slate-400'}`}>{day}</h4>
                           {!open && (
-                            <span className="rounded-md bg-slate-200/70 px-1.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wide text-slate-500">
+                            <span className="rounded-md bg-slate-200/70 px-1.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-slate-500">
                               Hospital closed
                             </span>
                           )}
@@ -176,7 +176,7 @@ function Availability() {
                               <Clock className="h-4 w-4 text-brand-blue" />
                               <div className="flex-1 leading-tight">
                                 <p className="text-[13px] font-semibold text-brand-navy">{prettyTime(s.start_time)} – {prettyTime(s.end_time)}</p>
-                                <p className="text-[11px] text-slate-400">Max {s.max_tokens} · {s.consultation_mins} min/consult</p>
+                                <p className="text-[13px] text-slate-400">Max {s.max_tokens} · {s.consultation_mins} min/consult</p>
                               </div>
                               <button onClick={() => remove(s.schedule_id)} className="text-slate-400 hover:text-red-500" aria-label="Remove session">
                                 <Trash2 className="h-4 w-4" />
@@ -184,7 +184,7 @@ function Availability() {
                             </div>
                           ))}
                           {byDay(day).length === 0 && (
-                            <p className="text-[12px] text-slate-400">{open ? 'No sessions.' : 'The hospital is not open on this day.'}</p>
+                            <p className="text-[13px] text-slate-400">{open ? 'No sessions.' : 'The hospital is not open on this day.'}</p>
                           )}
                           {open && (
                             <AddSession

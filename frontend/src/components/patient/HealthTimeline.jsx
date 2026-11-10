@@ -56,7 +56,7 @@ function VitalSummary({ v }) {
   return (
     <div className="mt-1.5 flex flex-wrap gap-1.5">
       {chips.map((c) => (
-        <span key={c.label} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[11px] font-medium text-slate-600">
+        <span key={c.label} className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[13px] font-medium text-slate-600">
           {c.label} <span className="font-bold text-brand-navy">{c.value}</span>
         </span>
       ))}
@@ -167,7 +167,7 @@ export default function HealthTimeline({ member, patientId }) {
                 type="button"
                 onClick={() => setFilter(f.key)}
                 aria-pressed={active}
-                className={`rounded-full px-3 py-1 text-[12px] font-semibold transition-colors ${
+                className={`rounded-full px-3 py-1 text-[13px] font-semibold transition-colors ${
                   active ? 'bg-brand-blue text-white' : 'border border-slate-200 text-slate-500 hover:border-brand-blue/40 hover:text-brand-blue'
                 }`}
               >
@@ -181,7 +181,7 @@ export default function HealthTimeline({ member, patientId }) {
       {/* Upcoming follow-ups — highlighted above the history (only in "All") */}
       {filter === 'all' && upcoming.length > 0 && (
         <div className="mb-4 space-y-2">
-          <p className="text-[11px] font-semibold uppercase tracking-wide text-teal-600">{t('ppage.upcoming')}</p>
+          <p className="text-[12px] font-semibold uppercase tracking-wide text-teal-600">{t('ppage.upcoming')}</p>
           {upcoming.map((f) => (
             <div key={f.follow_up_id} className="flex items-center gap-2.5 rounded-xl border border-teal-100 bg-teal-50/60 p-3">
               <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-teal-100 text-teal-600">
@@ -189,7 +189,7 @@ export default function HealthTimeline({ member, patientId }) {
               </span>
               <div className="min-w-0 leading-tight">
                 <p className="truncate text-[13px] font-bold text-brand-navy">{t('ppage.evtFollowUp')}</p>
-                <p className="truncate text-[11.5px] text-slate-500">
+                <p className="truncate text-[13px] text-slate-500">
                   {translitName(f.doctor_name, lang) || t('ppage.doctor')} · {fmtDate(f.due_date)}
                 </p>
               </div>
@@ -200,7 +200,7 @@ export default function HealthTimeline({ member, patientId }) {
 
       {/* Chronological history rail */}
       {visible.length === 0 ? (
-        <p className="rounded-xl bg-slate-50 px-3 py-4 text-center text-[12.5px] text-slate-400">{t('ppage.noneOfType')}</p>
+        <p className="rounded-xl bg-slate-50 px-3 py-4 text-center text-[13.5px] text-slate-400">{t('ppage.noneOfType')}</p>
       ) : (
       <div className="relative pl-6">
         <span className="absolute bottom-2 left-[7px] top-2 w-px bg-slate-200" aria-hidden="true" />
@@ -223,14 +223,14 @@ export default function HealthTimeline({ member, patientId }) {
                       <>
                         <div className="flex items-start justify-between gap-2">
                           <p className="truncate text-[13.5px] font-bold text-brand-navy">{translitName(d.doctor_name, lang) || t('ppage.evtVisit')}</p>
-                          <span className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${STATUS_PILL[d.status] || 'bg-slate-100 text-slate-500'}`}>{tx('px.status.', d.status)}</span>
+                          <span className={`shrink-0 rounded-full px-2 py-0.5 text-[13px] font-semibold capitalize ${STATUS_PILL[d.status] || 'bg-slate-100 text-slate-500'}`}>{tx('px.status.', d.status)}</span>
                         </div>
                         {d.doctor_specialty && (
-                          <p className="flex items-center gap-1 truncate text-[11.5px] text-slate-400">
+                          <p className="flex items-center gap-1 truncate text-[13px] text-slate-400">
                             <Stethoscope className="h-3 w-3" /> {d.doctor_specialty}
                           </p>
                         )}
-                        <p className="mt-0.5 text-[11.5px] text-slate-500">{fmtDate(d.appointment_date)}</p>
+                        <p className="mt-0.5 text-[13px] text-slate-500">{fmtDate(d.appointment_date)}</p>
                       </>
                     )}
 
@@ -238,13 +238,13 @@ export default function HealthTimeline({ member, patientId }) {
                     {ev.type === 'rx' && (
                       <>
                         <p className="truncate text-[13.5px] font-bold text-brand-navy">{t('ppage.evtRx')}</p>
-                        <p className="truncate text-[11.5px] text-slate-400">
+                        <p className="truncate text-[13px] text-slate-400">
                           {translitName(d.doctor_name, lang) || '—'}{d.diagnosis ? ` · ${d.diagnosis}` : ''}
                         </p>
-                        <p className="mt-0.5 flex items-center gap-2 text-[11.5px] text-slate-500">
+                        <p className="mt-0.5 flex items-center gap-2 text-[13px] text-slate-500">
                           {fmtDate(d.created_at)}
                           {d.items?.length > 0 && (
-                            <span className="rounded-full bg-teal-50 px-1.5 py-0.5 text-[10px] font-semibold text-teal-600">
+                            <span className="rounded-full bg-teal-50 px-1.5 py-0.5 text-[13px] font-semibold text-teal-600">
                               {t('ppage.medsCount', { n: d.items.length })}
                             </span>
                           )}
@@ -257,9 +257,9 @@ export default function HealthTimeline({ member, patientId }) {
                       <>
                         <div className="flex items-center gap-2">
                           <p className="text-[13.5px] font-bold text-brand-navy">{t('ppage.evtVital')}</p>
-                          {abnormal && <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-600">!</span>}
+                          {abnormal && <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[13px] font-bold text-red-600">!</span>}
                         </div>
-                        <p className="text-[11.5px] text-slate-500">{fmtDate(d.recorded_at)}</p>
+                        <p className="text-[13px] text-slate-500">{fmtDate(d.recorded_at)}</p>
                         <VitalSummary v={d} />
                       </>
                     )}
@@ -268,12 +268,12 @@ export default function HealthTimeline({ member, patientId }) {
                     {ev.type === 'report' && (
                       <>
                         <p className="truncate text-[13.5px] font-bold text-brand-navy">{d.file_name || t('ppage.evtReport')}</p>
-                        <p className="truncate text-[11.5px] capitalize text-slate-400">{d.document_type ? tx('px.docType.', d.document_type).replace('_', ' ') : t('px.document')}</p>
+                        <p className="truncate text-[13px] capitalize text-slate-400">{d.document_type ? tx('px.docType.', d.document_type).replace('_', ' ') : t('px.document')}</p>
                         <div className="mt-0.5 flex items-center justify-between gap-2">
-                          <span className="text-[11.5px] text-slate-500">{fmtDate(d.created_at || d.uploaded_at)}</span>
+                          <span className="text-[13px] text-slate-500">{fmtDate(d.created_at || d.uploaded_at)}</span>
                           <span className="flex items-center gap-2.5">
                             {d.file_url && (
-                              <a href={fileUrl(d.file_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[11px] font-semibold text-brand-blue hover:underline">
+                              <a href={fileUrl(d.file_url)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[13px] font-semibold text-brand-blue hover:underline">
                                 <ExternalLink className="h-3 w-3" />{t('pm.view')}</a>
                             )}
                             <button
@@ -281,7 +281,7 @@ export default function HealthTimeline({ member, patientId }) {
                               onClick={() => removeDoc(d)}
                               disabled={deletingId === d.document_id}
                               title={t('ppage.deleteReport')}
-                              className="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 transition-colors hover:text-red-600 disabled:opacity-50"
+                              className="inline-flex items-center gap-1 text-[13px] font-semibold text-slate-400 transition-colors hover:text-red-600 disabled:opacity-50"
                             >
                               <Trash2 className="h-3 w-3" />
                               {deletingId === d.document_id ? '…' : t('ppage.delete')}

@@ -122,7 +122,7 @@ function Timetable({ schedules }) {
           <div key={day} className={`flex items-center justify-between gap-3 border-b border-teal-50 px-4 py-2.5 text-[15px] last:border-b-0 ${isToday ? 'bg-teal-50 font-semibold' : ''}`}>
             <span className="flex items-center gap-2 text-foreground">
               {t(`cmn.day.${day}`)}
-              {isToday && <span className="rounded-full bg-teal-700 px-2 py-0.5 text-[11px] font-bold text-white">{t('pdoc.today')}</span>}
+              {isToday && <span className="rounded-full bg-teal-700 px-2 py-0.5 text-[13px] font-bold text-white">{t('pdoc.today')}</span>}
             </span>
             {rows.length
               ? <span className="text-right text-ink-soft">{rows.map((row) => `${fmtTime(row.start_time)} – ${fmtTime(row.end_time)}`).join(', ')}</span>

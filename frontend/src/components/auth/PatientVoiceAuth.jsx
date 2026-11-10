@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ShieldCheck, User, MapPin, Fingerprint, Mic, ArrowLeft, ArrowDown, Volume2, Sparkles, Square, Lock } from 'lucide-react'
@@ -19,7 +20,7 @@ const mobileRe = /^\d{10}$/
 /** Input with a mic button that speaks the prompt then captures a spoken answer.
  *  When `active` (driven by the guided walkthrough) it shows a pulsing arrow +
  *  bubble pointing at the field and reflects the guide's speak/listen phase. */
-function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text', placeholder, maxLength, exactLen, onVoiceError, active = false, bubble, phase = null }) {
+function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text', placeholder, maxLength, exactLen, onVoiceError, active = false, bubble, phase = null, look = 'modal', prefix, code = false }) {
   const { speech, t } = useI18n()
   const [listening, setListening] = useState(false)
   const [fieldError, setFieldError] = useState(null) // e.g. "only heard 6 of 10 digits"
@@ -61,6 +62,51 @@ function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text',
 
   const micActive = listening || phase === 'listening'
 
+  // The /patient-login page look (2026-11-08): a labelled rounded box, same mic
+  // and same behaviour as below — only the drawing differs.
+  if (look === 'page') {
+    return (
+      <div className="relative min-w-0">
+        <AnimatePresence>
+          {active && bubble && (
+            <motion.p initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }}
+              className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-[#0A9A96] px-3 py-1 text-[13px] font-semibold text-white">
+              <Volume2 className="h-3.5 w-3.5" />{bubble}
+            </motion.p>
+          )}
+        </AnimatePresence>
+        {label && <label className="mb-2 block text-[17px] font-semibold text-[#41526E]">{label}</label>}
+        <div className={`flex items-center gap-3 rounded-2xl border-[1.5px] bg-white px-5 shadow-[0_6px_18px_-14px_rgba(11,33,80,.35)] transition-[border-color,box-shadow] ${
+          active || micActive
+            ? 'border-[#0A9A96] shadow-[0_0_0_4px_rgba(10,154,150,.15)]'
+            : 'border-[#0B2150]/[.12] focus-within:border-[#0A9A96] focus-within:shadow-[0_0_0_4px_rgba(10,154,150,.12)]'
+        }`}>
+          {prefix && <b className="border-r-[1.5px] border-[#0B2150]/[.12] pr-3 text-[22px] font-semibold text-[#41526E]">{prefix}</b>}
+          <input
+            value={value}
+            onChange={(e) => { setFieldError(null); onChange(kind === 'digits' ? e.target.value.replace(/\D/g, '').slice(0, maxLength || 32) : e.target.value) }}
+            placeholder={placeholder}
+            inputMode={kind === 'digits' ? 'numeric' : 'text'}
+            maxLength={maxLength}
+            aria-label={label || placeholder}
+            autoComplete={kind === 'digits' && exactLen === 6 ? 'one-time-code' : undefined}
+            className={`w-full min-w-0 bg-transparent py-[17px] font-semibold text-[#0B2150] outline-none placeholder:font-normal placeholder:text-[#6B7A8F] ${code ? 'text-center text-[32px] tracking-[.45em]' : 'text-[22px]'}`}
+          />
+          <button type="button" onClick={handleMic} title={t('auth.tapMic')} aria-label={t('auth.tapMic')}
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors ${
+              micActive ? 'animate-pulse bg-red-500 text-white' : 'bg-[#0A9A96]/10 text-[#0A9A96] hover:bg-[#0A9A96] hover:text-white'
+            }`}>
+            <Mic className="h-5 w-5" />
+          </button>
+        </div>
+        {(micActive || (active && phase === 'speaking')) && (
+          <p className="mt-1.5 text-[14px] font-medium text-[#0A9A96]">{phase === 'speaking' ? t('guide.speaking') : t('auth.listening')}</p>
+        )}
+        {fieldError && <p className="mt-1.5 text-[14px] font-medium text-[#C2410C]">{fieldError}</p>}
+      </div>
+    )
+  }
+
   return (
     <div className="relative">
       {/* Guide arrow + bubble pointing at this field */}
@@ -72,7 +118,7 @@ function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text',
             exit={{ opacity: 0, y: 8 }}
             className="mb-1.5 flex items-center gap-2"
           >
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-blue px-3 py-1 text-[12px] font-semibold text-white shadow-sm">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-blue px-3 py-1 text-[13px] font-semibold text-white shadow-sm">
               <Volume2 className="h-3.5 w-3.5" />
               {bubble}
             </span>
@@ -87,7 +133,7 @@ function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text',
         )}
       </AnimatePresence>
 
-      <label className="mb-1 block text-[12.5px] font-semibold text-slate-600">{label}</label>
+      <label className="mb-1 block text-[13.5px] font-semibold text-slate-600">{label}</label>
       <div
         className={`flex items-center gap-2 rounded-xl border bg-white px-3 transition-shadow ${
           active
@@ -116,11 +162,11 @@ function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text',
         </button>
       </div>
       {(micActive || (active && phase === 'speaking')) && (
-        <p className="mt-1 text-[11.5px] font-medium text-brand-blue">
+        <p className="mt-1 text-[13px] font-medium text-brand-blue">
           {phase === 'speaking' ? t('guide.speaking') : t('auth.listening')}
         </p>
       )}
-      {fieldError && <p className="mt-1 text-[11.5px] font-medium text-red-500">{fieldError}</p>}
+      {fieldError && <p className="mt-1 text-[13px] font-medium text-red-500">{fieldError}</p>}
     </div>
   )
 }
@@ -139,7 +185,11 @@ function VoiceField({ icon: Icon, label, prompt, value, onChange, kind = 'text',
 // `replaceOnDone` — true when this is the /patient-login route rather than a
 // modal over the landing page, so the dashboard replaces the login entry in
 // history instead of stacking on top of it.
-function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
+// `variant="page"` (2026-11-08) draws the /patient-login page look — same state,
+// same handlers, same voice guide; only the markup at the bottom differs. The
+// landing-page pop-up keeps the default look. `onState` tells the page which
+// view is showing (login / register part 1-2 / code) so it can draw its art.
+function PatientVoiceAuth({ onClose, replaceOnDone = false, variant = 'modal', onState }) {
   const { t, lang, setLang, speech } = useI18n()
   const { requestOtp, loginOtp, registerOtp, homeFor } = useAuth()
   const navigate = useNavigate()
@@ -504,6 +554,165 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
 
   const guideTarget = (f) => guideOn && guideField === f
 
+  // ── /patient-login page look (variant="page") ─────────────────────────────
+  // Register's details are shown in two short parts (name + mobile, then city
+  // + consent). It is the same `details` step and the same sendOtp; the split
+  // is only on screen. While the voice guide runs, the part follows the field
+  // the guide is on.
+  const [regPart, setRegPart] = useState(1)
+  useEffect(() => { setRegPart(1) }, [mode])
+  const [showAbha, setShowAbha] = useState(false)
+  // The page header has a slot for the language buttons; found after mount.
+  const [langHost, setLangHost] = useState(null)
+  useEffect(() => { if (variant === 'page') setLangHost(document.getElementById('pa-langs')) }, [variant])
+  const part = mode === 'register' && step === 'details'
+    ? (guideOn ? (['city', 'consent'].includes(guideField) ? 2 : 1) : regPart)
+    : null
+  const succeeded = banner?.type === 'success' && banner.msg === t('auth.success')
+  useEffect(() => { onState?.({ mode, step, part, succeeded }) }, [mode, step, part, succeeded]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (variant === 'page') {
+    const fieldErr = (m) => setBanner({ type: 'error', msg: m })
+    const toPart2 = () => {
+      if (!firstName.trim()) return fieldErr(t('auth.nameLabel'))
+      if (!lastName.trim()) return fieldErr(t('ppage.lastNameReq'))
+      if (!mobileRe.test(phone)) return fieldErr(t('auth.invalidMobile'))
+      setBanner(null)
+      setRegPart(2)
+    }
+    const goBtn = 'inline-flex items-center justify-center gap-2.5 rounded-full bg-[#0A9A96] px-9 py-[18px] text-[20px] font-semibold text-white transition-colors hover:bg-[#088582] disabled:cursor-not-allowed disabled:opacity-60'
+    const linkBtn = 'font-semibold text-[#0A9A96] hover:underline'
+    const kick = 'text-[17px] font-semibold text-[#0A9A96]'
+    const h1 = 'mt-2 text-[50px] font-bold leading-[1.08] tracking-[-0.02em] text-[#0B2150]'
+    const sub = 'mt-3 max-w-[620px] text-[19px] text-[#41526E]'
+    const langs = (
+      <span className="flex gap-1 rounded-full bg-[#0A9A96]/[.09] p-1" role="group" aria-label="Language">
+        {Object.entries(LANGS).map(([code, meta]) => (
+          <button key={code} type="button" aria-pressed={lang === code}
+            onClick={() => { stopSpeaking(); if (guideOn) stopGuide(); setLang(code) }}
+            className={`rounded-full px-4 py-2 text-[16px] font-semibold transition-colors ${lang === code ? 'bg-white text-[#0B2150] shadow-[0_2px_8px_-3px_rgba(11,33,80,.3)]' : 'text-[#41526E] hover:text-[#0B2150]'}`}>
+            {meta.label}
+          </button>
+        ))}
+      </span>
+    )
+    const note = banner && (
+      <p role={banner.type === 'error' ? 'alert' : 'status'}
+        className={`mt-4 text-[16.5px] font-medium ${banner.type === 'error' ? 'text-[#C2410C]' : 'text-[#0A7F7B]'}`}>{banner.msg}</p>
+    )
+    const guide = step !== 'otp' && (
+      <button type="button" onClick={() => (guideOn ? stopGuide() : runGuide())}
+        className={`inline-flex items-center gap-2 rounded-full border-[1.5px] px-5 py-[15px] text-[17px] font-semibold transition-colors ${
+          guideOn ? 'border-red-200 bg-red-50 text-red-600 hover:bg-red-100' : 'border-dashed border-[#0A9A96] text-[#0A9A96] hover:bg-[#0A9A96]/[.08]'}`}>
+        {guideOn ? <Square className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
+        {guideOn ? t('guide.stop') : t('guide.start')}
+      </button>
+    )
+    const stepLine = (n) => <p className={kick}>{t('ax.pp.step', { n })}</p>
+
+    let view
+    if (step === 'otp') {
+      view = (
+        <>
+          <button type="button" onClick={() => { setStep(mode === 'register' ? 'details' : 'mobile'); setBanner(null) }} className="mb-4 inline-flex items-center gap-1.5 text-[16px] font-semibold text-[#6B7A8F] hover:text-[#0A9A96]">
+            <ArrowLeft className="h-4 w-4" /> {t('auth.back')}
+          </button>
+          {mode === 'register' ? stepLine(3) : <p className={kick}>{t('ax.pp.kickLogin')}</p>}
+          <h1 className={h1}>{t('ax.pp.hOtp')}</h1>
+          <p className={sub}>{t('ax.pp.subOtp', { phone })}</p>
+          {note}
+          <div className="mt-6 max-w-[440px]">
+            <VoiceField look="page" code kind="digits" maxLength={6} exactLen={6} prompt={t('auth.otpPrompt')} value={otp} onChange={setOtp} placeholder="••••••" onVoiceError={fieldErr} />
+          </div>
+          {mode === 'register' && !agreed && (
+            <div className="mt-4 [&_input]:h-[18px] [&_input]:w-[18px] [&_span]:text-[16px]">
+              <ConsentCheck checked={agreed} onChange={(v) => { setAgreed(v); if (v) setConsentErr(false) }} error={consentErr ? t('ax.pva.acceptToCreate') : null} />
+            </div>
+          )}
+          <div className="mt-6 flex flex-wrap items-center gap-5">
+            <button type="button" disabled={busy} onClick={verify} className={goBtn}>{mode === 'register' ? t('auth.createAccount') : t('auth.verifyLogin')}</button>
+            <button type="button" disabled={busy || coolingDown} onClick={() => { setOtp(''); sendOtp() }} className="text-[17px] font-semibold text-[#0A9A96] hover:underline disabled:cursor-not-allowed disabled:text-[#6B7A8F] disabled:no-underline">
+              {coolingDown ? t('auth.resendIn', { s: waitLabel }) : t('auth.resendOtp')}
+            </button>
+          </div>
+        </>
+      )
+    } else if (mode === 'login') {
+      view = (
+        <>
+          <p className={kick}>{t('ax.pp.kickLogin')}</p>
+          <h1 className={h1}>{t('ax.pp.hLogin')}</h1>
+          <p className={sub}>{t('ax.pp.subLogin')}</p>
+          {note}
+          <div className="mt-7 max-w-[560px]">
+            <VoiceField look="page" prefix="+91" kind="digits" maxLength={10} exactLen={10} label={t('auth.mobileLabel')} prompt={t('auth.mobilePrompt')} value={phone} onChange={setPhone} placeholder="98765 43210" onVoiceError={fieldErr} active={guideTarget('mobile')} bubble={t('guide.mobileBubble')} phase={guideTarget('mobile') ? guidePhase : null} />
+          </div>
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            <button type="button" disabled={busy || coolingDown} onClick={sendOtp} className={goBtn}>{coolingDown ? t('auth.resendIn', { s: waitLabel }) : t('auth.loginCta')}</button>
+            {guide}
+          </div>
+          <p className="mt-6 text-[17px] text-[#41526E]">{t('ax.pp.newHere')} <button type="button" onClick={() => reset('register')} className={linkBtn}>{t('auth.signupTab')}</button></p>
+        </>
+      )
+    } else if (part === 1) {
+      view = (
+        <>
+          {stepLine(1)}
+          <h1 className={h1}>{t('ax.pp.h1')}</h1>
+          <p className={sub}>{t('ax.pp.sub1')}</p>
+          {note}
+          <div className="mt-6 grid max-w-[680px] grid-cols-2 gap-[18px]">
+            <VoiceField look="page" kind="name" label={t('ppage.firstName')} prompt={t('auth.namePrompt')} value={firstName} onChange={setFirstName} placeholder={t('ax.pp.firstPh')} onVoiceError={fieldErr} active={guideTarget('name')} bubble={t('guide.nameBubble')} phase={guideTarget('name') ? guidePhase : null} />
+            <VoiceField look="page" kind="name" label={t('ppage.lastName')} prompt={t('ppage.lastName')} value={lastName} onChange={setLastName} placeholder={t('ax.pp.lastPh')} onVoiceError={fieldErr} />
+            <div className="col-span-2">
+              <VoiceField look="page" prefix="+91" kind="digits" maxLength={10} exactLen={10} label={t('auth.mobileLabel')} prompt={t('auth.mobilePrompt')} value={phone} onChange={setPhone} placeholder="98765 43210" onVoiceError={fieldErr} active={guideTarget('mobile')} bubble={t('guide.mobileBubble')} phase={guideTarget('mobile') ? guidePhase : null} />
+            </div>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <button type="button" onClick={toPart2} className={goBtn}>{t('ax.pp.cont')}</button>
+            {guide}
+          </div>
+          <p className="mt-5 text-[17px] text-[#41526E]">{t('ax.pp.haveAcc')} <button type="button" onClick={() => reset('login')} className={linkBtn}>{t('auth.loginTab')}</button></p>
+        </>
+      )
+    } else {
+      view = (
+        <>
+          <button type="button" onClick={() => { setRegPart(1); setBanner(null) }} className="mb-3 inline-flex items-center gap-1.5 text-[16px] font-semibold text-[#6B7A8F] hover:text-[#0A9A96]">
+            <ArrowLeft className="h-4 w-4" /> {t('auth.back')}
+          </button>
+          {stepLine(2)}
+          <h1 className={h1}>{firstName.trim() ? t('ax.pp.h2', { name: firstName.trim() }) : t('ax.pp.h2NoName')}</h1>
+          <p className={sub}>{t('ax.pp.sub2')}</p>
+          {note}
+          <div className="mt-6 grid max-w-[560px] gap-4">
+            <VoiceField look="page" kind="text" label={t('auth.cityLabel')} prompt={t('auth.cityLabel')} value={city} onChange={updateCity} placeholder={t('auth.cityLabel')} onVoiceError={fieldErr} active={guideTarget('city')} bubble={t('guide.cityBubble')} phase={guideTarget('city') ? guidePhase : null} />
+            {showAbha || abhaNumber
+              ? <VoiceField look="page" kind="digits" maxLength={14} label={t('auth.abhaLabel')} prompt={t('auth.abhaPrompt')} value={abhaNumber} onChange={updateAbha} placeholder="12-3456-7890-1234" onVoiceError={fieldErr} />
+              : <button type="button" onClick={() => setShowAbha(true)} className={`justify-self-start text-[17px] ${linkBtn}`}>{t('ax.pp.addAbha')}</button>}
+            <div className={`rounded-xl transition-shadow [&_input]:h-[18px] [&_input]:w-[18px] [&_span]:text-[16px] ${guideTarget('consent') ? 'shadow-[0_0_0_3px_rgba(10,154,150,.35)]' : ''}`}>
+              <ConsentCheck checked={agreed} onChange={(v) => { setAgreed(v); if (v) setConsentErr(false) }} error={consentErr ? t('ax.pva.acceptToContinue') : null} />
+            </div>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <button type="button" disabled={busy || coolingDown || !agreed} onClick={sendOtp} className={goBtn}>
+              {coolingDown ? t('auth.resendIn', { s: waitLabel }) : t('auth.registerCta')}
+            </button>
+            {guide}
+          </div>
+        </>
+      )
+    }
+
+    return (
+      <>
+        {langHost && createPortal(langs, langHost)}
+        <div>{view}</div>
+        <p className="mt-6 flex items-center gap-1.5 text-[14.5px] text-[#6B7A8F]"><Lock className="h-4 w-4" /> {t('ax.pva.dataSafe')}</p>
+      </>
+    )
+  }
+
   return (
     <div className="space-y-4">
       {/* Language picker — drives both the UI and the voice prompts. */}
@@ -537,7 +746,7 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
             <motion.span
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-blue px-2.5 py-0.5 text-[11px] font-semibold text-white shadow-sm"
+              className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-brand-blue px-2.5 py-0.5 text-[13px] font-semibold text-white shadow-sm"
             >
               {t('guide.signupHere')}
             </motion.span>
@@ -570,7 +779,7 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
                 <motion.p
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-1.5 flex items-center gap-1.5 px-1 text-[12.5px] font-semibold text-brand-blue"
+                  className="mb-1.5 flex items-center gap-1.5 px-1 text-[13.5px] font-semibold text-brand-blue"
                 >
                   <motion.span animate={{ y: [0, 3, 0] }} transition={{ repeat: Infinity, duration: 0.9 }}>
                     <ArrowDown className="h-4 w-4" />
@@ -620,7 +829,7 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
             equal weight — the rule says "or" so the choice reads as a fork. */}
         <div className="flex items-center gap-3 py-0.5">
           <span className="h-px flex-1 bg-slate-200" />
-          <span className="text-[12.5px] font-medium text-slate-400">{t('ax.pva.or')}</span>
+          <span className="text-[13.5px] font-medium text-slate-400">{t('ax.pva.or')}</span>
           <span className="h-px flex-1 bg-slate-200" />
         </div>
         <button
@@ -638,7 +847,7 @@ function PatientVoiceAuth({ onClose, replaceOnDone = false }) {
         </>
       )}
 
-      <p className="flex items-center justify-center gap-1.5 pt-1 text-[12.5px] text-slate-400">
+      <p className="flex items-center justify-center gap-1.5 pt-1 text-[13.5px] text-slate-400">
         <Lock className="h-3.5 w-3.5" /> {t('ax.pva.dataSafe')}
       </p>
     </div>

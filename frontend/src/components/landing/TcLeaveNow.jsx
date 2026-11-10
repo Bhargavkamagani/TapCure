@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
+import { Car, ListOrdered, BellRing, HeartHandshake } from 'lucide-react'
 import { useI18n } from '../../i18n/index.jsx'
 import TypeLoop from './TypeLoop.jsx'
 
@@ -46,6 +47,12 @@ const clock = (d) => {
   return `${h % 12 === 0 ? 12 : h % 12}:${pad(d.getMinutes())}`
 }
 const ampmOf = (d) => (d.getHours() >= 12 ? 'PM' : 'AM')
+const clockAp = (d) => `${clock(d)} ${ampmOf(d)}`
+// Countdown in words people use: "45 min", "1 hr 12 min".
+const inWords = (ms, t) => {
+  const m = Math.max(1, Math.round(Math.abs(ms) / 60000))
+  return m < 60 ? t('lx.min', { n: m }) : t('tc.ln.hrMin', { h: Math.floor(m / 60), m: m % 60 })
+}
 
 function TcLeaveNow() {
   const { t } = useI18n()
@@ -57,7 +64,9 @@ function TcLeaveNow() {
   const [now, setNow] = useState(() => new Date())
   const [fill, setFill] = useState(0)
   const [lit, setLit] = useState(0)
+  const [stepsOn, setStepsOn] = useState(0)
   const lineRef = useRef(null)
+  const tlRef = useRef(null)
   const dotRefs = useRef([])
 
   useEffect(() => {
@@ -73,9 +82,17 @@ function TcLeaveNow() {
       if (!el) return
       const r = el.getBoundingClientRect()
       const mid = window.innerHeight * 0.55
-      const done = Math.max(0, Math.min(r.height, mid - r.top))
+      // DisplayScale zooms the page, so screen sizes (getBoundingClientRect)
+      // and CSS sizes (the fill's height, dot offsetTop) differ by the zoom.
+      // Work in CSS pixels, or the road stops filling at about two-thirds.
+      const zoom = el.offsetHeight ? r.height / el.offsetHeight : 1
+      const done = Math.max(0, Math.min(el.offsetHeight, (mid - r.top) / zoom))
       setFill(done)
       setLit(dotRefs.current.filter((d) => d && d.offsetTop <= done).length)
+      // The leave-time steps light up one by one as they reach the middle of
+      // the screen: Leave home, Travel, Wait, Your turn.
+      const rows = tlRef.current?.querySelectorAll('.tl-item') || []
+      setStepsOn([...rows].filter((row) => row.getBoundingClientRect().top < window.innerHeight * 0.62).length)
     }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -108,14 +125,14 @@ function TcLeaveNow() {
     return {
       cfg, slot, drive, total, leaveBy, left, tone, cd, rolled,
       jam: drive > FREE_FLOW * 1.35,
+      // Each row: label, start, end (travel and wait are spans, so the times
+      // add up: leave + travel = arrive, arrive + wait = your turn), sub-line,
+      // minutes chip, chip tone.
       steps: [
-        // Three real steps. The old list had separate "Parked" and "Checked in"
-        // rows with their own learned minutes — the engine has neither, so they
-        // showed 0 min and claimed papers were pre-filled.
-        ['tc.ln.step.leaveHome', clock(leaveBy), 'tc.ln.step.leaveHomeSub', ''],
-        ['tc.ln.step.onRoad', clock(new Date(leaveBy.getTime() + drive * 60000)), drive > FREE_FLOW * 1.35 ? 'tc.ln.step.heavy' : 'tc.ln.step.clear', t('lx.min', { n: drive })],
-        ['tc.ln.step.atHospital', clock(new Date(leaveBy.getTime() + drive * 60000)), 'tc.ln.step.waiting', `${cfg.safety} ${t('tc.ln.step.cushion')}`],
-        ['tc.ln.step.called', clock(slot), 'tc.ln.step.calledSub', ''],
+        ['tc.ln.step.leaveHome', clockAp(leaveBy), '', 'tc.ln.step.leaveHomeSub', '', ''],
+        ['tc.ln.step.onRoad', clockAp(leaveBy), clockAp(new Date(leaveBy.getTime() + drive * 60000)), drive > FREE_FLOW * 1.35 ? 'tc.ln.step.heavy' : 'tc.ln.step.clear', t('lx.min', { n: drive }), drive > FREE_FLOW * 1.35 ? 'warn' : ''],
+        ['tc.ln.step.atHospital', clockAp(new Date(leaveBy.getTime() + drive * 60000)), clockAp(slot), 'tc.ln.step.waiting', t('lx.min', { n: cfg.safety }), ''],
+        ['tc.ln.step.called', clockAp(slot), '', 'tc.ln.step.calledSub', '', ''],
       ],
     }
   }, [mode, appt, now, t])
@@ -139,20 +156,43 @@ function TcLeaveNow() {
           {/* ── the number ── */}
           <div className={`lnl-st lnl-open ${plan.tone}`}>
             <span ref={dot(0)} className={`lnl-dot ${lit > 0 ? 'lit' : ''}`} aria-hidden="true" />
-            <p className="lnl-now">
-              {t('lx.ln.nowSlot', { now: clock(now), nowAp: ampmOf(now), slot: clock(plan.slot), slotAp: ampmOf(plan.slot) })}
-            </p>
-            <p className="lnl-pre">{t('tc.ln.leaveHomeAt')}</p>
-            <div className="lnl-big">{clock(plan.leaveBy)}<small>{ampmOf(plan.leaveBy)}</small></div>
-            <p className="lnl-cd">
-              {plan.left <= 0
-                ? <>{t('tc.ln.shouldHaveLeft')} <b>{plan.cd}</b> {t('tc.ln.ago')}</>
-                : <>{t('tc.ln.thatIs')} <b>{plan.cd}</b> {t('tc.ln.fromNow')}</>}
-            </p>
-            <p className="lnl-meta">{plan.total} {t('tc.ln.doorToChair')} · {KM} km</p>
-            {plan.rolled && <p className="lnl-day">{t('tc.ln.rolled')}</p>}
-            <div className="ln-panel">
-              <h3>{t('lx.demo.Dr. Anaya Rao')} <span style={{ color: 'var(--muted)', fontWeight: 500, fontSize: 15 }}>· {t('tc.spec.cardiology')}</span></h3>
+            {/* Clock on the left, the appointment it is counting to on the right
+                (the right half used to be empty). */}
+            <div className="lnl-openGrid">
+              <div>
+                <p className="lnl-now">
+                  {t('lx.ln.nowSlot', { now: clock(now), nowAp: ampmOf(now), slot: clock(plan.slot), slotAp: ampmOf(plan.slot) })}
+                </p>
+                <p className="lnl-pre">{t('tc.ln.leaveHomeAt')}</p>
+                <div className="lnl-big">{clock(plan.leaveBy)}<small>{ampmOf(plan.leaveBy)}</small></div>
+                <p className="lnl-cd">
+                  {plan.left <= 0
+                    ? <>{t('tc.ln.shouldHaveLeft')} <b>{inWords(plan.left, t)}</b> {t('tc.ln.ago')}</>
+                    : <>{t('tc.ln.thatIs')} <b>{inWords(plan.left, t)}</b></>}
+                </p>
+                {/* how the time is made: travel + wait, never one unexplained total */}
+                <p className="lnl-chips">
+                  <span className={`ln-chip ${plan.jam ? 'warn' : ''}`}>{t('tc.ln.travelChip', { n: plan.drive })}</span>
+                  <span className="ln-chip">{t('tc.ln.waitChip', { n: plan.cfg.safety })}</span>
+                  <span className="ln-chip plain">{KM} km</span>
+                </p>
+                {plan.rolled && <p className="lnl-day">{t('tc.ln.rolled')}</p>}
+              </div>
+              <div className="glass ln-appt">
+                <span className="kicker">{t('tc.ln.yourAppt')}</span>
+                <div className="ln-appt-row">
+                  <span className="doc-ava">AR</span>
+                  <span>
+                    <b>{t('lx.demo.Dr. Anaya Rao')}</b>
+                    <span className="who">{t('tc.spec.cardiology')} · {t('lx.demo.Sunrise Hospital, Jubilee Hills')}</span>
+                  </span>
+                </div>
+                <dl className="ln-appt-facts">
+                  <div><dt>{t('tc.ln.token')}</dt><dd>A-14</dd></div>
+                  <div><dt>{t('tc.ln.yourTurn')}</dt><dd>{clockAp(plan.slot)}</dd></div>
+                  <div><dt>{t('tc.ln.before')}</dt><dd>{t('tc.ln.people', { n: 6 })}</dd></div>
+                </dl>
+              </div>
             </div>
           </div>
 
@@ -174,34 +214,68 @@ function TcLeaveNow() {
           </div>
 
           {/* ── 02 arrive ── */}
+          {/* The steps are the journey, so they stay on the left along the road.
+              The right side holds a card that sums them up, like the appointment
+              card at the clock stop. */}
           <div className="lnl-st">
             <span ref={dot(2)} className={`lnl-dot ${lit > 2 ? 'lit' : ''}`} aria-hidden="true" />
-            <span className="lnl-tag"><b>02</b> &nbsp;/&nbsp; {t('tc.ln.arrive')}</span>
-            <h3 className="lnl-h">{t('tc.ln.arriveH')}</h3>
-            <p className="lnl-p">{t('tc.ln.arriveP')}</p>
+            <div className="ln-two">
+              <div>
+                <span className="lnl-tag"><b>02</b> &nbsp;/&nbsp; {t('tc.ln.arrive')}</span>
+                <h3 className="lnl-h">{t('tc.ln.arriveH')}</h3>
+                <p className="lnl-p">{t('tc.ln.arriveP')}</p>
 
-            <div className="timeline">
-              {plan.steps.map(([label, time, sub, dur], i) => (
-                <div className={`tl-item ${i === 0 ? 'hot' : ''}`} key={label}>
-                  <span className="tl-time">{time}</span>
-                  <span className="tl-rail"><i className="tl-dot" /></span>
-                  <span className="tl-label">{t(label)}<span>{t(sub)}</span></span>
-                  <span className="tl-dur">{dur}</span>
+                <div className="timeline" ref={tlRef}>
+                  {plan.steps.map(([label, start, end, sub, mins, tone], i) => (
+                    <div className={`tl-item ${i === 0 ? 'hot' : ''} ${i === plan.steps.length - 1 ? 'turn' : ''} ${i < stepsOn ? 'on' : ''}`} key={label}>
+                      <span className="tl-time">{start}{end && <small>{t('tc.ln.to', { time: end })}</small>}</span>
+                      <span className="tl-rail"><i className="tl-dot" /></span>
+                      <span className="tl-label">
+                        <span className="tl-title">{t(label)}{mins && <i className={`ln-chip ${tone}`}>{mins}</i>}</span>
+                        <span>{t(sub)}</span>
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
 
-            <p className="ln-note">
-              {t('tc.ln.noteA')} <b>{t('lx.min', { n: plan.cfg.safety })}</b> {t('tc.ln.noteB')}
-            </p>
+              <div className="glass ln-card">
+                <span className="kicker">{t('tc.ln.sumK')}</span>
+                <p className="ln-card-big">{t('lx.min', { n: plan.drive + plan.cfg.safety })}</p>
+                <div className="ln-bar" aria-hidden="true">
+                  <i className={plan.jam ? 'warn' : ''} style={{ flex: plan.drive }} />
+                  <i style={{ flex: plan.cfg.safety }} />
+                </div>
+                <dl className="ln-card-rows">
+                  <div><dt><i className={`sw ${plan.jam ? 'warn' : ''}`} />{t('tc.ln.step.onRoad')}</dt><dd>{t('lx.min', { n: plan.drive })}</dd></div>
+                  <div><dt><i className="sw" />{t('tc.ln.step.atHospital')}</dt><dd>{t('lx.min', { n: plan.cfg.safety })}</dd></div>
+                </dl>
+                <p className="ln-note">
+                  {t('tc.ln.noteA')} <b>{t('lx.min', { n: plan.cfg.safety })}</b> {t('tc.ln.noteB')}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* ── 03 seen ── */}
           <div className="lnl-st lnl-last">
             <span ref={dot(3)} className={`lnl-dot ${lit > 3 ? 'lit' : ''}`} aria-hidden="true" />
-            <span className="lnl-tag"><b>03</b> &nbsp;/&nbsp; {t('tc.ln.seen')}</span>
-            <h3 className="lnl-h">{t('tc.ln.seenH')}</h3>
-            <p className="lnl-p">{t('tc.ln.seenP')}</p>
+            <div className="ln-two">
+              <div>
+                <span className="lnl-tag"><b>03</b> &nbsp;/&nbsp; {t('tc.ln.seen')}</span>
+                <h3 className="lnl-h">{t('tc.ln.seenH')}</h3>
+                <p className="lnl-p">{t('tc.ln.seenP')}</p>
+              </div>
+              <div className="glass ln-card">
+                <span className="kicker">{t('tc.ln.cmpK')}</span>
+                <div className="ln-cmp">
+                  <p><span>{t('tc.ln.cmpWithout')}</span><b>{t('tc.ln.cmpHours', { n: 3 })}</b></p>
+                  <div className="ln-bar" aria-hidden="true"><i className="old" style={{ flex: 1 }} /></div>
+                  <p><span>{t('tc.ln.cmpWith')}</span><b className="good">{t('lx.min', { n: plan.cfg.safety })}</b></p>
+                  <div className="ln-bar" aria-hidden="true"><i style={{ flex: 1 }} /><i className="empty" style={{ flex: 5 }} /></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -210,17 +284,14 @@ function TcLeaveNow() {
             /* Each of these is something the app actually does. The old set promised
                per-hour parking data, a navigation hand-off and automatic re-slotting —
                none of which exist. */
-            ['tc.ln.feat1.t', 'tc.ln.feat1.d'],
-            ['tc.ln.feat2.t', 'tc.ln.feat2.d'],
-            ['tc.ln.feat3.t', 'tc.ln.feat3.d'],
-            ['tc.ln.feat4.t', 'tc.ln.feat4.d'],
-          ].map(([tk, dk], i) => (
+            // Each card has its own icon, so the four can be told apart at a glance.
+            [Car, 'tc.ln.feat1.t', 'tc.ln.feat1.d'],
+            [ListOrdered, 'tc.ln.feat2.t', 'tc.ln.feat2.d'],
+            [BellRing, 'tc.ln.feat3.t', 'tc.ln.feat3.d'],
+            [HeartHandshake, 'tc.ln.feat4.t', 'tc.ln.feat4.d'],
+          ].map(([Icon, tk, dk], i) => (
             <div className={`feat rv d${i + 1}`} key={tk}>
-              <span className="ic">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M3 12h4l3-8 4 16 3-8h4" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
+              <span className="ic"><Icon size={20} strokeWidth={2} aria-hidden="true" /></span>
               <b>{t(tk)}</b>
               <p>{t(dk)}</p>
             </div>

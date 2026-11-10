@@ -90,8 +90,8 @@ export default function SuspendDialog({ kind, id, name, suspended, onClose, onDo
               {(result.paid_cancelled || []).length > 0 && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-3">
                   <p className="mb-2 font-semibold text-amber-800">Patients who had paid the booking fee</p>
-                  <p className="mb-2 text-[12.5px] text-amber-800">Each got a free next booking (any doctor, any TapCure hospital, 90 days). You may want to call them.</p>
-                  <ul className="space-y-1 text-[12.5px]">
+                  <p className="mb-2 text-[13.5px] text-amber-800">Each got a free next booking (any doctor, any TapCure hospital, 90 days). You may want to call them.</p>
+                  <ul className="space-y-1 text-[13.5px]">
                     {result.paid_cancelled.map((p) => (
                       <li key={p.appointment_id} className="flex flex-wrap justify-between gap-2 rounded-lg bg-white px-2.5 py-1.5">
                         <span className="font-semibold text-brand-navy">{p.patient || 'Patient'}</span>
@@ -107,7 +107,7 @@ export default function SuspendDialog({ kind, id, name, suspended, onClose, onDo
           ) : suspended ? (
             <>
               <p>This will make <b>{name}</b> visible and bookable again and restore the logins that were blocked by the suspension.</p>
-              <p className="text-[12.5px] text-slate-400">Appointments cancelled during the suspension stay cancelled.</p>
+              <p className="text-[13.5px] text-slate-400">Appointments cancelled during the suspension stay cancelled.</p>
             </>
           ) : (
             <>
@@ -127,11 +127,11 @@ export default function SuspendDialog({ kind, id, name, suspended, onClose, onDo
                       <li>{preview.paid_appointments} of them paid the booking fee; they get a free next booking</li>
                     )}
                   </ul>
-                  <p className="mt-2 text-[12px] text-red-700/80">Records, prescriptions and payments are kept. You can reactivate later.</p>
+                  <p className="mt-2 text-[13px] text-red-700/80">Records, prescriptions and payments are kept. You can reactivate later.</p>
                 </div>
               )}
               <label className="block">
-                <span className="mb-1 block text-[12.5px] font-semibold text-brand-navy">Reason (kept in the audit log)</span>
+                <span className="mb-1 block text-[13.5px] font-semibold text-brand-navy">Reason (kept in the audit log)</span>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}

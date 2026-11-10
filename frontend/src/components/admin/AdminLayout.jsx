@@ -61,14 +61,14 @@ function AdminLayout() {
               </span>
               <span className="min-w-0 leading-tight">
                 <span className="block truncate text-[15px] font-bold text-brand-navy">TapCure Platform</span>
-                <span className="block text-[11.5px] text-slate-400">All hospitals · all doctors</span>
+                <span className="block text-[13px] text-slate-400">All hospitals · all doctors</span>
               </span>
             </div>
 
             {/* The badge says what this console is; the account name added
                 nothing but the seeded "Platform Owner" string beside it. */}
             <div className="flex shrink-0 items-center gap-3">
-              <span className="rounded-full bg-brand-blueLight px-2.5 py-1 text-[11px] font-bold text-brand-blue">
+              <span className="rounded-full bg-brand-blueLight px-2.5 py-1 text-[13px] font-bold text-brand-blue">
                 SUPER ADMIN
               </span>
             </div>

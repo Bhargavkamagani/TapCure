@@ -51,11 +51,11 @@ function WalkInModal({ doctorId, onClose, onCreated }) {
         <div className="mb-5 flex items-center justify-between">
           <div>
             <h3 className="text-[18px] font-extrabold text-brand-navy">Add Walk-in Patient</h3>
-            <p className="mt-0.5 text-[12px] text-slate-500">Register the patient and issue a token immediately.</p>
+            <p className="mt-0.5 text-[13px] text-slate-500">Register the patient and issue a token immediately.</p>
           </div>
           <button type="button" onClick={onClose} className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100"><X className="h-5 w-5" /></button>
         </div>
-        {error && <p className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-[12px] font-semibold text-red-600">{error}</p>}
+        {error && <p className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-[13px] font-semibold text-red-600">{error}</p>}
         <div className="space-y-3">
           <div className="col-span-full grid grid-cols-2 gap-3"><input className="field-input" placeholder="First name *" value={form.first_name} onChange={set('first_name')} /><input className="field-input" placeholder="Last name (optional)" value={form.last_name} onChange={set('last_name')} /></div>
           <input className="field-input" placeholder="10-digit mobile number *" inputMode="numeric" value={form.phone} onChange={set('phone')} />

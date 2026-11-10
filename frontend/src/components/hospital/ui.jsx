@@ -42,7 +42,7 @@ export function StatusBadge({ status }) {
   const key = `status.${String(status ?? '').toLowerCase().trim().replace(/[\s_]+/g, '_')}`
   const shown = t(key)
   return (
-    <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${BADGE[status] || 'bg-slate-100 text-slate-600'}`}>
+    <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${BADGE[status] || 'bg-slate-100 text-slate-600'}`}>
       {lang === 'en' || shown === key ? status : shown}
     </span>
   )
@@ -121,10 +121,10 @@ export function StatCard({ value, label, icon: Icon, tone = 'blue', sub }) {
         </span>
         <div>
           <div className={`text-[23px] font-extrabold leading-none ${t.num}`}>{value}</div>
-          <div className="mt-1 text-[12px] font-medium text-slate-500">{label}</div>
+          <div className="mt-1 text-[13px] font-medium text-slate-500">{label}</div>
         </div>
       </div>
-      {sub && <div className="mt-2 text-[11px] text-slate-400">{sub}</div>}
+      {sub && <div className="mt-2 text-[13px] text-slate-400">{sub}</div>}
     </div>
   )
 }

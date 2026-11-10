@@ -18,9 +18,9 @@
 export const tcLandingT = {
   /* ── specialties ── */
   'tc.spec.eyebrow': { en: 'Every specialty', te: 'ప్రతి స్పెషాలిటీ', hi: 'हर विशेषज्ञता' },
-  'tc.spec.h2a': { en: 'Whatever it is,', te: 'సమస్య ఏదైనా,', hi: 'तकलीफ़ जो भी हो,' },
-  'tc.spec.h2b': { en: 'someone good is', te: 'మంచి వైద్యుడు', hi: 'कोई अच्छा डॉक्टर' },
-  'tc.spec.h2c': { en: 'free today', te: 'ఈరోజు అందుబాటులో', hi: 'आज उपलब्ध है' },
+  'tc.spec.h2a': { en: 'Which doctor', te: 'మీకు ఏ డాక్టర్', hi: 'आपको कौन-सा डॉक्टर' },
+  'tc.spec.h2b': { en: 'do you', te: '', hi: '' },
+  'tc.spec.h2c': { en: 'need?', te: 'కావాలి?', hi: 'चाहिए?' },
   'tc.spec.cardiology': { en: 'Cardiology', te: 'కార్డియాలజీ', hi: 'हृदय रोग' },
   'tc.spec.neurology': { en: 'Neurology', te: 'న్యూరాలజీ', hi: 'तंत्रिका रोग' },
   'tc.spec.orthopedics': { en: 'Orthopedics', te: 'ఆర్థోపెడిక్స్', hi: 'हड्डी रोग' },
@@ -52,17 +52,17 @@ export const tcLandingT = {
   'tc.doc.consultation': { en: 'Consultation', te: 'కన్సల్టేషన్', hi: 'परामर्श' },
   'tc.doc.years': { en: 'yrs', te: 'సం.', hi: 'वर्ष' },
   'tc.doc.reviews': { en: 'reviews', te: 'సమీక్షలు', hi: 'समीक्षाएँ' },
-  'tc.doc.findOne': { en: 'Find one', te: 'ఒకరిని కనుగొనండి', hi: 'डॉक्टर खोजें' },
+  'tc.doc.findOne': { en: 'Book Token', te: 'టోకెన్ బుక్ చేయండి', hi: 'टोकन बुक करें' },
   'tc.spec.bookToday': { en: 'Book today', te: 'ఈరోజే బుక్ చేయండి', hi: 'आज बुक करें' },
 
   /* ── testimonials ── */
-  'tc.quote.eyebrow': { en: 'Patient voices', te: 'రోగుల మాటలు', hi: 'मरीज़ों की बातें' },
-  'tc.quote.h2a': { en: 'The waiting room,', te: 'వెయిటింగ్ రూమ్,', hi: 'वेटिंग रूम,' },
-  'tc.quote.h2b': { en: 'emptied', te: 'ఖాళీ అయ్యింది', hi: 'खाली हो गया' },
+  'tc.quote.eyebrow': { en: 'What people say', te: 'ప్రజలు ఏమంటున్నారు', hi: 'लोग क्या कहते हैं' },
+  'tc.quote.h2a': { en: 'Less waiting,', te: 'తక్కువ వేచి ఉండటం,', hi: 'कम इंतज़ार,' },
+  'tc.quote.h2b': { en: 'calmer visits', te: 'ప్రశాంతమైన విజిట్‌లు', hi: 'सुकून भरी मुलाक़ात' },
   'tc.quote1': {
-    en: 'I used to leave an hour early and still sit for forty minutes. TapCure buzzed at 4:12, I walked in at 4:56, and the nurse called my name at 5:01.',
-    te: 'ముందు గంట ముందే బయలుదేరినా నలభై నిమిషాలు కూర్చోవాల్సి వచ్చేది. TapCure 4:12కి గుర్తు చేసింది, నేను 4:56కి చేరుకున్నాను, 5:01కి నర్సు నా పేరు పిలిచారు.',
-    hi: 'पहले एक घंटा जल्दी निकलकर भी चालीस मिनट बैठना पड़ता था। TapCure ने 4:12 पर बताया, मैं 4:56 पर पहुँचा, और 5:01 पर नर्स ने मेरा नाम पुकारा।',
+    en: 'I used to leave an hour early and still sit for forty minutes. TapCure told me to leave at 4:12, I walked in at 4:56, and the nurse called my name at 5:01.',
+    te: 'నేను గంట ముందే బయలుదేరినా నలభై నిమిషాలు కూర్చోవాల్సి వచ్చేది. TapCure 4:12కి బయలుదేరమని చెప్పింది, నేను 4:56కి లోపలికి వెళ్లాను, నర్స్ 5:01కి నా పేరు పిలిచారు.',
+    hi: 'मैं एक घंटा पहले निकलती थी और फिर भी चालीस मिनट बैठना पड़ता था। TapCure ने मुझे 4:12 पर निकलने को कहा, मैं 4:56 पर अंदर पहुँची, और नर्स ने 5:01 पर मेरा नाम पुकारा।',
   },
   'tc.quote1.role': { en: 'Product designer · Hyderabad', te: 'ప్రొడక్ట్ డిజైనర్ · హైదరాబాద్', hi: 'प्रोडक्ट डिज़ाइनर · हैदराबाद' },
   'tc.quote2': {
@@ -80,19 +80,19 @@ export const tcLandingT = {
 
   /* ── checks / app ── */
   'tc.checks.eyebrow': { en: 'Works on every phone', te: 'ప్రతి ఫోన్‌లో పనిచేస్తుంది', hi: 'हर फ़ोन पर चलता है' },
-  'tc.checks.h2a': { en: 'Your whole visit,', te: 'మీ మొత్తం సందర్శన,', hi: 'आपकी पूरी विज़िट,' },
-  'tc.checks.h2b': { en: 'one screen.', te: 'ఒకే స్క్రీన్‌లో.', hi: 'एक ही स्क्रीन पर।' },
+  'tc.checks.h2a': { en: 'Your whole visit,', te: 'మీ పూర్తి విజిట్,', hi: 'आपकी पूरी मुलाक़ात,' },
+  'tc.checks.h2b': { en: 'on one screen.', te: 'ఒకే స్క్రీన్‌పై.', hi: 'एक ही स्क्रीन पर।' },
   'tc.check1.t': { en: 'Book in seconds, from anywhere', te: 'ఎక్కడి నుండైనా, క్షణాల్లో బుక్ చేయండి', hi: 'कहीं से भी, कुछ ही पलों में बुक करें' },
   'tc.check1.d': {
-    en: 'Open TapCure in your browser on any phone or laptop and you are straight in. Our iOS and Android apps are on the way.',
-    te: 'ఏ ఫోన్‌లోనైనా, ల్యాప్‌టాప్‌లోనైనా బ్రౌజర్‌లో TapCure తెరిస్తే చాలు. మా iOS, Android యాప్‌లు త్వరలో రానున్నాయి.',
-    hi: 'किसी भी फ़ोन या लैपटॉप के ब्राउज़र में TapCure खोलिए, बस हो गया। हमारे iOS और Android ऐप जल्द आ रहे हैं।',
+    en: 'Open TapCure in the browser on any phone or laptop. No app download needed. Our iOS and Android apps are coming soon.',
+    te: 'ఏ ఫోన్ లేదా ల్యాప్‌టాప్ బ్రౌజర్‌లోనైనా TapCure తెరవండి. యాప్ డౌన్‌లోడ్ అవసరం లేదు. మా iOS, Android యాప్‌లు త్వరలో వస్తాయి.',
+    hi: 'किसी भी फ़ोन या लैपटॉप के ब्राउज़र में TapCure खोलें। ऐप डाउनलोड की ज़रूरत नहीं। हमारे iOS और Android ऐप जल्द आ रहे हैं।',
   },
   'tc.check2.t': { en: 'A live token, not a guess', te: 'అంచనా కాదు, ప్రత్యక్ష టోకెన్', hi: 'अंदाज़ा नहीं, लाइव टोकन' },
   'tc.check2.d': {
-    en: 'Watch your queue position move in real time, and get told when to set off.',
-    te: 'మీ క్యూ స్థానం ప్రత్యక్షంగా కదలడాన్ని చూడండి, ఎప్పుడు బయలుదేరాలో తెలుసుకోండి.',
-    hi: 'अपनी क्यू पोज़िशन को लाइव बदलते देखें, और जानें कि कब निकलना है।',
+    en: 'See your place in the queue move live, and know when to leave home.',
+    te: 'క్యూలో మీ స్థానం లైవ్‌గా కదలడం చూడండి, ఇంటి నుండి ఎప్పుడు బయలుదేరాలో తెలుసుకోండి.',
+    hi: 'कतार में अपनी जगह लाइव बदलती देखें, और जानें कि घर से कब निकलना है।',
   },
   'tc.check3.t': { en: 'Up to five family members', te: 'ఐదుగురు కుటుంబ సభ్యుల వరకు', hi: 'पाँच परिवार के सदस्यों तक' },
   'tc.check3.d': {
@@ -106,8 +106,8 @@ export const tcLandingT = {
     te: 'డిజిటల్ ప్రిస్క్రిప్షన్లు మీ ఖాతాలోకి వస్తాయి, మీరు బయలుదేరే లోపే ఫాలో-అప్ బుక్ అవుతుంది.',
     hi: 'डिजिटल पर्चे आपके खाते में आ जाते हैं, और निकलने से पहले ही फ़ॉलो-अप बुक हो जाता है।',
   },
-  'tc.cta.createAccount': { en: 'Create an account', te: 'ఖాతా సృష్టించండి', hi: 'खाता बनाएँ' },
-  'tc.cta.seeTiming': { en: 'See how the timing works', te: 'సమయం ఎలా పనిచేస్తుందో చూడండి', hi: 'देखें टाइमिंग कैसे काम करती है' },
+  'tc.cta.createAccount': { en: 'Create an Account', te: 'ఖాతా సృష్టించండి', hi: 'अकाउंट बनाएँ' },
+  'tc.cta.seeTiming': { en: 'See How Timing Works', te: 'సమయం ఎలా లెక్కిస్తామో చూడండి', hi: 'देखें समय कैसे तय होता है' },
 
   /* ── FAQ shell ── */
   'tc.faq.eyebrow': { en: 'Questions', te: 'ప్రశ్నలు', hi: 'सवाल' },
@@ -155,19 +155,19 @@ export const tcLandingT = {
   'tc.phone.hello': { en: 'Good afternoon,', te: 'శుభ మధ్యాహ్నం,', hi: 'नमस्कार,' },
   'tc.phone.leaveIn': { en: 'Leave home in', te: 'ఇంటి నుండి బయలుదేరాల్సిన సమయం', hi: 'घर से निकलने में' },
   'tc.phone.appt': {
-    en: 'Dr. Anaya Rao · 5:00 PM · Sunrise Hospital',
-    te: 'డా. అనయా రావు · సాయంత్రం 5:00 · సన్‌రైజ్ ఆసుపత్రి',
-    hi: 'डॉ. अनया राव · शाम 5:00 · सनराइज़ अस्पताल',
+    en: 'Dr. Ananya Rao · 5:00 PM · Sunrise Hospital',
+    te: 'డా. అనన్య రావు · సాయంత్రం 5:00 · సన్‌రైజ్ హాస్పిటల్',
+    hi: 'डॉ. अनन्या राव · शाम 5:00 · सनराइज़ हॉस्पिटल',
   },
 
   /* ── footer ── */
   'tc.foot.tagline': { en: 'One tap to cure', te: 'ఒక్క ట్యాప్‌తో చికిత్స', hi: 'एक टैप, इलाज़ शुरू' },
   'tc.foot.blurb': {
-    en: 'Book appointment. Get token. Travel at the right time — healthcare made calm for Tier-2 and rural India.',
-    te: 'అపాయింట్‌మెంట్ బుక్ చేయండి. టోకెన్ పొందండి. సరైన సమయానికి బయలుదేరండి — టైర్-2, గ్రామీణ భారతదేశం కోసం ప్రశాంతమైన ఆరోగ్య సేవ.',
-    hi: 'अपॉइंटमेंट बुक करें। टोकन पाएँ। सही समय पर निकलें — टियर-2 और ग्रामीण भारत के लिए सुकून भरी स्वास्थ्य सेवा।',
+    en: 'Book appointment. Get token. Travel at the right time. Calm healthcare for every town and village in India.',
+    te: 'అపాయింట్‌మెంట్ బుక్ చేయండి. టోకెన్ పొందండి. సరైన సమయానికి ప్రయాణించండి. భారతదేశంలోని ప్రతి పట్టణం, గ్రామం కోసం ప్రశాంతమైన వైద్యం.',
+    hi: 'अपॉइंटमेंट बुक करें। टोकन पाएँ। सही समय पर निकलें। भारत के हर शहर और गाँव के लिए सुकून भरा इलाज।',
   },
-  'tc.foot.getInTouch': { en: 'Get in touch', te: 'సంప్రదించండి', hi: 'संपर्क करें' },
+  'tc.foot.getInTouch': { en: 'Get in Touch', te: 'సంప్రదించండి', hi: 'संपर्क करें' },
   'tc.foot.becomePartner': { en: 'Become a Partner', te: 'భాగస్వామి కండి', hi: 'पार्टनर बनें' },
   'tc.foot.explore': { en: 'Explore', te: 'అన్వేషించండి', hi: 'एक्सप्लोर' },
   'tc.foot.partners': { en: 'Partners', te: 'భాగస్వాములు', hi: 'पार्टनर' },
@@ -196,4 +196,23 @@ export const tcLandingT = {
   'tc.foot.refundsShort': { en: 'Refunds', te: 'రీఫండ్‌లు', hi: 'रिफ़ंड' },
   'tc.foot.disclaimerShort': { en: 'Disclaimer', te: 'నిరాకరణ', hi: 'अस्वीकरण' },
   'tc.foot.madeWith': { en: 'Made with care in Hyderabad', te: 'హైదరాబాద్‌లో శ్రద్ధతో రూపొందించబడింది', hi: 'हैदराबाद में जतन से बनाया गया' },
+
+  /* 2026-11-08: specialty tiles say who the doctor is in plain words, and what
+     they treat, instead of "Book today" on every tile. */
+  'tc.spec.cardiology.plain': { en: 'Heart', te: 'గుండె', hi: 'दिल' },
+  'tc.spec.cardiology.hint': { en: 'Cardiology · chest pain, BP', te: 'కార్డియాలజీ · ఛాతీ నొప్పి, బీపీ', hi: 'कार्डियोलॉजी · सीने में दर्द, बीपी' },
+  'tc.spec.neurology.plain': { en: 'Brain & Nerves', te: 'మెదడు & నరాలు', hi: 'दिमाग़ और नसें' },
+  'tc.spec.neurology.hint': { en: 'Neurology · headache, fits', te: 'న్యూరాలజీ · తలనొప్పి, ఫిట్స్', hi: 'न्यूरोलॉजी · सिरदर्द, दौरे' },
+  'tc.spec.orthopedics.plain': { en: 'Bones & Joints', te: 'ఎముకలు & కీళ్లు', hi: 'हड्डी और जोड़' },
+  'tc.spec.orthopedics.hint': { en: 'Orthopedics · back, knee', te: 'ఆర్థోపెడిక్స్ · నడుము, మోకాలు', hi: 'ऑर्थोपेडिक्स · कमर, घुटना' },
+  'tc.spec.general.plain': { en: 'General Physician', te: 'జనరల్ ఫిజీషియన్', hi: 'जनरल फ़िज़िशियन' },
+  'tc.spec.general.hint': { en: 'Fever, cold, body pain', te: 'జ్వరం, జలుబు, ఒళ్లు నొప్పులు', hi: 'बुख़ार, सर्दी, बदन दर्द' },
+  'tc.spec.pediatrics.plain': { en: 'Child', te: 'పిల్లలు', hi: 'बच्चे' },
+  'tc.spec.pediatrics.hint': { en: 'Pediatrics · kids, babies', te: 'పీడియాట్రిక్స్ · పిల్లలు, శిశువులు', hi: 'पीडियाट्रिक्स · बच्चे, शिशु' },
+  'tc.spec.dental.plain': { en: 'Teeth', te: 'పళ్లు', hi: 'दाँत' },
+  'tc.spec.dental.hint': { en: 'Dental · tooth pain', te: 'డెంటల్ · పంటి నొప్పి', hi: 'डेंटल · दाँत दर्द' },
+  'tc.spec.ophthalmology.plain': { en: 'Eyes', te: 'కళ్లు', hi: 'आँखें' },
+  'tc.spec.ophthalmology.hint': { en: 'Ophthalmology · vision', te: 'ఆప్తాల్మాలజీ · చూపు', hi: 'नेत्र रोग · नज़र' },
+  'tc.spec.dermatology.plain': { en: 'Skin', te: 'చర్మం', hi: 'त्वचा' },
+  'tc.spec.dermatology.hint': { en: 'Dermatology · rash, hair', te: 'డెర్మటాలజీ · దద్దుర్లు, జుట్టు', hi: 'डर्मेटोलॉजी · दाने, बाल' },
 }

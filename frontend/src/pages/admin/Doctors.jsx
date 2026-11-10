@@ -152,24 +152,24 @@ export default function AdminDoctors() {
                   <p className="truncate text-[15px] font-bold text-brand-navy">
                     {d.name}
                     {d.is_self_registered && (
-                      <span className="ml-2 rounded-md bg-purple-100 px-1.5 py-0.5 text-[10.5px] font-bold uppercase text-purple-700">Self-registered</span>
+                      <span className="ml-2 rounded-md bg-purple-100 px-1.5 py-0.5 text-[12px] font-bold uppercase text-purple-700">Self-registered</span>
                     )}
                   </p>
-                  <p className="truncate text-[12.5px] text-slate-500">
+                  <p className="truncate text-[13.5px] text-slate-500">
                     {d.specialization || 'General Physician'}
                     {hospitals[d.hospital_id] ? ` · ${hospitals[d.hospital_id]}` : ''}
                   </p>
                 </div>
                 {d.verification_status === 'verified' && ACTIVITY[d.status] && (
-                  <span className={`shrink-0 rounded-full px-2.5 py-1 text-[11.5px] font-bold ${ACTIVITY[d.status].pill}`}>
+                  <span className={`shrink-0 rounded-full px-2.5 py-1 text-[13px] font-bold ${ACTIVITY[d.status].pill}`}>
                     {ACTIVITY[d.status].label}
                   </span>
                 )}
-                <span className={`hidden shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[11.5px] font-bold sm:inline-flex ${st.pill}`}>
+                <span className={`hidden shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-bold sm:inline-flex ${st.pill}`}>
                   <StIcon className="h-3.5 w-3.5" /> {st.label}
                 </span>
                 {docs.length > 0 && (
-                  <span className="hidden shrink-0 items-center gap-1 text-[12px] font-semibold text-slate-400 md:inline-flex">
+                  <span className="hidden shrink-0 items-center gap-1 text-[13px] font-semibold text-slate-400 md:inline-flex">
                     <FileText className="h-3.5 w-3.5" /> {docs.length}
                   </span>
                 )}
@@ -181,7 +181,7 @@ export default function AdminDoctors() {
                   <div className="grid gap-4 md:grid-cols-2">
                     {/* Details */}
                     <div>
-                      <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">Details</p>
+                      <p className="mb-2 text-[12px] font-bold uppercase tracking-wide text-slate-400">Details</p>
                       <dl className="space-y-1.5 text-[13px]">
                         <Row icon={BadgeCheck} label="Reg. number" value={d.registration_number} />
                         <Row icon={FileText} label="HPR ID" value={d.hpr_id} />
@@ -191,7 +191,7 @@ export default function AdminDoctors() {
                         <Row icon={CheckCircle2} label="Verified on" value={d.verified_at ? fmtDate(d.verified_at) : null} />
                       </dl>
                       {d.rejection_reason && (
-                        <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[12.5px] text-red-700">
+                        <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[13.5px] text-red-700">
                           <span className="font-semibold">Rejected:</span> {d.rejection_reason}
                         </p>
                       )}
@@ -199,11 +199,11 @@ export default function AdminDoctors() {
 
                     {/* Documents */}
                     <div>
-                      <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">
+                      <p className="mb-2 text-[12px] font-bold uppercase tracking-wide text-slate-400">
                         Submitted documents {docs.length > 0 && `(${docs.length})`}
                       </p>
                       {docs.length === 0 ? (
-                        <p className="rounded-lg border border-dashed border-slate-200 bg-white px-3 py-4 text-center text-[12.5px] text-slate-400">
+                        <p className="rounded-lg border border-dashed border-slate-200 bg-white px-3 py-4 text-center text-[13.5px] text-slate-400">
                           No documents uploaded — this doctor was added by a hospital, not self-registered.
                         </p>
                       ) : (
@@ -219,7 +219,7 @@ export default function AdminDoctors() {
                                 <FileText className="h-4 w-4 shrink-0 text-brand-blue" />
                                 <span className="min-w-0 flex-1">
                                   <span className="block truncate text-[13px] font-semibold text-brand-navy">{doc.label || doc.doc_type}</span>
-                                  <span className="block truncate text-[11px] text-slate-400">
+                                  <span className="block truncate text-[13px] text-slate-400">
                                     {doc.file_size_kb ? `${doc.file_size_kb} KB · ` : ''}{fmtDate(doc.uploaded_at)}
                                   </span>
                                 </span>

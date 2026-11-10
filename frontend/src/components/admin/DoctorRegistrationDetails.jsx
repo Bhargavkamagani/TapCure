@@ -105,8 +105,8 @@ export default function DoctorRegistrationDetails({ doctorId, onClose, onApprove
           <div className="min-w-0 flex-1">
             <p className="truncate text-[18px] font-extrabold text-brand-navy">{data ? `Dr. ${data.name}` : 'Registration details'}</p>
             {data && (
-              <p className="mt-0.5 text-[12.5px] text-slate-500">
-                <span className={`mr-2 rounded-full px-2 py-0.5 text-[11px] font-bold ${statusPill}`}>{data.verification_status}</span>
+              <p className="mt-0.5 text-[13.5px] text-slate-500">
+                <span className={`mr-2 rounded-full px-2 py-0.5 text-[13px] font-bold ${statusPill}`}>{data.verification_status}</span>
                 Registered {dateTimeIST(data.registered_at) || '—'}
               </p>
             )}
@@ -132,7 +132,7 @@ export default function DoctorRegistrationDetails({ doctorId, onClose, onApprove
                   <Field label="About" value={data.bio} />
                 </dl>
                 {data.rejection_reason && (
-                  <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[12.5px] text-red-600">Rejected: {data.rejection_reason}</p>
+                  <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[13.5px] text-red-600">Rejected: {data.rejection_reason}</p>
                 )}
               </Section>
 
@@ -175,7 +175,7 @@ export default function DoctorRegistrationDetails({ doctorId, onClose, onApprove
                         <a
                           href={`https://www.google.com/maps?q=${pr.latitude},${pr.longitude}`}
                           target="_blank" rel="noreferrer"
-                          className="mt-2 inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand-blue hover:underline"
+                          className="mt-2 inline-flex items-center gap-1 text-[13.5px] font-semibold text-brand-blue hover:underline"
                         >
                           Open in Google Maps <ExternalLink className="h-3 w-3" />
                         </a>
@@ -207,19 +207,19 @@ export default function DoctorRegistrationDetails({ doctorId, onClose, onApprove
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-[13px] font-semibold text-brand-navy">{doc.label || doc.doc_type}</p>
-                          <p className="text-[11.5px] text-slate-400">{doc.file_size_kb} KB · {isImage(doc.file_url) ? 'Image' : 'PDF'}</p>
+                          <p className="text-[13px] text-slate-400">{doc.file_size_kb} KB · {isImage(doc.file_url) ? 'Image' : 'PDF'}</p>
                         </div>
-                        <span className="inline-flex items-center gap-1 text-[12px] font-semibold text-brand-blue">
+                        <span className="inline-flex items-center gap-1 text-[13px] font-semibold text-brand-blue">
                           Open <ExternalLink className="h-3.5 w-3.5" />
                         </span>
                       </a>
                     ))}
                   </div>
                 )}
-                <p className="mt-2 text-[11.5px] text-slate-400">Document links are private and expire; reopen this panel for fresh ones.</p>
+                <p className="mt-2 text-[13px] text-slate-400">Document links are private and expire; reopen this panel for fresh ones.</p>
               </Section>
 
-              <p className="flex items-center gap-1.5 text-[12px] text-slate-400">
+              <p className="flex items-center gap-1.5 text-[13px] text-slate-400">
                 <ShieldCheck className="h-3.5 w-3.5" /> Shown to Super Admins only.
                 <CalendarDays className="ml-2 h-3.5 w-3.5" /> Times in IST.
               </p>

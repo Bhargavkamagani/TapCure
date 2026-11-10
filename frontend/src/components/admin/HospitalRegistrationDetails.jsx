@@ -103,8 +103,8 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
           <div className="min-w-0 flex-1">
             <p className="truncate text-[18px] font-extrabold text-brand-navy">{data?.name || 'Registration details'}</p>
             {data && (
-              <p className="mt-0.5 text-[12.5px] text-slate-500">
-                <span className={`mr-2 rounded-full px-2 py-0.5 text-[11px] font-bold ${pending ? 'bg-amber-100 text-amber-700' : data.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
+              <p className="mt-0.5 text-[13.5px] text-slate-500">
+                <span className={`mr-2 rounded-full px-2 py-0.5 text-[13px] font-bold ${pending ? 'bg-amber-100 text-amber-700' : data.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-600'}`}>
                   {data.status}
                 </span>
                 Registered {dateTimeIST(data.registered_at) || '—'}
@@ -152,7 +152,7 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
                     <a
                       href={`https://www.google.com/maps?q=${data.latitude},${data.longitude}`}
                       target="_blank" rel="noreferrer"
-                      className="mt-2 inline-flex items-center gap-1 text-[12.5px] font-semibold text-brand-blue hover:underline"
+                      className="mt-2 inline-flex items-center gap-1 text-[13.5px] font-semibold text-brand-blue hover:underline"
                     >
                       Open in Google Maps <ExternalLink className="h-3 w-3" />
                     </a>
@@ -192,7 +192,7 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
                   {DAYS.map((d) => {
                     const on = (tm.working_days || []).includes(d)
                     return (
-                      <span key={d} className={`rounded-lg px-2.5 py-1 text-[12px] font-semibold ${on ? 'bg-brand-blueLight text-brand-blue' : 'bg-slate-100 text-slate-400 line-through'}`}>
+                      <span key={d} className={`rounded-lg px-2.5 py-1 text-[13px] font-semibold ${on ? 'bg-brand-blueLight text-brand-blue' : 'bg-slate-100 text-slate-400 line-through'}`}>
                         {d}<span className="sr-only">{on ? ' open' : ' closed'}</span>
                       </span>
                     )
@@ -204,7 +204,7 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
                 {data.services?.length ? (
                   <div className="flex flex-wrap gap-1.5">
                     {data.services.map((s) => (
-                      <span key={s} className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[12.5px] font-semibold text-emerald-700">{s}</span>
+                      <span key={s} className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[13.5px] font-semibold text-emerald-700">{s}</span>
                     ))}
                   </div>
                 ) : (
@@ -218,7 +218,7 @@ export default function HospitalRegistrationDetails({ hospitalId, onClose, onApp
                   emptyText={<span className="italic">None selected</span>} />
               </Section>
 
-              <p className="flex items-center gap-1.5 text-[12px] text-slate-400">
+              <p className="flex items-center gap-1.5 text-[13px] text-slate-400">
                 <ShieldCheck className="h-3.5 w-3.5" /> Shown to Super Admins only.
                 <CalendarDays className="ml-2 h-3.5 w-3.5" /> Times in IST.
               </p>

@@ -32,7 +32,7 @@ function ChoiceCard({ to, icon: Icon, title, desc, bullets, tone }) {
           <span className={`flex h-16 w-16 items-center justify-center rounded-2xl ${style.icon}`}>
             <Icon className="h-8 w-8" />
           </span>
-          <span className="rounded-full bg-slate-50 px-3 py-1 text-[11px] font-bold text-slate-500">
+          <span className="rounded-full bg-slate-50 px-3 py-1 text-[13px] font-bold text-slate-500">
             {t('ppage.startHere')}
           </span>
         </span>
@@ -44,7 +44,7 @@ function ChoiceCard({ to, icon: Icon, title, desc, bullets, tone }) {
 
         <span className="grid gap-2">
           {bullets.map((bullet) => (
-            <span key={bullet} className="flex items-center gap-2 text-[12.5px] font-semibold text-slate-600">
+            <span key={bullet} className="flex items-center gap-2 text-[13.5px] font-semibold text-slate-600">
               <span className="h-1.5 w-1.5 rounded-full bg-brand-green" />
               {bullet}
             </span>
@@ -114,7 +114,7 @@ function BookAppointmentStart() {
           </span>
           <div>
             <p className="text-[14px] font-bold text-brand-navy">{t('ppage.alreadyHaveAppt')}</p>
-            <p className="text-[12.5px] text-slate-500">{t('ppage.viewBookings')}</p>
+            <p className="text-[13.5px] text-slate-500">{t('ppage.viewBookings')}</p>
           </div>
         </div>
         <Link to="/patient-dashboard/appointments" className="rounded-xl border border-slate-200 px-4 py-2 text-[13px] font-bold text-brand-navy hover:bg-slate-50">

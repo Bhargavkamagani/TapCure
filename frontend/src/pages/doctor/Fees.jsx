@@ -65,7 +65,7 @@ export function RevisitWindowCard({ row, onSaved }) {
             <BadgeCheck className="h-4 w-4 shrink-0 text-emerald-600" />
             <h3 className="text-[16px] font-bold text-brand-navy">Free Revisit</h3>
           </div>
-          <p className="mt-1 text-[12.5px] text-slate-500">
+          <p className="mt-1 text-[13.5px] text-slate-500">
             {row.practice_name ? <span className="font-semibold text-slate-600">{row.practice_name} · </span> : null}
             After a paid consultation, a patient may see you again free of charge within
             this many days. They walk in — no booking needed.
@@ -84,14 +84,14 @@ export function RevisitWindowCard({ row, onSaved }) {
               onChange={(e) => { setDays(e.target.value.replace(/[^0-9]/g, '')); setNote(null) }}
               className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-[16px] font-bold text-brand-navy outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/10"
             />
-            <span className="flex-1 text-[12.5px] text-slate-400">
+            <span className="flex-1 text-[13.5px] text-slate-400">
               {days.trim() === '' ? 'not offered' : 'days from the consultation date'}
             </span>
             <button
               type="button"
               onClick={save}
               disabled={saving}
-              className="inline-flex h-8 shrink-0 items-center justify-center gap-1 rounded-md bg-brand-blue px-2.5 text-[11.5px] font-bold text-white transition hover:bg-brand-blueDark disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-[78px]"
+              className="inline-flex h-8 shrink-0 items-center justify-center gap-1 rounded-md bg-brand-blue px-2.5 text-[13px] font-bold text-white transition hover:bg-brand-blueDark disabled:cursor-not-allowed disabled:opacity-60 sm:min-w-[78px]"
             >
               <Save className="h-3.5 w-3.5" />
               {saving ? 'Saving…' : 'Save'}
@@ -105,10 +105,10 @@ export function RevisitWindowCard({ row, onSaved }) {
               {row.days == null ? 'Not offered' : `${row.days} days`}
             </p>
             {row.days != null && (
-              <span className="text-[11px] text-slate-400">from the consultation date</span>
+              <span className="text-[13px] text-slate-400">from the consultation date</span>
             )}
           </div>
-          <div className="mt-3 flex items-center gap-2 text-[12.5px] text-slate-500">
+          <div className="mt-3 flex items-center gap-2 text-[13.5px] text-slate-500">
             <Lock className="h-3.5 w-3.5 shrink-0 text-slate-400" />
             Set by your hospital, like your fee. Contact your hospital admin to change it.
           </div>
@@ -116,7 +116,7 @@ export function RevisitWindowCard({ row, onSaved }) {
       )}
 
       {note && (
-        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[12.5px] font-medium ${
+        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[13.5px] font-medium ${
           note.type === 'error'
             ? 'border-rose-200 bg-rose-50 text-rose-700'
             : 'border-emerald-200 bg-emerald-50 text-emerald-700'
@@ -153,15 +153,15 @@ function Fees() {
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-bold text-brand-navy">Standard Consultation</p>
-          <p className="text-[12.5px] text-slate-500">{doctor.specialization}</p>
+          <p className="text-[13.5px] text-slate-500">{doctor.specialization}</p>
         </div>
         <div className="text-right">
           <p className="text-[26px] font-extrabold leading-none text-brand-navy">₹{Number(doctor.consultation_fee)}</p>
-          <p className="text-[11px] text-slate-400">per visit</p>
+          <p className="text-[13px] text-slate-400">per visit</p>
         </div>
       </Card>
 
-      <div className="flex items-center gap-2 text-[12.5px] text-slate-500 md:max-w-md">
+      <div className="flex items-center gap-2 text-[13.5px] text-slate-500 md:max-w-md">
         <Lock className="h-3.5 w-3.5 text-slate-400" />
         This fee is set by your hospital. Contact your hospital admin to change it.
       </div>

@@ -23,7 +23,7 @@ function fmtDistance(km, t) {
 function OpenBadge({ active }) {
   const { t, lang } = useI18n()
   return (
-    <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
+    <span className={`rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'}`}>
       {active ? t('ppage.open') : t('ppage.closed')}
     </span>
   )
@@ -259,7 +259,7 @@ function Hospitals() {
               <div className="relative h-[210px] w-full shrink-0 overflow-hidden">
                 <HospitalPicture hospital={c} />
                 <span className="absolute right-3 top-3"><OpenBadge active={c.is_active} /></span>
-                <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1 text-[12px] font-semibold text-brand-navy shadow-sm">
+                <span className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-2.5 py-1 text-[13px] font-semibold text-brand-navy shadow-sm">
                   <Users className="h-3.5 w-3.5 text-brand-blue" />{t('ppage.nDoctors', { n: c.doctorCount })}
                 </span>
               </div>
@@ -270,7 +270,7 @@ function Hospitals() {
                   <p className="min-w-0 truncate text-[16px] font-bold text-brand-navy" title={c.name}>{translitName(c.name, lang)}</p>
                   <InsuranceLogos codes={c.insurance_partners} className="mt-0.5" />
                 </div>
-                {lang !== 'en' && <p className="text-[11px] text-slate-400">{c.name}</p>}
+                {lang !== 'en' && <p className="text-[13px] text-slate-400">{c.name}</p>}
                 <p className="mt-1 flex items-center gap-1 text-[13px] text-slate-500" title={[c.address, c.city].filter(Boolean).join(', ')}>
                   <MapPin className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                   <span className="truncate">{translitName(shortPlace(c.address, c.city) || c.city, lang) || '—'}</span>
@@ -278,14 +278,14 @@ function Hospitals() {
               </div>
 
               {c.distanceKm != null && (
-                <span className="mt-3 inline-flex w-fit items-center gap-1 rounded-full bg-brand-blueLight px-2.5 py-1 text-[11.5px] font-semibold text-brand-blue">
+                <span className="mt-3 inline-flex w-fit items-center gap-1 rounded-full bg-brand-blueLight px-2.5 py-1 text-[13px] font-semibold text-brand-blue">
                   <Navigation className="h-3 w-3" />
                   {t('px.distAway', { dist: fmtDistance(c.distanceKm, t) + (c.etaMin ? ` · ~${t('pdash.min', { n: c.etaMin })}` : '') })}
                 </span>
               )}
 
               {c.phone && (
-                <p className="mt-2 flex items-center gap-1.5 text-[12.5px] text-slate-500"><Phone className="h-3.5 w-3.5 text-slate-400" />{c.phone}</p>
+                <p className="mt-2 flex items-center gap-1.5 text-[13.5px] text-slate-500"><Phone className="h-3.5 w-3.5 text-slate-400" />{c.phone}</p>
               )}
 
               <Link

@@ -81,7 +81,7 @@ function Today() {
         <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-[12px] font-semibold text-slate-400">
+            <tr className="text-[13px] font-semibold text-slate-400">
               <th className="pb-3 pr-4">Time</th><th className="pb-3 pr-4">Patient</th><th className="pb-3 pr-4">Age</th>
               <th className="pb-3 pr-4">Type</th><th className="pb-3 pr-4">Fee</th><th className="pb-3">Status</th>
             </tr>
@@ -99,7 +99,7 @@ function Today() {
                         the desk. Emergency is a token PRIORITY, not a visit
                         type, so it reads as a walk-in here — same rule as the
                         Reports split. */}
-                    <span className={`rounded-md px-2 py-0.5 text-[11.5px] font-semibold ${['walkin', 'emergency'].includes(a.appointment_type) ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-brand-blue'}`}>
+                    <span className={`rounded-md px-2 py-0.5 text-[13px] font-semibold ${['walkin', 'emergency'].includes(a.appointment_type) ? 'bg-orange-100 text-orange-600' : 'bg-blue-100 text-brand-blue'}`}>
                       {['walkin', 'emergency'].includes(a.appointment_type) ? 'Walk-in' : 'Online'}
                     </span>
                   </td>

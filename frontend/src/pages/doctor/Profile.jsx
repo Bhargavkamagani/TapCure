@@ -20,7 +20,7 @@ function Row({ icon: Icon, label, value }) {
     <div className="flex items-start gap-3 py-2.5">
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500"><Icon className="h-[18px] w-[18px]" /></span>
       <div>
-        <p className="text-[11.5px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+        <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
         <p className="text-[14px] font-medium text-brand-navy">{value || '—'}</p>
       </div>
     </div>
@@ -111,7 +111,7 @@ function EditModal({ doctor, feeLocked, onClose, onSaved }) {
           {feeLocked ? (
             <div>
               <TextInput label="Consultation Fee (₹)" value={form.consultation_fee} readOnly disabled />
-              <p className="mt-1 text-[11.5px] text-slate-400">Set by your hospital.</p>
+              <p className="mt-1 text-[13px] text-slate-400">Set by your hospital.</p>
             </div>
           ) : (
             <TextInput label="Consultation Fee (₹)" inputMode="numeric" maxLength={6} value={form.consultation_fee} onChange={digitsOnly('consultation_fee')} />
@@ -249,14 +249,14 @@ export function PracticeModal({ doctor, practice = null, onClose, onSaved }) {
             <SelectInput label="Practice type" value={form.practice_type} onChange={set('practice_type')} disabled={isEdit}>
               {PRACTICE_TYPES.map((type) => <option key={type.value} value={type.value}>{type.label}</option>)}
             </SelectInput>
-            {isEdit && <p className="mt-1 text-[11.5px] text-slate-400">Can't be changed — remove this practice and add it again instead.</p>}
+            {isEdit && <p className="mt-1 text-[13px] text-slate-400">Can't be changed — remove this practice and add it again instead.</p>}
           </div>
           <TextInput label="Practice name" value={form.name} onChange={set('name')} placeholder="e.g. Dr Janesh Home Practice" />
           <TextInput label="City" value={form.city} onChange={set('city')} />
           {feeLocked ? (
             <div>
               <TextInput label="Consultation fee" value={Number(doctor.consultation_fee) || 0} readOnly disabled />
-              <p className="mt-1 text-[11.5px] text-slate-400">Change it under Edit Profile — it applies to all your practices.</p>
+              <p className="mt-1 text-[13px] text-slate-400">Change it under Edit Profile — it applies to all your practices.</p>
             </div>
           ) : (
             <TextInput label="Consultation fee" type="number" min="0" value={form.consultation_fee} onChange={set('consultation_fee')} />
@@ -309,7 +309,7 @@ function SignatureCard({ doctor, onSaved }) {
   return (
     <Card>
       <h3 className="text-[16px] font-bold text-brand-navy">Signature for Prescriptions</h3>
-      <p className="mb-3 mt-1 text-[12.5px] text-slate-500">
+      <p className="mb-3 mt-1 text-[13.5px] text-slate-500">
         Printed above your name on prescription PDFs. Sign on white paper with a dark pen and take a clear photo,
         cropped close to the signature. Only you can see or change it.
       </p>
@@ -385,7 +385,7 @@ function Profile() {
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-blueLight text-brand-blue"><Building2 className="h-5 w-5" /></span>
               <div className="text-left">
                 <p className="text-[14px] font-bold text-brand-navy">{hospital.name}</p>
-                <p className="text-[12px] text-slate-500">{[hospital.city, hospital.state].filter(Boolean).join(', ')}</p>
+                <p className="text-[13px] text-slate-500">{[hospital.city, hospital.state].filter(Boolean).join(', ')}</p>
               </div>
             </div>
           )}
@@ -407,7 +407,7 @@ function Profile() {
           </div>
           {doctor.bio && (
             <div className="mt-3 border-t border-slate-100 pt-3">
-              <p className="text-[11.5px] font-semibold uppercase tracking-wide text-slate-400">About</p>
+              <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">About</p>
               <p className="mt-1 text-[13.5px] text-slate-600">{doctor.bio}</p>
             </div>
           )}
@@ -424,7 +424,7 @@ function Profile() {
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h3 className="flex items-center gap-2 text-[16px] font-bold text-brand-navy"><span aria-hidden="true">🏡</span> My Hospital</h3>
-            <p className="text-[12.5px] text-slate-500">
+            <p className="text-[13.5px] text-slate-500">
               {doctor.is_self_registered
                 ? 'Where patients are sent. Keep the address and map pin up to date — travel times are measured from it.'
                 : 'Where you practise. Your hospital maintains this address — ask them to update it if anything is wrong.'}
@@ -446,7 +446,7 @@ function Profile() {
                   <Building2 className="h-6 w-6" />
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-white/90 px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-emerald-700 shadow-sm">
+                  <span className="rounded-full bg-white/90 px-3 py-1 text-[12px] font-bold uppercase tracking-wide text-emerald-700 shadow-sm">
                     Registered hospital
                   </span>
                   {/* Edit only, deliberately. A solo doctor usually has exactly
@@ -477,13 +477,13 @@ function Profile() {
                     {Number(practice.consultation_fee || doctor.consultation_fee || 0)} consultation fee
                   </span>
                   {practice.latitude != null && practice.longitude != null ? (
-                    <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-50 px-3 py-2 text-[12px] font-semibold text-blue-700">
+                    <span className="inline-flex items-center gap-1.5 rounded-xl bg-blue-50 px-3 py-2 text-[13px] font-semibold text-blue-700">
                       <MapPin className="h-3.5 w-3.5" /> Location verified
                     </span>
                   ) : (
                     // No pin = no map, no distance sort and no "leave by" time
                     // for the patient. Worth saying out loud, not just omitting.
-                    <span className="inline-flex items-center gap-1.5 rounded-xl bg-amber-50 px-3 py-2 text-[12px] font-semibold text-amber-700">
+                    <span className="inline-flex items-center gap-1.5 rounded-xl bg-amber-50 px-3 py-2 text-[13px] font-semibold text-amber-700">
                       <MapPin className="h-3.5 w-3.5" />
                       {mayEdit(practice) ? 'No map pin — edit to set it' : 'No map pin set'}
                     </span>
@@ -502,7 +502,7 @@ function Profile() {
 
       <div className="h-full">
         <h3 className="mb-1 flex items-center gap-2 text-[16px] font-bold text-brand-navy"><span aria-hidden="true">🎁</span> Free Revisit</h3>
-        <p className="mb-3 text-[12.5px] text-slate-500">Set how many days a patient may return after a paid consultation without another consultation fee.</p>
+        <p className="mb-3 text-[13.5px] text-slate-500">Set how many days a patient may return after a paid consultation without another consultation fee.</p>
         <div className="grid grid-cols-1 gap-4">
           {practices.map((practice) => (
             <RevisitWindowCard

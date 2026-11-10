@@ -81,11 +81,11 @@ function Notifications() {
                   <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${m.tone}`}><Icon className="h-5 w-5" /></span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[14px] font-bold text-brand-navy">{n.title}</p>
-                    <p className="text-[12.5px] text-slate-500">{n.message}</p>
+                    <p className="text-[13.5px] text-slate-500">{n.message}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     {unreadRow && <span className="h-2 w-2 rounded-full bg-brand-blue" />}
-                    <span className="whitespace-nowrap text-[11.5px] text-slate-400">{relativeTime(n.created_at)}</span>
+                    <span className="whitespace-nowrap text-[13px] text-slate-400">{relativeTime(n.created_at)}</span>
                   </div>
                 </li>
               )

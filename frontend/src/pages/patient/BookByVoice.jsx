@@ -1388,7 +1388,7 @@ function BookByVoice() {
               </button>
             ))}
           </div>
-          <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11.5px] font-bold ${
+          <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[13px] font-bold ${
             cloud || cloudTts ? 'bg-green-50 text-green-700' : 'bg-slate-100 text-slate-500'
           }`}>
             <BadgeCheck className="h-3.5 w-3.5" />
@@ -1423,7 +1423,7 @@ function BookByVoice() {
                 a patient tapping a button that does nothing. */}
             {lang === 'te' && guideSilent && (
               <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-left">
-                <p className="text-[12.5px] font-bold text-amber-900">{t('vbook.voiceUnavailable')}</p>
+                <p className="text-[13.5px] font-bold text-amber-900">{t('vbook.voiceUnavailable')}</p>
                 <p className="mt-1 whitespace-pre-line text-[13px] leading-relaxed text-amber-800">
                   {t('vbook.guideSpoken')}
                 </p>
@@ -1461,7 +1461,7 @@ function BookByVoice() {
                 {trip.geoLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : trip.lat != null ? <CheckCircle2 className="h-4 w-4" /> : <MapPin className="h-4 w-4" />}
                 {trip.geoLoading ? t('ppage.locating') : trip.lat != null ? t('ppage.locationCaptured') : t('ppage.useCurrentLocation')}
               </button>
-              <button type="button" onClick={() => setShowAddr((s) => !s)} className="mt-2 text-[12.5px] font-semibold text-brand-blue hover:underline">
+              <button type="button" onClick={() => setShowAddr((s) => !s)} className="mt-2 text-[13.5px] font-semibold text-brand-blue hover:underline">
                 {showAddr ? t('vbook.hideAddress') : t('vbook.enterAddressInstead')}
               </button>
               {showAddr && (
@@ -1494,8 +1494,8 @@ function BookByVoice() {
                   </button>
                 </div>
               )}
-              {trip.label && trip.lat != null && <p className="mt-2 truncate text-[12px] text-slate-500">📍 {trip.label}</p>}
-              {trip.geoError && <p className="mt-1 text-[12px] text-amber-600">{trip.geoError}</p>}
+              {trip.label && trip.lat != null && <p className="mt-2 truncate text-[13px] text-slate-500">📍 {trip.label}</p>}
+              {trip.geoError && <p className="mt-1 text-[13px] text-amber-600">{trip.geoError}</p>}
             </div>
 
             <button
@@ -1506,7 +1506,7 @@ function BookByVoice() {
               <Mic className="h-5 w-5" /> {t('vbook.start')}
             </button>
             {!ttsSupported() && (
-              <p className="text-[12px] text-amber-600">{t('auth.voiceUnsupported')}</p>
+              <p className="text-[13px] text-amber-600">{t('auth.voiceUnsupported')}</p>
             )}
           </div>
         ) : step === 'done' ? (
@@ -1585,11 +1585,11 @@ function BookByVoice() {
                     and once the booking is being made — there is nothing to
                     return to, and a dead control is worse than none. */}
                 {canGoBack && (
-                  <button type="button" onClick={goBack} className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-slate-500 hover:text-brand-navy hover:underline">
+                  <button type="button" onClick={goBack} className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-slate-500 hover:text-brand-navy hover:underline">
                     <ArrowLeft className="h-3.5 w-3.5" /> {t('vbook.back')}
                   </button>
                 )}
-                <button type="button" onClick={replay} className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-brand-blue hover:underline">
+                <button type="button" onClick={replay} className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-brand-blue hover:underline">
                   <Volume2 className="h-3.5 w-3.5" /> {t('vbook.repeat')}
                 </button>
               </div>
@@ -1698,7 +1698,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
       <div className="flex flex-col gap-4">
         {alt.dates.length > 0 && (
           <div>
-            <p className="mb-2 text-[12.5px] font-semibold text-slate-400">{t('vbook.altDatesTitle', { doctor: doctorName })}</p>
+            <p className="mb-2 text-[13.5px] font-semibold text-slate-400">{t('vbook.altDatesTitle', { doctor: doctorName })}</p>
             <div className="flex flex-wrap gap-2">
               {alt.dates.map((d) => (
                 <button key={d.date} onClick={pickAltDate(d.date)}
@@ -1711,7 +1711,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
         )}
         {alt.doctors.length > 0 && (
           <div>
-            <p className="mb-2 text-[12.5px] font-semibold text-slate-400">{t('vbook.altDoctorsTitle', { date: prettyDate(chosenDate) })}</p>
+            <p className="mb-2 text-[13.5px] font-semibold text-slate-400">{t('vbook.altDoctorsTitle', { date: prettyDate(chosenDate) })}</p>
             <div className={grid}>
               {alt.doctors.map(({ doctor: d }) => (
                 <button key={d.doctor_id} onClick={pickFreeDoctor(d.doctor_id)}
@@ -1740,7 +1740,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
   if (step === 'origin') {
     return (
       <div className="flex flex-col items-center gap-2">
-        <p className="text-[12.5px] font-semibold text-slate-400">{t('vbook.originHint')}</p>
+        <p className="text-[13.5px] font-semibold text-slate-400">{t('vbook.originHint')}</p>
         <button onClick={onSkipOrigin} className="rounded-xl border border-slate-200 px-5 py-2.5 text-[14px] font-semibold text-brand-navy hover:bg-slate-50">
           {t('vbook.skipOrigin')}
         </button>
@@ -1752,7 +1752,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
     // the assistant picked the wrong same-named village.
     return (
       <div>
-        <p className="mb-2 text-[12.5px] font-semibold text-slate-400">{t('vbook.orTap')}</p>
+        <p className="mb-2 text-[13.5px] font-semibold text-slate-400">{t('vbook.orTap')}</p>
         <div className="flex flex-col gap-2">
           {originMatches.map((place, i) => (
             <button key={`${place.lat},${place.lng},${i}`} onClick={() => onPickOrigin(place)}
@@ -1787,7 +1787,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
   if (step === 'who') {
     return (
       <div>
-        <p className='mb-2 text-[12.5px] font-semibold text-slate-400'>{t('vbook.orTap')}</p>
+        <p className='mb-2 text-[13.5px] font-semibold text-slate-400'>{t('vbook.orTap')}</p>
         <div className={grid}>
           <button onClick={pickWho('self')} className='rounded-xl border border-slate-200 bg-white p-3 text-left text-[14px] font-bold text-brand-navy hover:border-brand-blue/40 hover:bg-brand-blue/5'>
             {t('ppage.myself')}
@@ -1807,7 +1807,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
   if (step === 'preference') {
     return (
       <div>
-        <p className='mb-2 text-[12.5px] font-semibold text-slate-400'>{t('vbook.orTap')}</p>
+        <p className='mb-2 text-[13.5px] font-semibold text-slate-400'>{t('vbook.orTap')}</p>
         <div className={grid}>
           <button onClick={pickPreference('suitable')} className='rounded-xl border border-slate-200 bg-white p-3 text-left text-[14px] font-bold text-brand-navy'>
             {t('vbook.findSuitable')}
@@ -1822,7 +1822,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
   if (step === 'location' && locations.length) {
     return (
       <div>
-        <p className='mb-2 text-[12.5px] font-semibold text-slate-400'>{t('vbook.orTap')}</p>
+        <p className='mb-2 text-[13.5px] font-semibold text-slate-400'>{t('vbook.orTap')}</p>
         <div className='flex flex-wrap gap-2'>
           {locations.map((city) => (
             <button key={city} onClick={pickLocation(city)} className='rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[14px] font-bold text-brand-navy'>
@@ -1836,7 +1836,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
   if (step === 'doctor' && doctorShortlist.length) {
     return (
       <div>
-        <p className="mb-2 text-[12.5px] font-semibold text-slate-400">{t('vbook.orTap')}</p>
+        <p className="mb-2 text-[13.5px] font-semibold text-slate-400">{t('vbook.orTap')}</p>
         <div className={grid}>
           {doctorShortlist.map((d, i) => (
             <button key={d.doctor_id} onClick={pickDoctor(d.doctor_id)}
@@ -1852,7 +1852,7 @@ function Options({ step, t, pendingPerson, onAddPersonYes, onAddPersonNo, family
   if (step === 'date') {
     return (
       <div>
-        <p className="mb-2 text-[12.5px] font-semibold text-slate-400">{t('vbook.orTap')}</p>
+        <p className="mb-2 text-[13.5px] font-semibold text-slate-400">{t('vbook.orTap')}</p>
         <div className="flex flex-wrap gap-2">
           {days.map((d) => (
             <button key={d.iso} onClick={pickDate(d.iso)}

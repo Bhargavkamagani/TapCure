@@ -15,7 +15,7 @@ function Staff() {
     <div className="flex flex-col gap-4">
       <PageHeading title="Hospital Staff" subtitle="Doctors practising at your hospital." />
 
-      <div className="flex items-center gap-2 rounded-xl bg-blue-50 px-3 py-2.5 text-[12.5px] text-brand-blue">
+      <div className="flex items-center gap-2 rounded-xl bg-blue-50 px-3 py-2.5 text-[13.5px] text-brand-blue">
         <Info className="h-4 w-4 shrink-0" />
         Front-desk and admin user management is handled in the hospital admin console.
       </div>
@@ -24,7 +24,7 @@ function Staff() {
         <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-[12px] font-semibold text-slate-400">
+            <tr className="text-[13px] font-semibold text-slate-400">
               <th className="pb-3 pr-4">Name</th><th className="pb-3 pr-4">Specialization</th><th className="pb-3 pr-4">Experience</th><th className="pb-3">Status</th>
             </tr>
           </thead>

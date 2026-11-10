@@ -18,7 +18,7 @@ function Fact({ icon: Icon, label, value, delay }) {
         <Icon className="h-[18px] w-[18px]" />
       </span>
       <div className="min-w-0 text-left">
-        <p className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-slate-400">{label}</p>
+        <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-slate-400">{label}</p>
         <p className="truncate text-[14.5px] font-bold text-ink">{value}</p>
       </div>
     </motion.div>
@@ -74,7 +74,7 @@ export default function OnboardingDone() {
             )}
             <div className="text-left leading-tight">
               <p className="whitespace-nowrap text-[14.5px] font-bold text-ink">Dr. {doctor?.name}</p>
-              <p className="text-[12px] font-semibold text-teal-700">{doctor?.specialization || 'Practitioner'}</p>
+              <p className="text-[13px] font-semibold text-teal-700">{doctor?.specialization || 'Practitioner'}</p>
             </div>
           </div>
 
@@ -107,7 +107,7 @@ export default function OnboardingDone() {
             </motion.button>
           </div>
 
-          <p className="mt-4 text-[12px] text-slate-400">
+          <p className="mt-4 text-[13px] text-slate-400">
             Anything here can be changed later from your dashboard.
           </p>
         </div>

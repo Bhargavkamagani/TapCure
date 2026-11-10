@@ -46,7 +46,7 @@ export default function CollectPaymentModal({ amount, patientName, tokenCode, on
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600"><Wallet className="h-5 w-5" /></span>
             <div className="leading-tight">
               <p className="text-[16px] font-extrabold text-brand-navy">Collect ₹{amount}</p>
-              <p className="mt-0.5 text-[12.5px] text-slate-500">
+              <p className="mt-0.5 text-[13.5px] text-slate-500">
                 {patientName ? `From ${patientName}` : 'From this patient'}{tokenCode ? ` · token ${tokenCode}` : ''}
               </p>
             </div>
@@ -66,8 +66,8 @@ export default function CollectPaymentModal({ amount, patientName, tokenCode, on
           ))}
         </div>
 
-        <p className="mt-3 text-[11.5px] text-slate-500">This marks the token as PAID so the doctor can call them. Only confirm once you've received the money.</p>
-        {error && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[12px] text-red-600">{error}</p>}
+        <p className="mt-3 text-[13px] text-slate-500">This marks the token as PAID so the doctor can call them. Only confirm once you've received the money.</p>
+        {error && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[13px] text-red-600">{error}</p>}
 
         <div className="mt-4 flex gap-2">
           <button type="button" onClick={onClose} disabled={busy} className="flex-1 rounded-xl border border-slate-200 px-3 py-2.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-50">Cancel</button>

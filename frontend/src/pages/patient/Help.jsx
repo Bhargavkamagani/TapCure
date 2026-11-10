@@ -73,7 +73,7 @@ function Help() {
               <c.icon className="h-5 w-5" />
             </span>
             <div className="leading-tight">
-              <p className="text-[12px] font-semibold text-slate-400">{t(c.labelKey)}</p>
+              <p className="text-[13px] font-semibold text-slate-400">{t(c.labelKey)}</p>
               <p className="text-[14px] font-bold text-brand-navy">{c.value}</p>
             </div>
           </Card>
@@ -110,7 +110,7 @@ function Help() {
           </div>
           {/* Reassure them we already know who they are. */}
           {(realEmail(patient) || patient?.phone) && (
-            <p className="mt-2 text-[11.5px] text-slate-400">
+            <p className="mt-2 text-[13px] text-slate-400">
               {t('ppage.helpRepliesTo', { contact: realEmail(patient) || `+91 ${patient?.phone}` })}
             </p>
           )}

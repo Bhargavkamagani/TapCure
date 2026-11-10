@@ -58,7 +58,7 @@ function DoctorSidebar({ open = false, onClose }) {
           <h4 className="text-[13px] font-bold text-white">Need Help?</h4>
           {/* Was to="/" — clicking Contact Support dropped the doctor out of
               the console onto the marketing landing page. */}
-          <Link to="/contact" className="text-[12px] font-semibold text-teal-200/70 hover:text-teal-100">
+          <Link to="/contact" className="text-[13px] font-semibold text-teal-200/70 hover:text-teal-100">
             Contact Support
           </Link>
         </div>

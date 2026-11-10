@@ -23,11 +23,11 @@ function Messages() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between">
                     <p className="truncate text-[13.5px] font-bold text-brand-navy">{m.name}</p>
-                    <span className="text-[11px] text-slate-400">{m.time}</span>
+                    <span className="text-[13px] text-slate-400">{m.time}</span>
                   </div>
-                  <p className="truncate text-[12.5px] text-slate-500">{m.preview}</p>
+                  <p className="truncate text-[13.5px] text-slate-500">{m.preview}</p>
                 </div>
-                {m.unread > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-blue px-1.5 text-[11px] font-bold text-white">{m.unread}</span>}
+                {m.unread > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-blue px-1.5 text-[13px] font-bold text-white">{m.unread}</span>}
               </li>
             ))}
           </ul>
