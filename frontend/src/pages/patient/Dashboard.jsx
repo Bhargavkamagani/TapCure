@@ -93,11 +93,11 @@ function SmartOpQueue({ est, liveTravelMin, onNotify, notifyOn }) {
       {/* Now serving / Your token */}
       <div className="grid grid-cols-2 gap-3">
         <div className="rounded-2xl bg-slate-50 p-3.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">{t('pdash.nowServing')}</p>
+          <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{t('pdash.nowServing')}</p>
           <p className="mt-0.5 text-3xl font-extrabold tabular-nums text-teal-600 animate-token-pulse">{nowNum != null ? `#${nowNum}` : '—'}</p>
         </div>
         <div className="rounded-2xl bg-orange-50 p-3.5 ring-1 ring-orange-100">
-          <p className="text-[10px] font-semibold uppercase tracking-wide text-orange-400">{t('pdash.yourToken')}</p>
+          <p className="text-[12px] font-semibold uppercase tracking-wide text-orange-400">{t('pdash.yourToken')}</p>
           <p className="mt-0.5 text-3xl font-extrabold tabular-nums text-orange-500">{youNum != null ? `#${youNum}` : '—'}</p>
         </div>
       </div>
@@ -116,9 +116,9 @@ function SmartOpQueue({ est, liveTravelMin, onNotify, notifyOn }) {
                   {node.kind === 'gap' ? (
                     <span className="flex h-8 items-center px-1 text-[16px] font-bold text-slate-300">…</span>
                   ) : (
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-[11px] font-bold tabular-nums transition-all duration-300 ${circleCls(node)}`}>{node.n}</span>
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-full text-[13px] font-bold tabular-nums transition-all duration-300 ${circleCls(node)}`}>{node.n}</span>
                   )}
-                  <span className={`text-[9px] font-bold ${node.kind === 'now' ? 'text-teal-600' : node.kind === 'you' ? 'text-orange-500' : 'text-transparent'}`}>
+                  <span className={`text-[13px] font-bold ${node.kind === 'now' ? 'text-teal-600' : node.kind === 'you' ? 'text-orange-500' : 'text-transparent'}`}>
                     {node.kind === 'now' ? t('pdash.now') : node.kind === 'you' ? t('pdash.you') : '·'}
                   </span>
                 </div>
@@ -130,13 +130,13 @@ function SmartOpQueue({ est, liveTravelMin, onNotify, notifyOn }) {
 
       {/* Status chips */}
       <div className="mt-3 flex flex-wrap gap-2">
-        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${punctual.cls}`}>
+        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-semibold ${punctual.cls}`}>
           <punctual.icon className="h-3.5 w-3.5" /> {punctual.label}
         </span>
-        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${crowd.cls}`}>
+        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-semibold ${crowd.cls}`}>
           <Users className="h-3.5 w-3.5" /> {crowd.label}
         </span>
-        <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-semibold text-teal-700">
+        <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 px-2.5 py-1 text-[13px] font-semibold text-teal-700">
           {before === 0 ? t('pdash.youreNext') : t('pdash.beforeYou', { n: before })}
         </span>
       </div>
@@ -149,14 +149,14 @@ function SmartOpQueue({ est, liveTravelMin, onNotify, notifyOn }) {
         <div className="flex items-start gap-2">
           <Clock className="mt-0.5 h-5 w-5 shrink-0 text-teal-600" />
           <div>
-            <p className="text-[11px] text-slate-500">{t('pdash.estWait')}</p>
+            <p className="text-[13px] text-slate-500">{t('pdash.estWait')}</p>
             <p className="font-bold text-slate-800">{humanMins(t, est.wait_min)}</p>
           </div>
         </div>
         <div className="flex items-start gap-2">
           <Car className="mt-0.5 h-5 w-5 shrink-0 text-teal-600" />
           <div>
-            <p className="flex items-center gap-1 text-[11px] text-slate-500">
+            <p className="flex items-center gap-1 text-[13px] text-slate-500">
               {t('pdash.travelTime')}
               {liveTravelMin != null && (
                 <span title={t('pm.liveTraffic')} className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
@@ -170,7 +170,7 @@ function SmartOpQueue({ est, liveTravelMin, onNotify, notifyOn }) {
         <div className="flex items-start gap-2">
           <Footprints className={`mt-0.5 h-5 w-5 shrink-0 ${est.should_leave_now ? 'text-amber-600' : 'text-teal-600'}`} />
           <div>
-            <p className="text-[11px] text-slate-500">{t('pdash.leaveByTitle')}</p>
+            <p className="text-[13px] text-slate-500">{t('pdash.leaveByTitle')}</p>
             {/* Once the moment has passed, a clock time reads as "you're late".
                 "Now" is both truthful and the actual instruction. */}
             <p className={`font-bold ${est.should_leave_now ? 'text-amber-700' : 'text-slate-800'}`}>
@@ -181,7 +181,7 @@ function SmartOpQueue({ est, liveTravelMin, onNotify, notifyOn }) {
         <div className="flex items-start gap-2">
           <CalendarClock className="mt-0.5 h-5 w-5 shrink-0 text-teal-600" />
           <div>
-            <p className="text-[11px] text-slate-500">{t('pdash.reachBy')}</p>
+            <p className="text-[13px] text-slate-500">{t('pdash.reachBy')}</p>
             <p className="font-bold text-slate-800">{est.arrive_by ? clockIST(est.arrive_by) : '—'}</p>
           </div>
         </div>
@@ -224,7 +224,7 @@ function QueueEmpty({ nextAppt }) {
         <Ticket className="h-7 w-7" />
       </span>
       <p className="text-[15px] font-bold text-brand-navy">{t('pdash.noTokenYet')}</p>
-      <p className="mt-1.5 max-w-xs text-[12.5px] leading-relaxed text-slate-500">
+      <p className="mt-1.5 max-w-xs text-[13.5px] leading-relaxed text-slate-500">
         {nextAppt
           ? t('pdash.queueOpensOn', { date: `${chip.day} ${chip.month}` })
           : t('pdash.queueNoAppt')}
@@ -463,9 +463,9 @@ function Dashboard() {
                 <div className="min-w-0 flex-1">
                   <p className="flex flex-wrap items-center gap-2 text-[15px] font-bold text-brand-navy">
                     {t('vbook.promoCta')}
-                    <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-teal-700">{t('pdash.recommended')}</span>
+                    <span className="rounded-full bg-teal-100 px-2 py-0.5 text-[12px] font-bold uppercase tracking-wide text-teal-700">{t('pdash.recommended')}</span>
                   </p>
-                  <p className="mt-0.5 text-[12.5px] text-slate-500">{t('vbook.promoSub')}</p>
+                  <p className="mt-0.5 text-[13.5px] text-slate-500">{t('vbook.promoSub')}</p>
                 </div>
                 <span className="sparkle-btn shrink-0">
                   <svg className="sparkle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -487,7 +487,7 @@ function Dashboard() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-[15px] font-bold text-brand-navy">{t('pdash.bookManually')}</p>
-                  <p className="mt-0.5 text-[12.5px] text-slate-500">{t('pdash.bookManuallySub')}</p>
+                  <p className="mt-0.5 text-[13.5px] text-slate-500">{t('pdash.bookManuallySub')}</p>
                 </div>
                 <span className="sparkle-btn shrink-0">
                   <svg className="sparkle" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -501,7 +501,7 @@ function Dashboard() {
             </div>
 
             {/* Trust flags */}
-            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] font-medium text-slate-500">
+            <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] font-medium text-slate-500">
               <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-teal-600" /> {t('pdash.flagFastest')}</span>
               <span className="text-slate-300">•</span>
               <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-teal-600" /> {t('pdash.flagSecure')}</span>
@@ -582,22 +582,22 @@ function Dashboard() {
                     advance instead of only on the morning of the visit. */}
                 <div className="mt-2.5 grid grid-cols-3 gap-2">
                   <div className="rounded-xl bg-white/70 px-2.5 py-2">
-                    <p className="text-[10.5px] text-slate-500">{t('pdash.tokenExpected')}</p>
+                    <p className="text-[13px] text-slate-500">{t('pdash.tokenExpected')}</p>
                     <p className="text-[13px] font-bold text-slate-800">{clockISTWithDay(nextEst.estimated_time)}</p>
                   </div>
                   <div className="rounded-xl bg-white/70 px-2.5 py-2">
-                    <p className="text-[10.5px] text-slate-500">{t('pdash.reachBy')}</p>
+                    <p className="text-[13px] text-slate-500">{t('pdash.reachBy')}</p>
                     <p className="text-[13px] font-bold text-slate-800">{clockISTWithDay(nextEst.arrive_by)}</p>
                   </div>
                   <div className="rounded-xl bg-white/70 px-2.5 py-2">
-                    <p className="text-[10.5px] text-slate-500">{t('pdash.travelTime')}</p>
+                    <p className="text-[13px] text-slate-500">{t('pdash.travelTime')}</p>
                     <p className="text-[13px] font-bold text-slate-800">
                       {humanMins(t, nextEst.travel_min)}
                     </p>
                   </div>
                 </div>
                 {nextEst.origin_label && (
-                  <p className="mt-1.5 text-[11.5px] text-slate-500">{t('ppage.travelFrom', { place: originLabelText(nextEst.origin_label, t, lang) })}</p>
+                  <p className="mt-1.5 text-[13px] text-slate-500">{t('ppage.travelFrom', { place: originLabelText(nextEst.origin_label, t, lang) })}</p>
                 )}
               </div>
             )}
@@ -638,7 +638,7 @@ function Dashboard() {
           /* The shadow and ring live on the STATE, not the base: a dead pill
              is glass over the globe, and a white ring with a drop shadow would
              put the white block straight back. */
-          const pillBase = 'absolute inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[12.5px] font-bold'
+          const pillBase = 'absolute inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 py-2 text-[13.5px] font-bold'
           const live = 'bg-white shadow-lg ring-1 ring-slate-100 transition-colors'
           const muted = 'bg-white/35 text-slate-400 ring-1 ring-white/50 backdrop-blur-[2px] cursor-default select-none'
           return (
@@ -858,7 +858,7 @@ function Dashboard() {
                 <MapPin className="h-4 w-4 shrink-0 text-brand-blue" />
                 <span className="truncate">{translitName(nextHospital?.name, lang) || '—'}</span>
               </p>
-              <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[12.5px] text-slate-500">
+              <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[13.5px] text-slate-500">
                 <span className="inline-flex items-center gap-1">
                   <CalendarDays className="h-3.5 w-3.5 text-slate-400" />
                   {dateChip(nextAppt.appointment_date).day} {dateChip(nextAppt.appointment_date).month}
@@ -877,7 +877,7 @@ function Dashboard() {
                   account holder's — the answer is never left to be guessed. */}
               {(nextAppt.family_member_name || patient?.name) && (
                 <p className="mt-1.5">
-                  <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[11px] font-semibold text-purple-600">
+                  <span className="inline-flex max-w-full items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[13px] font-semibold text-purple-600">
                     <UserRound className="h-3 w-3 shrink-0" />
                     <span className="truncate">
                       {t('pm.forPerson', { name: translitName(nextAppt.family_member_name || patient.name, lang) })}
@@ -914,13 +914,13 @@ function Dashboard() {
                   <p className="truncate text-[13.5px] font-bold text-brand-navy">
                     {translitName(resolveDoctor(nextAppt.doctor_id)?.name, lang) || t('px.doctorNum', { id: nextAppt.doctor_id })}
                   </p>
-                  <p className="truncate text-[12px] text-slate-500">
+                  <p className="truncate text-[13px] text-slate-500">
                     {specialtyLabel(resolveDoctor(nextAppt.doctor_id)?.specialization, lang)}
                   </p>
                 </div>
                 <Link
                   to="appointments"
-                  className="ml-auto inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[12.5px] font-bold text-brand-blue hover:text-brand-blueDark"
+                  className="ml-auto inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-[13.5px] font-bold text-brand-blue hover:text-brand-blueDark"
                 >
                   {t('pdash.viewDetails')} <ArrowRight className="h-3.5 w-3.5" />
                 </Link>

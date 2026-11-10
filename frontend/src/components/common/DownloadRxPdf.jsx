@@ -45,12 +45,12 @@ export default function DownloadRxPdf({ rxId, className = '', compact = false })
         onClick={download}
         disabled={busy}
         title={t('px.rx.downloadPdf')}
-        className={className || 'flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60'}
+        className={className || 'flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60'}
       >
         <Download className="h-3.5 w-3.5" />
         {busy ? t('px.rx.preparingPdf') : compact ? 'PDF' : t('px.rx.downloadPdf')}
       </button>
-      {err && <span className="mt-0.5 text-[11px] text-red-500">{err}</span>}
+      {err && <span className="mt-0.5 text-[13px] text-red-500">{err}</span>}
     </span>
   )
 }

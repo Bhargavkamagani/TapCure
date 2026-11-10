@@ -238,7 +238,7 @@ export default function AssistantWalkIn() {
               <div>
                 <label className="mb-1.5 block text-[13px] font-semibold text-slate-600">Doctor</label>
                 <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3">
-                  {doc && <Avatar name={doc.name} className="h-7 w-7 text-[9px]" />}
+                  {doc && <Avatar name={doc.name} className="h-7 w-7 text-[13px]" />}
                   <select value={form.doctor_id} onChange={set('doctor_id')} disabled={doctors.length === 0}
                     className="w-full bg-transparent py-2.5 text-sm font-medium text-brand-navy outline-none disabled:text-slate-400">
                     {doctors.length === 0 ? (
@@ -251,7 +251,7 @@ export default function AssistantWalkIn() {
                   </select>
                 </div>
                 {doctorsLoaded && doctors.length === 0 && (
-                  <p className="mt-1 text-[11.5px] text-amber-700">
+                  <p className="mt-1 text-[13px] text-amber-700">
                     No active, verified doctor at this hospital — a walk-in can't be registered until one is
                     available. Add or activate a doctor from Hospital &rarr; Doctors.
                   </p>
@@ -276,13 +276,13 @@ export default function AssistantWalkIn() {
                 <div className="mt-3">
                   <TextInput icon={MapPin} placeholder="City / Village (optional)" value={form.city} onChange={set('city')} />
                 </div>
-                <p className="mt-1 px-1 text-[11px] text-slate-400">Saved to the patient record — skip if the queue is busy.</p>
+                <p className="mt-1 px-1 text-[13px] text-slate-400">Saved to the patient record — skip if the queue is busy.</p>
               </div>
 
               {/* Existing-patient match → confirm (no duplicate registration) */}
               <AnimatePresence>
                 {checking && (
-                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[12px] text-slate-400">
+                  <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-[13px] text-slate-400">
                     Checking this number…
                   </motion.p>
                 )}
@@ -292,25 +292,25 @@ export default function AssistantWalkIn() {
                     className={`rounded-xl border p-3 ${useMatch ? 'border-emerald-200 bg-emerald-50/60' : 'border-amber-200 bg-amber-50/70'}`}
                   >
                     <div className="flex items-center gap-3">
-                      <Avatar name={match.name} className="h-10 w-10 text-[12px]" />
+                      <Avatar name={match.name} className="h-10 w-10 text-[13px]" />
                       <div className="min-w-0 flex-1 leading-tight">
-                        <p className={`text-[10px] font-bold uppercase tracking-wide ${useMatch ? 'text-emerald-600' : 'text-amber-600'}`}>
+                        <p className={`text-[12px] font-bold uppercase tracking-wide ${useMatch ? 'text-emerald-600' : 'text-amber-600'}`}>
                           {useMatch
                             ? 'Using existing record'
                             : matchIsLocal ? 'Existing patient found' : 'Known from another hospital'}
                         </p>
                         <p className="truncate text-[14px] font-bold text-brand-navy">{match.name}</p>
-                        <p className="text-[11.5px] text-slate-500">{[match.uhid, match.phone].filter(Boolean).join(' · ')}</p>
+                        <p className="text-[13px] text-slate-500">{[match.uhid, match.phone].filter(Boolean).join(' · ')}</p>
                       </div>
                       {useMatch ? (
                         <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-600" />
                       ) : (
-                        <button type="button" onClick={applyMatch} className="shrink-0 rounded-lg bg-brand-blue px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark">
+                        <button type="button" onClick={applyMatch} className="shrink-0 rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark">
                           Use this patient
                         </button>
                       )}
                     </div>
-                    <p className="mt-2 text-[11.5px] text-slate-500">
+                    <p className="mt-2 text-[13px] text-slate-500">
                       {matchIsLocal
                         ? "This walk-in will be added to this patient's record — no new registration."
                         : 'This patient is registered at another hospital, so we can’t write to that record. '
@@ -327,7 +327,7 @@ export default function AssistantWalkIn() {
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600"><Gift className="h-5 w-5" /></span>
                     <div className="min-w-0 flex-1 leading-tight">
                       <p className="text-[13px] font-extrabold text-emerald-900">Free revisit available{freePass.for_name ? ` for ${freePass.for_name}` : ''}</p>
-                      <p className="mt-0.5 text-[11.5px] text-emerald-800/80">
+                      <p className="mt-0.5 text-[13px] text-emerald-800/80">
                         With Dr. {freePass.doctor_name} · paid visit on {new Date(`${freePass.issued_on}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} · free until {new Date(`${freePass.valid_until}T00:00:00`).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                       </p>
                     </div>
@@ -336,11 +336,11 @@ export default function AssistantWalkIn() {
                     className="mt-2.5 w-full rounded-lg bg-emerald-600 px-3 py-2 text-[13px] font-bold text-white hover:bg-emerald-700 disabled:opacity-60">
                     {busy ? 'Issuing token…' : 'Use free revisit (₹0) — issue token'}
                   </button>
-                  <p className="mt-1.5 text-[11px] text-slate-500">Registering below instead charges the normal fee and keeps the free revisit for later.</p>
+                  <p className="mt-1.5 text-[13px] text-slate-500">Registering below instead charges the normal fee and keeps the free revisit for later.</p>
                 </div>
               )}
               {matchError && (
-                <p className="flex items-start gap-1.5 rounded-xl bg-amber-50 px-3 py-2 text-[11.5px] font-medium text-amber-700">
+                <p className="flex items-start gap-1.5 rounded-xl bg-amber-50 px-3 py-2 text-[13px] font-medium text-amber-700">
                   <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                   {matchError} You can still register — check afterwards that this isn’t a duplicate.
                 </p>
@@ -377,7 +377,7 @@ export default function AssistantWalkIn() {
           <Card className="!p-0">
             <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3.5">
               <h3 className="text-[15px] font-bold text-brand-navy">Tokens Issued</h3>
-              <span className="text-[11px] font-semibold text-slate-400">today</span>
+              <span className="text-[13px] font-semibold text-slate-400">today</span>
             </div>
             {issued.length === 0 ? (
               <div className="flex flex-col items-center justify-center gap-2 py-14 text-slate-400">
@@ -404,7 +404,7 @@ export default function AssistantWalkIn() {
                       </motion.span>
                       <div className="min-w-0 flex-1 leading-tight">
                         <p className="truncate text-[14px] font-bold text-brand-navy">{t.code} · {t.name}</p>
-                        <p className="flex items-center gap-1 text-[11px] text-slate-400"><Clock className="h-3 w-3" /> {t.doctor} · {t.wait != null ? `est. ~${t.wait} min` : (TOKEN_STATUS[t.status] || t.status || '—')}</p>
+                        <p className="flex items-center gap-1 text-[13px] text-slate-400"><Clock className="h-3 w-3" /> {t.doctor} · {t.wait != null ? `est. ~${t.wait} min` : (TOKEN_STATUS[t.status] || t.status || '—')}</p>
                       </div>
                     </motion.li>
                   ))}

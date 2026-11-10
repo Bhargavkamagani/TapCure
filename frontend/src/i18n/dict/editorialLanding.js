@@ -14,13 +14,13 @@
  * the new landing page.
  */
 export const editorialLandingT = {
-  'land.nav.doctors': { en: 'Find doctors', te: 'వైద్యులను కనుగొనండి', hi: 'डॉक्टर खोजें' },
-  'land.nav.hospitals': { en: 'Find hospitals', te: 'ఆసుపత్రులను కనుగొనండి', hi: 'अस्पताल खोजें' },
+  'land.nav.doctors': { en: 'Find Doctors', te: 'వైద్యులను కనుగొనండి', hi: 'डॉक्टर खोजें' },
+  'land.nav.hospitals': { en: 'Find Hospitals', te: 'ఆసుపత్రులను కనుగొనండి', hi: 'अस्पताल खोजें' },
   'land.nav.articles': { en: 'Health Articles', te: 'ఆరోగ్య వ్యాసాలు', hi: 'स्वास्थ्य लेख' },
-  'land.nav.login': { en: 'Log in / Sign up', te: 'లాగిన్ / నమోదు', hi: 'लॉग इन / साइन अप' },
+  'land.nav.login': { en: 'Log In / Sign Up', te: 'లాగిన్ / నమోదు', hi: 'लॉग इन / साइन अप' },
   'land.nav.menu': { en: 'Menu', te: 'మెనూ', hi: 'मेन्यू' },
   // Nav shortcut to the sixty-second health calculators (#health).
-  'land.nav.magic': { en: 'See the magic', te: 'మ్యాజిక్ చూడండి', hi: 'जादू देखिए' },
+  'land.nav.magic': { en: 'Free Health Check', te: 'ఉచిత ఆరోగ్య పరీక్ష', hi: 'मुफ़्त हेल्थ चेक' },
   // Heading over the language chips in the mobile menu.
   'land.nav.language': { en: 'Language', te: 'భాష', hi: 'भाषा' },
   'land.nav.roleAction': { en: 'log in / sign up', te: 'లాగిన్ / నమోదు', hi: 'लॉग इन / साइन अप' },

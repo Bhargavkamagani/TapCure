@@ -44,7 +44,7 @@ function Detail({ icon: Icon, label, value }) {
     <div className="flex items-start gap-2 rounded-xl bg-slate-50 px-3 py-2">
       <Icon className="mt-[3px] h-4 w-4 shrink-0 text-slate-400" />
       <div className="min-w-0">
-        <p className="text-[10.5px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+        <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
         <p className="truncate text-[13px] font-bold text-brand-navy" title={text}>{text}</p>
       </div>
     </div>
@@ -100,12 +100,12 @@ function DepartmentSpecialtyFields({ departments, form, setForm, error }) {
         )}
       </div>
       {dept && (
-        <p className="pl-1 text-[12px] text-slate-500">
+        <p className="pl-1 text-[13px] text-slate-500">
           Specialty: <span className="font-semibold text-brand-navy">{fixed || form.specialization}</span>
           {fixed ? ' (from the department)' : ''}
         </p>
       )}
-      {options.length === 0 && <p className="pl-1 text-[12px] text-slate-500">No departments yet. Add them on the Departments page to group doctors.</p>}
+      {options.length === 0 && <p className="pl-1 text-[13px] text-slate-500">No departments yet. Add them on the Departments page to group doctors.</p>}
     </div>
   )
 }
@@ -333,15 +333,15 @@ function EditDoctorModal({ doctor, leave, departments, onClose, onSaved }) {
             <div className="space-y-2 rounded-xl border border-amber-200 bg-amber-50 p-3">
               <p className="text-xs font-semibold text-amber-800">Leave dates</p>
               <div className="grid grid-cols-2 gap-2">
-                <label className="text-[11px] text-amber-800">From
+                <label className="text-[13px] text-amber-800">From
                   <input type="date" min={todayIST()} value={form.leave_from} onChange={set('leave_from')} className="mt-0.5 w-full rounded-lg border border-amber-200 bg-white px-2 py-1.5 text-sm text-brand-navy" />
                 </label>
-                <label className="text-[11px] text-amber-800">To (last day of leave)
+                <label className="text-[13px] text-amber-800">To (last day of leave)
                   <input type="date" min={form.leave_from || todayIST()} value={form.leave_to} onChange={set('leave_to')} className="mt-0.5 w-full rounded-lg border border-amber-200 bg-white px-2 py-1.5 text-sm text-brand-navy" />
                 </label>
               </div>
               <input value={form.leave_reason} onChange={set('leave_reason')} maxLength={200} placeholder="Reason (optional)" className="w-full rounded-lg border border-amber-200 bg-white px-2 py-1.5 text-sm" />
-              <p className="text-[11px] text-amber-800">
+              <p className="text-[13px] text-amber-800">
                 Patients can’t book these dates; anyone already booked is cancelled and told. The doctor can still log in
                 and is bookable again the day after the leave ends.
               </p>
@@ -424,7 +424,7 @@ function Doctors() {
 
       {/* Three counts used to occupy a full band of cards above the list the
           admin actually came here to read. Same numbers, one line. */}
-      <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+      <div className="flex flex-wrap items-center gap-2 text-[13px] font-semibold">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-blue-700">
           <Stethoscope className="h-3.5 w-3.5" /> {doctors.length} total
         </span>
@@ -464,19 +464,19 @@ function Doctors() {
                 />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[16px] font-bold text-brand-navy">{d.name}</p>
-                  <p className="truncate text-[12.5px] text-slate-500">{d.specialization}</p>
+                  <p className="truncate text-[13.5px] text-slate-500">{d.specialization}</p>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                     <StatusBadge status={onLeaveNow(d, leaves[d.doctor_id]) ? 'On Leave' : (STATUS_LABEL[d.status] || d.status)} />
                     {d.status === 'active' && leaves[d.doctor_id] && (
-                      <span className="text-[11px] font-semibold text-amber-700">{leaveText(leaves[d.doctor_id])}</span>
+                      <span className="text-[13px] font-semibold text-amber-700">{leaveText(leaves[d.doctor_id])}</span>
                     )}
                     {d.is_self_registered && (
-                      <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[10.5px] font-bold text-violet-700">
+                      <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[13px] font-bold text-violet-700">
                         Self-registered
                       </span>
                     )}
                     {d.verification_status === 'pending' && (
-                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[10.5px] font-bold text-amber-700">
+                      <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[13px] font-bold text-amber-700">
                         Pending verification
                       </span>
                     )}
@@ -496,7 +496,7 @@ function Doctors() {
               {/* Everything the admin came to this page to check, labelled.
                   Previously only four of these were shown and the rest lived
                   inside the edit modal. */}
-              <div className="mt-3.5 grid grid-cols-1 gap-2 text-[12px] sm:grid-cols-2">
+              <div className="mt-3.5 grid grid-cols-1 gap-2 text-[13px] sm:grid-cols-2">
                 <Detail icon={Building2} label="Department" value={deptName(d.department_id)} />
                 <Detail icon={IndianRupee} label="Consultation Fee" value={`₹${Number(d.consultation_fee || 0)}`} />
                 <Detail icon={Briefcase} label="Experience" value={`${d.experience_years || 0} years`} />
@@ -509,7 +509,7 @@ function Doctors() {
               </div>
 
               {d.bio && (
-                <p className="mt-3 line-clamp-2 text-[12px] text-slate-500" title={d.bio}>{d.bio}</p>
+                <p className="mt-3 line-clamp-2 text-[13px] text-slate-500" title={d.bio}>{d.bio}</p>
               )}
             </Card>
           ))}

@@ -45,7 +45,7 @@ function CopyButton({ value }) {
     } catch { /* clipboard blocked — ignore */ }
   }
   return (
-    <button onClick={copy} title={t('pm.copyUhid')} className="inline-flex items-center gap-1 rounded-lg bg-white/15 px-2 py-1 text-[11px] font-semibold text-white hover:bg-white/25">
+    <button onClick={copy} title={t('pm.copyUhid')} className="inline-flex items-center gap-1 rounded-lg bg-white/15 px-2 py-1 text-[13px] font-semibold text-white hover:bg-white/25">
       {done ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}{done ? t('px.copied') : t('px.copy')}
     </button>
   )
@@ -80,7 +80,7 @@ export function UhidCard({ patient, onClose }) {
       <div aria-hidden className="pointer-events-none absolute -bottom-16 -left-8 h-36 w-36 rounded-full bg-white/5 blur-2xl" />
 
       <div className="relative flex items-start justify-between">
-        <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-white/70">
+        <p className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-white/70">
           <IdCard className="h-3.5 w-3.5" />{t('pm.patientRecord')}
         </p>
         {onClose && (
@@ -101,7 +101,7 @@ export function UhidCard({ patient, onClose }) {
 
       <div className="relative mt-3 flex flex-wrap gap-1.5">
         {chips.map((c) => (
-          <span key={c} className="rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-semibold text-white/95">
+          <span key={c} className="rounded-full bg-white/15 px-2.5 py-1 text-[13px] font-semibold text-white/95">
             {c}
           </span>
         ))}
@@ -110,7 +110,7 @@ export function UhidCard({ patient, onClose }) {
       <div className="relative mt-3 flex items-center gap-2 print:hidden">
         <CopyButton value={uhid} />
         <button onClick={() => window.print()}
-                className="inline-flex items-center gap-1 rounded-lg bg-white/15 px-2 py-1 text-[11px] font-semibold text-white transition hover:bg-white/25">
+                className="inline-flex items-center gap-1 rounded-lg bg-white/15 px-2 py-1 text-[13px] font-semibold text-white transition hover:bg-white/25">
           <Printer className="h-3.5 w-3.5" />{t('pm.printCard')}
         </button>
       </div>
@@ -134,12 +134,12 @@ function Tabs({ value, onChange, counts }) {
         const active = value === key
         return (
           <button key={key} onClick={() => onChange(key)}
-                  className={`relative flex flex-1 items-center justify-center gap-1.5 px-2 py-3 text-[12.5px] font-bold transition
+                  className={`relative flex flex-1 items-center justify-center gap-1.5 px-2 py-3 text-[13.5px] font-bold transition
                               ${active ? 'text-brand-blue' : 'text-slate-400 hover:text-slate-600'}`}>
             <Icon className="h-4 w-4" />
             {t(labelKey)}
             {counts[key] > 0 && (
-              <span className={`rounded-full px-1.5 text-[10px] font-bold ${active ? 'bg-brand-blueLight text-brand-blue' : 'bg-slate-100 text-slate-400'}`}>
+              <span className={`rounded-full px-1.5 text-[13px] font-bold ${active ? 'bg-brand-blueLight text-brand-blue' : 'bg-slate-100 text-slate-400'}`}>
                 {counts[key]}
               </span>
             )}
@@ -162,7 +162,7 @@ function ScopeNote({ role, doctorKey, hospitalKey }) {
   const { t } = useI18n()
   if (role === 'PATIENT' || role === 'SUPER_ADMIN' || !role) return null
   return (
-    <p className="mb-2.5 flex items-start gap-1.5 rounded-xl bg-slate-50 px-3 py-2 text-[11px] leading-snug text-slate-500">
+    <p className="mb-2.5 flex items-start gap-1.5 rounded-xl bg-slate-50 px-3 py-2 text-[13px] leading-snug text-slate-500">
       <Info className="mt-px h-3.5 w-3.5 shrink-0 text-slate-400" />
       {t(role === 'DOCTOR' ? doctorKey : hospitalKey)}
     </p>
@@ -177,7 +177,7 @@ function AllergyStrip({ allergies }) {
   if (allergies === null) return null
   if (allergies.length === 0) {
     return (
-      <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-5 py-2 text-[11.5px] font-semibold text-slate-400">
+      <div className="flex items-center gap-2 border-b border-slate-100 bg-slate-50 px-5 py-2 text-[13px] font-semibold text-slate-400">
         <Check className="h-3.5 w-3.5" />{t('pm.noAllergies')}
       </div>
     )
@@ -187,10 +187,10 @@ function AllergyStrip({ allergies }) {
     <div className={`flex items-start gap-2 border-b px-5 py-2.5 ${worst ? 'border-red-200 bg-red-50' : 'border-amber-200 bg-amber-50'}`}>
       <AlertTriangle className={`mt-0.5 h-4 w-4 shrink-0 ${worst ? 'text-red-600' : 'text-amber-600'}`} />
       <div className="min-w-0">
-        <p className={`text-[11px] font-bold uppercase tracking-wide ${worst ? 'text-red-700' : 'text-amber-700'}`}>
+        <p className={`text-[12px] font-bold uppercase tracking-wide ${worst ? 'text-red-700' : 'text-amber-700'}`}>
           {t('pm.allergyAlert')}
         </p>
-        <p className={`text-[12.5px] font-semibold ${worst ? 'text-red-900' : 'text-amber-900'}`}>
+        <p className={`text-[13.5px] font-semibold ${worst ? 'text-red-900' : 'text-amber-900'}`}>
           {allergies.map((a) => a.allergen).join(', ')}
         </p>
       </div>
@@ -212,7 +212,7 @@ function HistorySection({ icon: Icon, title, count, tone = 'text-slate-400', chi
         {action && <span className="ml-auto">{action}</span>}
       </h4>
       {form}
-      {count === 0 ? <p className="rounded-xl bg-slate-50 px-3 py-2.5 text-[12px] text-slate-400">{empty}</p> : children}
+      {count === 0 ? <p className="rounded-xl bg-slate-50 px-3 py-2.5 text-[13px] text-slate-400">{empty}</p> : children}
     </section>
   )
 }
@@ -220,13 +220,13 @@ function HistorySection({ icon: Icon, title, count, tone = 'text-slate-400', chi
 function AddToggle({ open, onClick }) {
   const { t } = useI18n()
   return (
-    <button onClick={onClick} className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-0.5 text-[11px] font-semibold text-brand-blue hover:bg-blue-50">
+    <button onClick={onClick} className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-0.5 text-[13px] font-semibold text-brand-blue hover:bg-blue-50">
       {open ? <X className="h-3 w-3" /> : <Plus className="h-3 w-3" />}{open ? t('pm.close') : t('px.add')}
     </button>
   )
 }
 
-const _field = 'w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[12.5px] text-brand-navy outline-none focus:border-brand-blue'
+const _field = 'w-full rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-[13.5px] text-brand-navy outline-none focus:border-brand-blue'
 
 /* Wrapper around an inline add-form: handles busy/error state + Save button. */
 function AddForm({ onSubmit, onDone, children, submitLabel }) {
@@ -242,8 +242,8 @@ function AddForm({ onSubmit, onDone, children, submitLabel }) {
   return (
     <form onSubmit={submit} className="mb-2 space-y-2 rounded-xl border border-slate-200 bg-slate-50/60 p-3">
       {children}
-      {err && <p className="rounded-lg bg-red-50 px-2 py-1 text-[11px] text-red-600">{err}</p>}
-      <button disabled={busy} className="w-full rounded-lg bg-brand-blue py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60">
+      {err && <p className="rounded-lg bg-red-50 px-2 py-1 text-[13px] text-red-600">{err}</p>}
+      <button disabled={busy} className="w-full rounded-lg bg-brand-blue py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60">
         {busy ? t('pcommon.saving') : (submitLabel || t('pm.save'))}
       </button>
     </form>
@@ -288,7 +288,7 @@ function AddConditionForm({ patientId, onDone }) {
       <input className={_field} placeholder={t('pm.conditionPh')} value={f.condition} onChange={set('condition')} />
       <div className="grid grid-cols-2 items-center gap-2">
         <input type="date" className={_field} value={f.diagnosed_date} onChange={set('diagnosed_date')} />
-        <label className="flex items-center gap-1.5 text-[12px] font-medium text-slate-600">
+        <label className="flex items-center gap-1.5 text-[13px] font-medium text-slate-600">
           <input type="checkbox" checked={f.is_chronic} onChange={(e) => setF((s) => ({ ...s, is_chronic: e.target.checked }))} /> {t('pm.chronic')}
         </label>
       </div>
@@ -335,9 +335,9 @@ function UploadDocForm({ patientId, appointments = [], role, onDone }) {
         </select>
       )}
       {receptionistLabReport && completedVisits.length === 0 && (
-        <p className="text-[11px] text-amber-600">{t('px.hist.noCompletedConsult')}</p>
+        <p className="text-[13px] text-amber-600">{t('px.hist.noCompletedConsult')}</p>
       )}
-      <input type="file" className="w-full text-[11.5px] text-slate-500 file:mr-2 file:rounded-lg file:border-0 file:bg-brand-blueLight file:px-2 file:py-1 file:text-[11px] file:font-semibold file:text-brand-blue" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+      <input type="file" className="w-full text-[13px] text-slate-500 file:mr-2 file:rounded-lg file:border-0 file:bg-brand-blueLight file:px-2 file:py-1 file:text-[13px] file:font-semibold file:text-brand-blue" onChange={(e) => setFile(e.target.files?.[0] || null)} />
     </AddForm>
   )
 }
@@ -413,7 +413,7 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
       </span>
       <div className="min-w-0 leading-tight">
         <p className="truncate text-[13px] font-bold text-brand-navy">{value || '—'}</p>
-        <p className="text-[10px] uppercase tracking-wide text-slate-400">{label}</p>
+        <p className="text-[12px] uppercase tracking-wide text-slate-400">{label}</p>
       </div>
     </div>
   )
@@ -462,20 +462,20 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                               charge the wrong person nothing and the right person
                               full price. */}
                           {p.for_name ? (
-                            <span className="ml-1.5 rounded-full bg-emerald-600/10 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+                            <span className="ml-1.5 rounded-full bg-emerald-600/10 px-2 py-0.5 text-[13px] font-bold text-emerald-800">
                               {t('rvp.for', { name: p.for_name })}
                             </span>
                           ) : null}
                         </p>
                         {/* Names the doctor: a pass earned with one doctor is not
                             valid with another, and the desk must not have to guess. */}
-                        <p className="mt-0.5 text-[12px] text-emerald-800">
+                        <p className="mt-0.5 text-[13px] text-emerald-800">
                           {t('rvp.badgeUntil', {
                             date: new Date(p.valid_until).toLocaleDateString('en-IN',
                               { day: 'numeric', month: 'short', year: 'numeric' }),
                           }).replace('this doctor', p.doctor_name || 'this doctor')}
                         </p>
-                        <p className="mt-0.5 text-[11.5px] font-semibold text-emerald-700">
+                        <p className="mt-0.5 text-[13px] font-semibold text-emerald-700">
                           {p.doctor_name ? t('px.drName', { name: p.doctor_name }) : ''} · {t('rvp.noCharge')}
                         </p>
                       </div>
@@ -485,7 +485,7 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                       onClick={() => useRevisit(p)}
                       disabled={redeeming === p.pass_id}
                       className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5
-                                 text-[12.5px] font-bold text-white shadow-sm transition hover:bg-emerald-700
+                                 text-[13.5px] font-bold text-white shadow-sm transition hover:bg-emerald-700
                                  disabled:cursor-not-allowed disabled:opacity-60"
                     >
                       <BadgeCheck className="h-4 w-4" />
@@ -498,7 +498,7 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                     pass, and the token number must not vanish with it before the
                     desk has read it out. */}
                 {redeemNote && (
-                  <div className={`rounded-2xl border px-4 py-3 text-[12.5px] font-semibold ${
+                  <div className={`rounded-2xl border px-4 py-3 text-[13.5px] font-semibold ${
                     redeemNote.type === 'error'
                       ? 'border-rose-200 bg-rose-50 text-rose-700'
                       : 'border-emerald-200 bg-emerald-50 text-emerald-800'
@@ -547,9 +547,9 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                   form={openForm === 'allergy' && <AddAllergyForm patientId={pid} onDone={afterAdd(loadAllergies)} />}>
                   <ul className="space-y-2">
                     {(allergies || []).map((a) => (
-                      <li key={a.allergy_id} className="flex items-center justify-between rounded-xl border border-red-100 bg-red-50/50 px-3 py-2 text-[12.5px]">
+                      <li key={a.allergy_id} className="flex items-center justify-between rounded-xl border border-red-100 bg-red-50/50 px-3 py-2 text-[13.5px]">
                         <span className="font-semibold text-brand-navy">{a.allergen}<span className="ml-1 font-normal text-slate-400">· {tx('px.allergyType.', a.allergy_type)}</span></span>
-                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${SEVERITY_PILL[a.severity] || 'bg-slate-100 text-slate-500'}`}>{tx('px.severity.', a.severity)}</span>
+                        <span className={`rounded-full px-2 py-0.5 text-[13px] font-bold ${SEVERITY_PILL[a.severity] || 'bg-slate-100 text-slate-500'}`}>{tx('px.severity.', a.severity)}</span>
                       </li>
                     ))}
                   </ul>
@@ -561,13 +561,13 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                   form={openForm === 'condition' && <AddConditionForm patientId={pid} onDone={afterAdd(loadHistory)} />}>
                   <ul className="space-y-2">
                     {(history || []).map((h) => (
-                      <li key={h.history_id} className="rounded-xl border border-slate-100 px-3 py-2 text-[12.5px]">
+                      <li key={h.history_id} className="rounded-xl border border-slate-100 px-3 py-2 text-[13.5px]">
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-brand-navy">{h.condition}</span>
-                          {h.is_chronic && <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-bold text-purple-600">{t('pm.chronic')}</span>}
+                          {h.is_chronic && <span className="rounded-full bg-purple-100 px-2 py-0.5 text-[13px] font-bold text-purple-600">{t('pm.chronic')}</span>}
                         </div>
                         {(h.diagnosed_date || h.notes) && (
-                          <p className="mt-0.5 text-[11px] text-slate-400">{[h.diagnosed_date && t('px.hist.diagnosedOn', { date: fmtDate(h.diagnosed_date) }), h.notes].filter(Boolean).join(' · ')}</p>
+                          <p className="mt-0.5 text-[13px] text-slate-400">{[h.diagnosed_date && t('px.hist.diagnosedOn', { date: fmtDate(h.diagnosed_date) }), h.notes].filter(Boolean).join(' · ')}</p>
                         )}
                       </li>
                     ))}
@@ -581,12 +581,12 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                   <ScopeNote role={user?.role_name} doctorKey="pm.recScopeDoctor" hospitalKey="pm.recScopeHospital" />
                   <ul className="space-y-2">
                     {(docs || []).map((d) => (
-                      <li key={d.document_id} className="flex items-center justify-between rounded-xl border border-slate-100 px-3 py-2 text-[12.5px]">
+                      <li key={d.document_id} className="flex items-center justify-between rounded-xl border border-slate-100 px-3 py-2 text-[13.5px]">
                         <span className="min-w-0 truncate font-semibold text-brand-navy">
                           {d.file_name}<span className="ml-1 font-normal capitalize text-slate-400">· {d.document_type?.replace('_', ' ')}</span>
-                          {d.hospital_name && <span className="block truncate text-[10.5px] font-normal text-slate-400">{d.hospital_name}{d.doctor_name ? ` · ${t('px.drName', { name: d.doctor_name })}` : ''}</span>}
+                          {d.hospital_name && <span className="block truncate text-[13px] font-normal text-slate-400">{d.hospital_name}{d.doctor_name ? ` · ${t('px.drName', { name: d.doctor_name })}` : ''}</span>}
                         </span>
-                        <a href={fileUrl(d.file_url)} target="_blank" rel="noreferrer" className="ml-2 shrink-0 rounded-lg bg-brand-blueLight px-2 py-1 text-[11px] font-semibold text-brand-blue hover:bg-blue-100">{t('pm.open')}</a>
+                        <a href={fileUrl(d.file_url)} target="_blank" rel="noreferrer" className="ml-2 shrink-0 rounded-lg bg-brand-blueLight px-2 py-1 text-[13px] font-semibold text-brand-blue hover:bg-blue-100">{t('pm.open')}</a>
                       </li>
                     ))}
                   </ul>
@@ -604,21 +604,21 @@ export default function PatientHistoryDrawer({ patient, onClose }) {
                 <ScopeNote role={user?.role_name} doctorKey="pm.visitsScopeDoctor" hospitalKey="pm.visitsScopeHospital" />
                 <ul className="space-y-2">
                   {(appts || []).slice(0, 12).map((a) => (
-                    <li key={a.appointment_id} className="rounded-xl border border-slate-100 px-3 py-2.5 text-[12.5px] transition hover:border-slate-200 hover:bg-slate-50/60">
+                    <li key={a.appointment_id} className="rounded-xl border border-slate-100 px-3 py-2.5 text-[13.5px] transition hover:border-slate-200 hover:bg-slate-50/60">
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-brand-navy">{fmtDate(a.appointment_date)}{a.slot_time ? ` · ${a.slot_time.slice(0, 5)}` : ''}</span>
-                        <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold capitalize ${STATUS_PILL[a.status] || 'bg-slate-100 text-slate-500'}`}>{tx('px.status.', a.status)}</span>
+                        <span className={`rounded-full px-2 py-0.5 text-[13px] font-bold capitalize ${STATUS_PILL[a.status] || 'bg-slate-100 text-slate-500'}`}>{tx('px.status.', a.status)}</span>
                       </div>
-                      <div className="mt-1 flex items-center gap-1.5 text-[12px] text-slate-600">
+                      <div className="mt-1 flex items-center gap-1.5 text-[13px] text-slate-600">
                         <Stethoscope className="h-3.5 w-3.5 text-brand-blue" />
                         <span className="font-semibold">{a.doctor_name ? t('px.drName', { name: a.doctor_name }) : t('ppage.doctor')}</span>
                         {a.doctor_specialty && <span className="text-slate-400">· {a.doctor_specialty}</span>}
                       </div>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[11px] text-slate-400">
+                      <div className="mt-0.5 flex flex-wrap items-center gap-x-2 text-[13px] text-slate-400">
                         {a.appointment_type && <span className="capitalize">{t('px.hist.purpose', { type: a.appointment_type })}</span>}
                         {a.hospital_name && <span className="flex items-center gap-0.5"><MapPin className="h-3 w-3" />{a.hospital_name}</span>}
                       </div>
-                      {a.notes && <p className="mt-1 rounded-lg bg-slate-50 px-2 py-1 text-[11px] text-slate-500">{a.notes}</p>}
+                      {a.notes && <p className="mt-1 rounded-lg bg-slate-50 px-2 py-1 text-[13px] text-slate-500">{a.notes}</p>}
                     </li>
                   ))}
                 </ul>

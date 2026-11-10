@@ -15,7 +15,7 @@ import WhatsAppAlertsToggle from '../../components/common/WhatsAppAlertsToggle.j
 function Field({ label, children }) {
   return (
     <div>
-      <label className="mb-1 block text-[12px] font-semibold text-slate-600">{label}</label>
+      <label className="mb-1 block text-[13px] font-semibold text-slate-600">{label}</label>
       {children}
     </div>
   )
@@ -35,7 +35,7 @@ function StatCardMini({ icon: Icon, value, label, tone }) {
         <Icon className="h-6 w-6 shrink-0" />
         <div>
           <div className="text-[22px] font-extrabold leading-none text-brand-navy">{value}</div>
-          <div className="mt-1 text-[12px] font-medium text-slate-500">{label}</div>
+          <div className="mt-1 text-[13px] font-medium text-slate-500">{label}</div>
         </div>
       </div>
     </div>
@@ -182,10 +182,10 @@ function OpQueue() {
                     </div>
                     <div className="text-right">
                       <p className="text-[15px] font-bold text-brand-navy">{seenName(cur)}</p>
-                      {bookedBy(cur) && <p className="text-[11px] text-slate-400">booked by {bookedBy(cur)}</p>}
+                      {bookedBy(cur) && <p className="text-[13px] text-slate-400">booked by {bookedBy(cur)}</p>}
                       <p className="text-[13px] text-slate-500">{[cur.patient_age && `${cur.patient_age}y`, cur.patient_gender].filter(Boolean).join(' · ') || '—'}</p>
                       <TravelChip minutes={cur.travel_minutes} origin={cur.origin_label} className="mt-1" />
-                      <span className="mt-1.5 inline-block rounded-md bg-green-100 px-2 py-0.5 text-[11px] font-semibold text-green-700">{cur.priority}</span>
+                      <span className="mt-1.5 inline-block rounded-md bg-green-100 px-2 py-0.5 text-[13px] font-semibold text-green-700">{cur.priority}</span>
                     </div>
                   </div>
                   <div className="mt-auto flex gap-2 border-t border-slate-100 pt-4">
@@ -212,7 +212,7 @@ function OpQueue() {
             <Card className="flex min-h-0 flex-col">
               <div className="mb-3 flex items-center justify-between">
                 <h3 className="text-[15px] font-bold text-brand-navy">Waiting Patients</h3>
-                <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold text-orange-600">{queue.total_waiting} in queue</span>
+                <span className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[13px] font-semibold text-orange-600">{queue.total_waiting} in queue</span>
               </div>
               <div className="min-h-0 flex-1 overflow-auto">
                 {loadingQueue ? (
@@ -222,7 +222,7 @@ function OpQueue() {
                 ) : (
                   <table className="w-full text-left">
                     <thead>
-                      <tr className="text-[12px] font-semibold text-slate-400">
+                      <tr className="text-[13px] font-semibold text-slate-400">
                         <th className="pb-2 font-semibold">Token</th>
                         <th className="pb-2 font-semibold">Patient</th>
                         <th className="pb-2 font-semibold">Pos.</th>
@@ -236,7 +236,7 @@ function OpQueue() {
                           <td className="whitespace-nowrap py-2 pr-3 font-semibold text-brand-navy">{t.display_code}</td>
                           <td className="whitespace-nowrap py-2 pr-3 text-slate-600">
                             {seenName(t, '—')}
-                            {bookedBy(t) && <span className="ml-1 text-[11px] text-slate-400">· {bookedBy(t)}</span>}
+                            {bookedBy(t) && <span className="ml-1 text-[13px] text-slate-400">· {bookedBy(t)}</span>}
                             {/* How far they have to come — a patient hours away
                                 is a different decision from one down the road. */}
                             <TravelChip minutes={t.travel_minutes} origin={t.origin_label} className="ml-1.5 align-middle" />
@@ -247,19 +247,19 @@ function OpQueue() {
                                 zero-fee row is "No fee", not a collection the
                                 hospital could reconcile against. */}
                             {t.consultation_fee > 0 && !t.consultation_paid ? (
-                              <button disabled={busy} onClick={() => setCollectFor(t)} className="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-amber-600 disabled:opacity-60">
+                              <button disabled={busy} onClick={() => setCollectFor(t)} className="inline-flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1 text-[13px] font-bold text-white hover:bg-amber-600 disabled:opacity-60">
                                 Collect ₹{t.consultation_fee}
                               </button>
                             ) : t.free_revisit ? (
                               <FreeRevisitChip info={t.free_revisit} detail />
                             ) : t.consultation_paid ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[11px] font-semibold text-green-700"><CheckCircle2 className="h-3 w-3" /> Paid{t.consultation_payment_method ? ` · ${paymentModeLabel(t.consultation_payment_method)}` : ''}</span>
+                              <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[13px] font-semibold text-green-700"><CheckCircle2 className="h-3 w-3" /> Paid{t.consultation_payment_method ? ` · ${paymentModeLabel(t.consultation_payment_method)}` : ''}</span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500" title="No consultation fee is set for this doctor">No fee</span>
+                              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500" title="No consultation fee is set for this doctor">No fee</span>
                             )}
                           </td>
                           <td className="py-2 text-right">
-                            <button disabled={busy} onClick={() => skip(t.token_id)} title="Skip" className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[11px] font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-60">
+                            <button disabled={busy} onClick={() => skip(t.token_id)} title="Skip" className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[13px] font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-60">
                               <SkipForward className="h-3.5 w-3.5" /> Skip
                             </button>
                           </td>
@@ -274,7 +274,7 @@ function OpQueue() {
             {/* Walk-in entry */}
             <Card>
               <h3 className="mb-2.5 text-[15px] font-bold text-brand-navy">Walk-in Patient Entry</h3>
-              <p className="mb-3 text-[12px] text-slate-400">Adds a walk-in to {selectedDoctor?.name || 'this doctor'} and issues a token instantly.</p>
+              <p className="mb-3 text-[13px] text-slate-400">Adds a walk-in to {selectedDoctor?.name || 'this doctor'} and issues a token instantly.</p>
               <form onSubmit={generateWalkIn} className="space-y-2.5">
                 <Field label="Patient Name">
                   <input value={walkIn.name} onChange={(e) => setWalkIn((w) => ({ ...w, name: e.target.value }))} placeholder="Enter full name" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-brand-blue" />
@@ -295,7 +295,7 @@ function OpQueue() {
             </Card>
           </div>
 
-          <p className="flex items-center justify-center gap-1.5 text-[12px] text-slate-400">
+          <p className="flex items-center justify-center gap-1.5 text-[13px] text-slate-400">
             <Info className="h-3.5 w-3.5" /> Queue is per doctor, for today. All times in IST.
           </p>
         </>

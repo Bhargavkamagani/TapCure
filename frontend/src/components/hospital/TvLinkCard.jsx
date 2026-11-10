@@ -58,7 +58,7 @@ export default function TvLinkCard({ hospitalId }) {
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-50 text-teal-600"><Tv className="h-5 w-5" /></span>
           <div className="leading-tight">
             <p className="text-[15px] font-bold text-brand-navy">TV display link</p>
-            <p className="mt-0.5 text-[12.5px] text-slate-500">
+            <p className="mt-0.5 text-[13.5px] text-slate-500">
               Open this on the waiting-room TV. It shows every doctor's live queue and keeps working every day. Token numbers only — no patient names.
             </p>
           </div>
@@ -66,7 +66,7 @@ export default function TvLinkCard({ hospitalId }) {
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <input readOnly value={url || 'Loading…'} onFocus={(e) => e.target.select()}
-          className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-[12.5px] text-slate-700 outline-none" />
+          className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 font-mono text-[13.5px] text-slate-700 outline-none" />
         <button type="button" onClick={copy} disabled={!url}
           className="inline-flex items-center gap-1.5 rounded-xl bg-brand-blue px-3 py-2 text-[13px] font-bold text-white hover:bg-brand-blueDark disabled:opacity-50">
           {copied ? <><Check className="h-4 w-4" /> Copied</> : <><Copy className="h-4 w-4" /> Copy</>}
@@ -80,7 +80,7 @@ export default function TvLinkCard({ hospitalId }) {
           <RefreshCw className="h-4 w-4" /> {busy ? 'Making…' : 'Make new link'}
         </button>
       </div>
-      {error && <p className="mt-2 text-[12px] text-red-500">{error}</p>}
+      {error && <p className="mt-2 text-[13px] text-red-500">{error}</p>}
     </Card>
   )
 }

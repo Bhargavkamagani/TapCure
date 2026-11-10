@@ -56,7 +56,7 @@ function DelayModal({ doctor, onClose, onSaved }) {
               </span>
               <div>
                 <h3 className="text-[15px] font-bold text-slate-800">Doctor Running Late</h3>
-                <p className="text-[12px] text-slate-500">
+                <p className="text-[13px] text-slate-500">
                   {doctor.name}{doctor.delay > 0 ? ` · currently +${doctor.delay} min` : ''}
                 </p>
               </div>
@@ -68,7 +68,7 @@ function DelayModal({ doctor, onClose, onSaved }) {
         </div>
 
         <div className="p-5">
-          <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-slate-400">Delay (minutes)</label>
+          <label className="mb-2 block text-[12px] font-semibold uppercase tracking-wider text-slate-400">Delay (minutes)</label>
           <div className="mb-3 grid grid-cols-4 gap-1.5">
             {DELAY_PRESETS.map((p) => (
               <button key={p} type="button" onClick={() => setMinutes(p)}
@@ -81,11 +81,11 @@ function DelayModal({ doctor, onClose, onSaved }) {
             className="mb-4 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-100"
             placeholder="Custom minutes" />
 
-          <label className="mb-2 block text-[11px] font-semibold uppercase tracking-wider text-slate-400">Reason (optional)</label>
+          <label className="mb-2 block text-[12px] font-semibold uppercase tracking-wider text-slate-400">Reason (optional)</label>
           <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="e.g. Emergency case, stuck in traffic"
             className="mb-4 w-full rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-100" />
 
-          <div className="mb-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3.5 py-2.5 text-[12px] text-amber-700">
+          <div className="mb-4 flex items-start gap-2 rounded-xl bg-amber-50 px-3.5 py-2.5 text-[13px] text-amber-700">
             <BellRing className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
             Waiting patients will be notified of the revised ETA.
           </div>
@@ -237,7 +237,7 @@ export default function AssistantDashboard() {
           <motion.div key={s.key} variants={fadeUp} whileHover={{ y: -2, transition: { duration: 0.15 } }}>
             <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-100">
               <div>
-                <p className="text-[11.5px] font-semibold text-slate-400">{s.label}</p>
+                <p className="text-[13px] font-semibold text-slate-400">{s.label}</p>
                 <p className="mt-1.5 text-[26px] font-extrabold leading-none text-slate-800">
                   <AnimatedNumber value={kpis?.[s.key] ?? 0} />
                 </p>
@@ -263,7 +263,7 @@ export default function AssistantDashboard() {
               <span className={`flex h-12 w-12 items-center justify-center rounded-2xl ${a.tone} shadow-sm transition-colors duration-300 group-hover:bg-white/20 group-hover:text-white`}>
                 <a.icon className="h-6 w-6" />
               </span>
-              <span className="text-[12.5px] font-semibold text-slate-600 transition-colors duration-300 group-hover:text-white">{a.label}</span>
+              <span className="text-[13.5px] font-semibold text-slate-600 transition-colors duration-300 group-hover:text-white">{a.label}</span>
             </Link>
           ))}
         </div>
@@ -291,7 +291,7 @@ export default function AssistantDashboard() {
                 Refresh to be sure. */}
             {lastUpdated && (
               <span
-                className="mr-1 hidden items-center gap-1.5 text-[11px] font-semibold text-slate-400 sm:flex"
+                className="mr-1 hidden items-center gap-1.5 text-[13px] font-semibold text-slate-400 sm:flex"
                 title={`Updates automatically every ${REFRESH_MS / 1000} seconds`}
               >
                 <span className="relative flex h-1.5 w-1.5">
@@ -302,11 +302,11 @@ export default function AssistantDashboard() {
               </span>
             )}
             <button onClick={() => load()} title="Refresh"
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-[12px] font-semibold text-slate-500 transition hover:bg-slate-50 hover:text-teal-600">
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-[13px] font-semibold text-slate-500 transition hover:bg-slate-50 hover:text-teal-600">
               <RefreshCw className="h-3.5 w-3.5" /> Refresh
             </button>
             <Link to="/assistant-dashboard/queue"
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-[12px] font-semibold text-teal-600 transition hover:bg-teal-50">
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1 text-[13px] font-semibold text-teal-600 transition hover:bg-teal-50">
               View all <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -314,7 +314,7 @@ export default function AssistantDashboard() {
 
         {/* Column labels */}
         {!loading && rows.length > 0 && (
-          <div className="shrink-0 hidden grid-cols-[1fr_7rem_5rem_4.5rem_auto] border-b border-slate-50 bg-slate-50 px-5 py-2 text-[10.5px] font-bold uppercase tracking-widest text-slate-400 sm:grid">
+          <div className="shrink-0 hidden grid-cols-[1fr_7rem_5rem_4.5rem_auto] border-b border-slate-50 bg-slate-50 px-5 py-2 text-[12px] font-bold uppercase tracking-widest text-slate-400 sm:grid">
             <span>Doctor</span>
             <span className="text-center">Status</span>
             <span className="text-center">Serving</span>
@@ -348,10 +348,10 @@ export default function AssistantDashboard() {
               >
                 {/* Doctor */}
                 <div className="flex min-w-[160px] flex-1 items-center gap-2.5">
-                  <Avatar name={d.name || 'Doctor'} className={`h-8 w-8 shrink-0 text-[11px] ${d.duty?.on_duty ? '' : 'opacity-50'}`} />
+                  <Avatar name={d.name || 'Doctor'} className={`h-8 w-8 shrink-0 text-[13px] ${d.duty?.on_duty ? '' : 'opacity-50'}`} />
                   <div className="min-w-0">
                     <p className={`truncate text-[13px] font-bold ${d.duty?.on_duty ? 'text-slate-800' : 'text-slate-500'}`}>{d.name}</p>
-                    <p className="truncate text-[11px] text-slate-400">
+                    <p className="truncate text-[13px] text-slate-400">
                       {d.specialization}
                       {d.duty?.hours ? ` · ${d.duty.hours}` : ''}
                       {!d.duty?.on_duty && d.duty?.detail ? ` · ${d.duty.detail}` : ''}
@@ -361,41 +361,41 @@ export default function AssistantDashboard() {
 
                 {/* Status — "not here today" outranks any queue reading */}
                 {!d.duty?.on_duty ? (
-                  <span className={`inline-flex w-[6.5rem] items-center justify-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[10.5px] font-bold ${dutyTone(d.duty?.state)}`}
+                  <span className={`inline-flex w-[6.5rem] items-center justify-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[13px] font-bold ${dutyTone(d.duty?.state)}`}
                         title={dutyTitle(d.duty)}>
                     <CalendarOff className="h-2.5 w-2.5 shrink-0" /> {dutyShort(d.duty)}
                   </span>
                 ) : d.delay > 0 ? (
-                  <span className="inline-flex w-[6.5rem] items-center justify-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[10.5px] font-bold text-amber-700">
+                  <span className="inline-flex w-[6.5rem] items-center justify-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[13px] font-bold text-amber-700">
                     <Clock className="h-2.5 w-2.5" /> +{d.delay} min late
                   </span>
                 ) : d.duty?.state === 'on_break' ? (
-                  <span className="inline-flex w-[6.5rem] items-center justify-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[10.5px] font-semibold text-sky-600"
+                  <span className="inline-flex w-[6.5rem] items-center justify-center gap-1 rounded-full bg-sky-50 px-2 py-0.5 text-[13px] font-semibold text-sky-600"
                         title={d.duty?.detail || undefined}>
                     <Coffee className="h-2.5 w-2.5" /> On break
                   </span>
                 ) : (
-                  <span className="inline-flex w-[6.5rem] items-center justify-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[10.5px] font-semibold text-teal-600">
+                  <span className="inline-flex w-[6.5rem] items-center justify-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[13px] font-semibold text-teal-600">
                     <span className="h-1.5 w-1.5 rounded-full bg-teal-500" /> On time
                   </span>
                 )}
 
                 {/* Serving */}
                 <div className="w-20 text-center">
-                  <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Serving</p>
+                  <p className="text-[12px] font-bold uppercase tracking-wider text-slate-400">Serving</p>
                   {d.now ? (
-                    <span className="inline-flex items-center gap-1 text-[12px] font-bold text-teal-600">
+                    <span className="inline-flex items-center gap-1 text-[13px] font-bold text-teal-600">
                       <Radio className="h-2.5 w-2.5 animate-pulse" /> {d.now}
                     </span>
                   ) : (
-                    <span className="text-[12px] text-slate-300">—</span>
+                    <span className="text-[13px] text-slate-300">—</span>
                   )}
                 </div>
 
                 {/* Waiting — null when the queue lookup failed, so the desk
                     doesn't read a hard "0" it can't rely on. */}
                 <div className="w-14 text-center">
-                  <p className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400">Waiting</p>
+                  <p className="text-[12px] font-bold uppercase tracking-wider text-slate-400">Waiting</p>
                   <span className={`text-[13px] font-extrabold ${d.waiting > 0 ? 'text-orange-500' : 'text-slate-300'}`}
                         title={d.stale ? 'Queue could not be loaded' : undefined}>
                     {d.waiting == null ? '—' : d.waiting}
@@ -409,7 +409,7 @@ export default function AssistantDashboard() {
                     <button
                       onClick={() => setDelayFor(d)}
                       title="Doctor running late"
-                      className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-[11.5px] font-semibold transition ${
+                      className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-[13px] font-semibold transition ${
                         d.delay > 0
                           ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
                           : 'bg-slate-100 text-slate-500 hover:bg-amber-50 hover:text-amber-600'
@@ -420,7 +420,7 @@ export default function AssistantDashboard() {
                   )}
                   <Link
                     to={`/assistant-dashboard/queue?doctor=${d.doctor_id}`}
-                    className="flex items-center gap-1 rounded-lg bg-teal-500 px-2.5 py-1 text-[11.5px] font-semibold text-white shadow-sm transition hover:bg-teal-600"
+                    className="flex items-center gap-1 rounded-lg bg-teal-500 px-2.5 py-1 text-[13px] font-semibold text-white shadow-sm transition hover:bg-teal-600"
                   >
                     Manage <ChevronRight className="h-3 w-3" />
                   </Link>
@@ -445,14 +445,14 @@ export default function AssistantDashboard() {
             {/* "Today", not "on Duty" — the panel now also lists who is off. */}
             <h2 className="text-[14px] font-bold text-slate-700">Doctors Today</h2>
           </div>
-          <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[12px] font-bold text-teal-600">
+          <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[13px] font-bold text-teal-600">
             {onDuty.length}{offCount > 0 ? `/${rows.length}` : ''}
           </span>
         </div>
 
         {/* On-time / late / off-today summary */}
         {!loading && rows.length > 0 && (
-          <div className="shrink-0 flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-slate-50 bg-slate-50 px-5 py-2 text-[11px] font-semibold">
+          <div className="shrink-0 flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-slate-50 bg-slate-50 px-5 py-2 text-[13px] font-semibold">
             <span className="flex items-center gap-1.5 text-teal-600">
               <span className="h-1.5 w-1.5 rounded-full bg-teal-500" /> {onTimeCount} on time
             </span>
@@ -481,35 +481,35 @@ export default function AssistantDashboard() {
           <ul className="no-scrollbar flex-1 divide-y divide-slate-50 overflow-y-auto">
             {rows.map((d) => (
               <li key={d.doctor_id} className="flex items-center gap-2.5 px-4 py-2.5">
-                <Avatar name={d.name || 'Doctor'} className="h-8 w-8 shrink-0 text-[11px]" />
+                <Avatar name={d.name || 'Doctor'} className="h-8 w-8 shrink-0 text-[13px]" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[12.5px] font-bold text-slate-800">{d.name}</p>
-                  <p className="truncate text-[10.5px] text-slate-400">{d.specialization}</p>
+                  <p className="truncate text-[13.5px] font-bold text-slate-800">{d.name}</p>
+                  <p className="truncate text-[13px] text-slate-400">{d.specialization}</p>
                 </div>
                 <div className="shrink-0 text-right">
                   {!d.duty?.on_duty ? (
-                    <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-0.5 text-[10px] font-bold ${dutyTone(d.duty?.state)}`}
+                    <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-1.5 py-0.5 text-[13px] font-bold ${dutyTone(d.duty?.state)}`}
                           title={dutyTitle(d.duty)}>
                       <CalendarOff className="h-2.5 w-2.5 shrink-0" /> {dutyShort(d.duty)}
                     </span>
                   ) : d.stale ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold text-slate-500">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-1.5 py-0.5 text-[13px] font-semibold text-slate-500">
                       <AlertTriangle className="h-2.5 w-2.5" /> Unavailable
                     </span>
                   ) : d.duty?.state === 'on_break' ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-1.5 py-0.5 text-[10px] font-semibold text-sky-600">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-sky-50 px-1.5 py-0.5 text-[13px] font-semibold text-sky-600">
                       <Coffee className="h-2.5 w-2.5" /> On break
                     </span>
                   ) : d.delay > 0 ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-1.5 py-0.5 text-[13px] font-bold text-amber-700">
                       <Clock className="h-2.5 w-2.5" /> +{d.delay}m
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 px-1.5 py-0.5 text-[10px] font-semibold text-teal-600">
+                    <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 px-1.5 py-0.5 text-[13px] font-semibold text-teal-600">
                       <span className="h-1.5 w-1.5 rounded-full bg-teal-500" /> On time
                     </span>
                   )}
-                  <p className="mt-0.5 text-[10px] text-slate-400">
+                  <p className="mt-0.5 text-[13px] text-slate-400">
                     {!d.duty?.on_duty
                       ? (d.duty?.detail || 'no queue today')
                       : d.stale ? 'queue not loaded' : d.waiting > 0 ? `${d.waiting} waiting` : 'No wait'}

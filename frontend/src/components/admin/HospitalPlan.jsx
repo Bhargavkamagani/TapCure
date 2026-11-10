@@ -11,11 +11,11 @@ import { useDialog } from '../common/DialogProvider.jsx'
  */
 const PLANS = [
   { code: 'pilot', label: 'Pilot (free 30 days)' },
-  // Shown as X's for now (2026-10-27), one per digit. Previous: ₹499 / ₹999 / ₹1,999 / from ₹4,999.
-  { code: 'starter', label: 'Starter · ₹0xx' },
-  { code: 'smart_hospital', label: 'Smart Hospital · ₹0xx' },
-  { code: 'pro', label: 'Pro · ₹0,xxx' },
-  { code: 'hospital', label: 'Hospital · from ₹0,xxx' },
+  // Real list prices (2026-11-02); billing itself is still ₹0 for now.
+  { code: 'starter', label: 'Starter · ₹499' },
+  { code: 'smart_hospital', label: 'Smart Hospital · ₹999' },
+  { code: 'pro', label: 'Pro · ₹1,999' },
+  { code: 'hospital', label: 'Hospital · from ₹4,999' },
 ]
 
 export default function HospitalPlan({ hospitalId }) {
@@ -71,7 +71,7 @@ export default function HospitalPlan({ hospitalId }) {
     <div className="mt-4 rounded-xl border border-slate-100 bg-white p-3.5">
       <div className="mb-2 flex items-center gap-2">
         <CreditCard className="h-4 w-4 text-brand-blue" />
-        <p className="text-[11px] font-bold uppercase tracking-wide text-slate-400">Plan</p>
+        <p className="text-[12px] font-bold uppercase tracking-wide text-slate-400">Plan</p>
       </div>
       <p className="text-[13px] text-slate-600">
         {usage?.plan
@@ -83,13 +83,13 @@ export default function HospitalPlan({ hospitalId }) {
           : 'No plan yet.'}
       </p>
       <div className="mt-3 flex flex-wrap items-end gap-2">
-        <label className="flex flex-col gap-1 text-[11.5px] font-semibold text-slate-500">
+        <label className="flex flex-col gap-1 text-[13px] font-semibold text-slate-500">
           Plan
           <select value={form.plan_code} onChange={set('plan_code')} className={field}>
             {PLANS.map((p) => <option key={p.code} value={p.code}>{p.label}</option>)}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-[11.5px] font-semibold text-slate-500">
+        <label className="flex flex-col gap-1 text-[13px] font-semibold text-slate-500">
           Billing
           <select value={form.billing_cycle} onChange={set('billing_cycle')} className={field} disabled={form.plan_code === 'pilot'}>
             <option value="monthly">Monthly</option>
@@ -97,14 +97,14 @@ export default function HospitalPlan({ hospitalId }) {
           </select>
         </label>
         {form.plan_code === 'pro' && (
-          <label className="flex flex-col gap-1 text-[11.5px] font-semibold text-slate-500">
-            Extra doctors (₹0xx each)
+          <label className="flex flex-col gap-1 text-[13px] font-semibold text-slate-500">
+            Extra doctors (₹599 each)
             <select value={form.extra_doctors} onChange={set('extra_doctors')} className={field}>
               {[0, 1, 2, 3].map((n) => <option key={n} value={n}>{n}</option>)}
             </select>
           </label>
         )}
-        <label className="flex flex-col gap-1 text-[11.5px] font-semibold text-slate-500">
+        <label className="flex flex-col gap-1 text-[13px] font-semibold text-slate-500">
           Discount %
           <input type="number" min="0" max="100" value={form.discount_pct} onChange={set('discount_pct')} className={`${field} w-20`} />
         </label>

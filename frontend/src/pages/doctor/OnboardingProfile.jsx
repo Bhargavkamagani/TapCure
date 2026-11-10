@@ -69,7 +69,7 @@ function SubStepRail({ index }) {
                 transition={{ duration: 0.4 }}
               />
             </div>
-            <p className={`mt-2 flex items-center gap-1.5 text-[11.5px] font-bold transition-colors ${
+            <p className={`mt-2 flex items-center gap-1.5 text-[13px] font-bold transition-colors ${
               state === 'todo' ? 'text-slate-300' : state === 'active' ? 'text-teal-700' : 'text-emerald-600'
             }`}>
               {state === 'done'
@@ -281,7 +281,7 @@ export default function OnboardingProfile() {
                     return d.profile_photo_url
                   }}
                 />
-                <p className="mt-3 text-center text-[11.5px] leading-relaxed text-teal-800/70">
+                <p className="mt-3 text-center text-[13px] leading-relaxed text-teal-800/70">
                   Profiles with a photo are chosen far more often than those without.
                 </p>
               </div>
@@ -312,12 +312,12 @@ export default function OnboardingProfile() {
             <div className="grid max-w-3xl grid-cols-1 gap-5 sm:grid-cols-2">
               {regOnRecord ? (
                 <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/50 px-3.5 py-2.5">
-                  <p className="text-[12.5px] font-bold text-slate-500">Medical Registration No.</p>
+                  <p className="text-[13.5px] font-bold text-slate-500">Medical Registration No.</p>
                   <p className="mt-1 flex items-center gap-1.5 text-[15px] font-extrabold text-brand-navy">
                     <BadgeCheck className="h-4 w-4 shrink-0 text-emerald-600" />
                     <span className="truncate">{form.registration_number}</span>
                   </p>
-                  <p className="mt-1 text-[11.5px] leading-relaxed text-slate-500">
+                  <p className="mt-1 text-[13px] leading-relaxed text-slate-500">
                     Taken from your registration, with the certificate you uploaded.
                     Contact support if it needs correcting.
                   </p>
@@ -360,7 +360,7 @@ export default function OnboardingProfile() {
               {feeLocked ? (
                 <div>
                   <TextInput label="Consultation Fee (₹)" icon={IndianRupee} value={form.consultation_fee} readOnly disabled />
-                  <p className="mt-1 text-[11.5px] text-slate-400">Set by your hospital.</p>
+                  <p className="mt-1 text-[13px] text-slate-400">Set by your hospital.</p>
                 </div>
               ) : (
                 <TextInput
@@ -403,10 +403,10 @@ export default function OnboardingProfile() {
                   className="min-h-[170px] w-full rounded-2xl border border-slate-200 bg-slate-50/60 px-4 py-3 text-sm leading-relaxed text-ink outline-none transition-colors focus:border-teal-500 focus:bg-white focus:ring-4 focus:ring-teal-500/10"
                 />
                 <div className="mt-1.5 flex items-start justify-between gap-3">
-                  <p className={`text-[11.5px] ${errors.bio ? 'text-red-500' : 'text-slate-400'}`}>
+                  <p className={`text-[13px] ${errors.bio ? 'text-red-500' : 'text-slate-400'}`}>
                     {errors.bio || 'Two or three lines is plenty. You can add this later from My Profile.'}
                   </p>
-                  <span className={`shrink-0 text-[11.5px] tabular-nums ${
+                  <span className={`shrink-0 text-[13px] tabular-nums ${
                     (form.bio || '').length > MAX_BIO ? 'font-bold text-red-500' : 'text-slate-400'
                   }`}>
                     {(form.bio || '').length}/{MAX_BIO}
@@ -423,7 +423,7 @@ export default function OnboardingProfile() {
                   <label className="block text-[13px] font-bold text-brand-navy">
                     Free revisit days <span className="text-red-500">*</span>
                   </label>
-                  <p className="mt-1 text-[12.5px] leading-relaxed text-slate-500">
+                  <p className="mt-1 text-[13.5px] leading-relaxed text-slate-500">
                     After a paid consultation at {personalPractice.name}, the patient may return to you free within this many days.
                   </p>
                   <div className="mt-4 flex items-center gap-3">
@@ -435,7 +435,7 @@ export default function OnboardingProfile() {
                       onChange={(e) => { setRevisitDays(e.target.value.replace(/\D/g, '')); setError(null) }}
                       className="w-32 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm font-bold text-brand-navy outline-none focus:border-teal-500"
                     />
-                    <span className="text-[12.5px] text-slate-500">days from the consultation date</span>
+                    <span className="text-[13.5px] text-slate-500">days from the consultation date</span>
                   </div>
                 </div>
               ) : (

@@ -86,9 +86,9 @@ export default function DoctorDetailsModal({ doctorId, onClose }) {
             )}
             {st && (
               <div className="mt-1.5 flex flex-wrap gap-1.5">
-                <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${st.pill}`}>{st.label}</span>
+                <span className={`rounded-full px-2.5 py-0.5 text-[13px] font-bold ${st.pill}`}>{st.label}</span>
                 {d.is_self_registered && (
-                  <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-[11px] font-bold text-purple-700">Self-registered</span>
+                  <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-[13px] font-bold text-purple-700">Self-registered</span>
                 )}
               </div>
             )}
@@ -128,7 +128,7 @@ export default function DoctorDetailsModal({ doctorId, onClose }) {
                   <Fact icon={CheckCircle2} label="Verified on" value={fmtDate(d.verified_at)} />
                 </div>
                 {d.rejection_reason && (
-                  <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[12.5px] text-red-700">
+                  <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-[13.5px] text-red-700">
                     <span className="font-semibold">Rejected:</span> {d.rejection_reason}
                   </p>
                 )}
@@ -168,7 +168,7 @@ export default function DoctorDetailsModal({ doctorId, onClose }) {
                           <FileText className="h-4 w-4 shrink-0 text-brand-blue" />
                           <span className="min-w-0 flex-1">
                             <span className="block truncate text-[13px] font-semibold text-brand-navy">{doc.label || doc.doc_type}</span>
-                            {doc.file_size_kb ? <span className="block text-[11px] text-slate-400">{doc.file_size_kb} KB</span> : null}
+                            {doc.file_size_kb ? <span className="block text-[13px] text-slate-400">{doc.file_size_kb} KB</span> : null}
                           </span>
                           <ExternalLink className="h-3.5 w-3.5 shrink-0 text-slate-400" />
                         </a>
@@ -188,7 +188,7 @@ export default function DoctorDetailsModal({ doctorId, onClose }) {
 function Section({ title, children }) {
   return (
     <section>
-      <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">{title}</p>
+      <p className="mb-2 text-[12px] font-bold uppercase tracking-wide text-slate-400">{title}</p>
       {children}
     </section>
   )
@@ -200,7 +200,7 @@ function Fact({ icon: Icon, label, value }) {
     <div className="flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-2">
       <Icon className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
       <div className="min-w-0">
-        <p className="text-[10.5px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+        <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
         <p className="break-words text-[13px] font-semibold text-brand-navy">{text}</p>
       </div>
     </div>
@@ -209,6 +209,6 @@ function Fact({ icon: Icon, label, value }) {
 
 function Empty({ children }) {
   return (
-    <p className="rounded-lg border border-dashed border-slate-200 bg-white px-3 py-4 text-center text-[12.5px] text-slate-400">{children}</p>
+    <p className="rounded-lg border border-dashed border-slate-200 bg-white px-3 py-4 text-center text-[13.5px] text-slate-400">{children}</p>
   )
 }

@@ -36,7 +36,7 @@ export default function ImageSlotUpload({ title, hint, emptyText, url, aspect = 
         <div className={`relative ${aspect} w-full bg-white`}>
           {url && !broken
             ? <img src={fileUrl(url)} alt={title} onError={() => setBroken(true)} className={`h-full w-full ${contain ? 'object-contain' : 'object-cover'}`} />
-            : <div className="grid h-full w-full place-items-center px-3 text-center text-[12px] text-slate-400">{emptyText}</div>}
+            : <div className="grid h-full w-full place-items-center px-3 text-center text-[13px] text-slate-400">{emptyText}</div>}
         </div>
         <div className="flex flex-wrap items-center gap-2 border-t border-slate-200 bg-white px-3 py-2">
           <label className={`inline-flex cursor-pointer items-center rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-bold text-white hover:bg-brand-blueDark ${busy ? 'pointer-events-none opacity-60' : ''}`}>
@@ -46,7 +46,7 @@ export default function ImageSlotUpload({ title, hint, emptyText, url, aspect = 
           {url && (
             <button type="button" disabled={busy} onClick={remove} className="rounded-lg border border-slate-200 px-3 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60">Remove</button>
           )}
-          {hint && <span className="text-[11.5px] text-slate-400">{hint}</span>}
+          {hint && <span className="text-[13px] text-slate-400">{hint}</span>}
         </div>
       </div>
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}

@@ -109,14 +109,14 @@ function HealthRecords() {
               <HeartPulse className="h-4 w-4 text-brand-blue" /> {t('ppage.ongoingConditions')}
             </h3>
             {conditions.length === 0 ? (
-              <p className="text-[12.5px] text-slate-400">{t('ppage.noConditions')}</p>
+              <p className="text-[13.5px] text-slate-400">{t('ppage.noConditions')}</p>
             ) : (
               <ul className="space-y-2">
                 {conditions.map((c) => (
-                  <li key={c.history_id} className="rounded-lg bg-blue-50 px-3 py-2 text-[12.5px] font-medium text-brand-navy">
+                  <li key={c.history_id} className="rounded-lg bg-blue-50 px-3 py-2 text-[13.5px] font-medium text-brand-navy">
                     {c.condition}
-                    {c.is_chronic && <span className="ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-brand-blue">{t('ppage.chronic')}</span>}
-                    {c.diagnosed_date && <span className="ml-2 text-[11px] text-slate-400">{prettyDate(c.diagnosed_date)}</span>}
+                    {c.is_chronic && <span className="ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-[13px] font-semibold text-brand-blue">{t('ppage.chronic')}</span>}
+                    {c.diagnosed_date && <span className="ml-2 text-[13px] text-slate-400">{prettyDate(c.diagnosed_date)}</span>}
                   </li>
                 ))}
               </ul>
@@ -127,13 +127,13 @@ function HealthRecords() {
               <AlertCircle className="h-4 w-4 text-red-500" /> {t('ppage.allergies')}
             </h3>
             {allergies.length === 0 ? (
-              <p className="text-[12.5px] text-slate-400">{t('ppage.noAllergies')}</p>
+              <p className="text-[13.5px] text-slate-400">{t('ppage.noAllergies')}</p>
             ) : (
               <div className="flex flex-wrap gap-2">
                 {allergies.map((a) => (
                   <span
                     key={a.allergy_id}
-                    className={`rounded-full px-3 py-1 text-[12px] font-semibold ${SEVERITY_TONE[a.severity?.toLowerCase()] || 'bg-red-50 text-red-600'}`}
+                    className={`rounded-full px-3 py-1 text-[13px] font-semibold ${SEVERITY_TONE[a.severity?.toLowerCase()] || 'bg-red-50 text-red-600'}`}
                     title={[a.allergy_type, a.severity, a.reaction].filter(Boolean).join(' · ')}
                   >
                     {a.allergen}
@@ -145,7 +145,7 @@ function HealthRecords() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 rounded-xl bg-green-50 px-3 py-2.5 text-[12.5px] text-green-700">
+      <div className="flex items-center gap-2 rounded-xl bg-green-50 px-3 py-2.5 text-[13.5px] text-green-700">
         <ShieldCheck className="h-4 w-4 shrink-0" />
         {t('ppage.dataSecure')}
       </div>

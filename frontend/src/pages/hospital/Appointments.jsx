@@ -126,7 +126,7 @@ function Appointments() {
         <div className="min-h-0 flex-1 overflow-auto">
           <table className="w-full text-left">
             <thead className="sticky top-0 bg-white">
-              <tr className="whitespace-nowrap text-[12px] font-semibold text-slate-400">
+              <tr className="whitespace-nowrap text-[13px] font-semibold text-slate-400">
                 <th className="pb-2 pr-4">Appt ID</th>
                 <th className="pb-2 pr-4">Patient</th>
                 <th className="pb-2 pr-4">Doctor</th>
@@ -142,10 +142,10 @@ function Appointments() {
                   <td className="whitespace-nowrap py-2.5 pr-4 font-semibold text-brand-navy">#{shortId(a.appointment_id)}</td>
                   <td className="whitespace-nowrap py-2.5 pr-4">
                     <div className="flex items-center gap-2.5">
-                      <Avatar name={seenName(a)} className="h-8 w-8 text-[11px]" />
+                      <Avatar name={seenName(a)} className="h-8 w-8 text-[13px]" />
                       <div className="leading-tight">
                         <p className="font-semibold text-brand-navy">{seenName(a)}</p>
-                        {bookedBy(a) && <p className="text-[11px] text-slate-400">booked by {bookedBy(a)}</p>}
+                        {bookedBy(a) && <p className="text-[13px] text-slate-400">booked by {bookedBy(a)}</p>}
                       </div>
                     </div>
                   </td>

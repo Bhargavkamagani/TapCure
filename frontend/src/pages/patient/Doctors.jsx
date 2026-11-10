@@ -430,10 +430,10 @@ function Doctors() {
                   <div className="flex min-w-0 flex-1 flex-col p-3.5">
                     <StatusBadge status={label} />
                     <p className="mt-1.5 truncate text-[17px] font-extrabold leading-tight text-brand-navy" title={d.name}>{translitName(d.name, lang)}</p>
-                    {lang !== 'en' && <p className="truncate text-[11px] text-slate-400">{d.name}</p>}
-                    <p className="truncate text-[12.5px] font-bold text-teal-700">{specialtyLabel(d.specialization, lang)}</p>
+                    {lang !== 'en' && <p className="truncate text-[13px] text-slate-400">{d.name}</p>}
+                    <p className="truncate text-[13.5px] font-bold text-teal-700">{specialtyLabel(d.specialization, lang)}</p>
 
-                    <div className="mt-2 space-y-1 text-[11.5px] text-slate-500">
+                    <div className="mt-2 space-y-1 text-[13px] text-slate-500">
                       {d.qualification && (
                         <p className="flex items-start gap-1.5">
                           <GraduationCap className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
@@ -463,13 +463,13 @@ function Doctors() {
                       ₹ {Number(d.consultation_fee)}
                     </p>
                     {/* Existing key — no new dictionary entries added for this card. */}
-                    <p className="text-[11px] text-slate-400">{t('pflow.consultation')}</p>
+                    <p className="text-[13px] text-slate-400">{t('pflow.consultation')}</p>
                   </div>
                   <div className="border-l border-slate-200 pl-3 leading-tight">
                     <p className="whitespace-nowrap text-[13.5px] font-bold text-brand-navy">
                       {d.experience_years}
                     </p>
-                    <p className="whitespace-nowrap text-[11px] text-slate-400">
+                    <p className="whitespace-nowrap text-[13px] text-slate-400">
                       {t('ppage.yrsExp', { n: '' }).trim()}
                     </p>
                   </div>
@@ -478,21 +478,21 @@ function Doctors() {
                       brings a signed-in patient straight back to booking. */}
                   <Link
                     to={`/doctors/${d.doctor_id}`}
-                    className="ml-auto shrink-0 whitespace-nowrap rounded-lg border border-brand-blue px-2.5 py-[7px] text-center text-[12px] font-bold text-brand-blue transition-colors hover:bg-brand-blueLight/40"
+                    className="ml-auto shrink-0 whitespace-nowrap rounded-lg border border-brand-blue px-2.5 py-[7px] text-center text-[13px] font-bold text-brand-blue transition-colors hover:bg-brand-blueLight/40"
                   >
                     {t('psearch.viewProfile')}
                   </Link>
                   {bookable ? (
                     <Link
                       to={`/patient-dashboard/appointments/new?doctor=${d.doctor_id}${bookingForParam}`}
-                      className="shrink-0 whitespace-nowrap rounded-lg bg-brand-blue px-3.5 py-2 text-center text-[12px] font-bold text-white transition-colors hover:bg-brand-blueDark"
+                      className="shrink-0 whitespace-nowrap rounded-lg bg-brand-blue px-3.5 py-2 text-center text-[13px] font-bold text-white transition-colors hover:bg-brand-blueDark"
                     >
                       {t('psearch.book')}
                     </Link>
                   ) : (
                     <button
                       disabled
-                      className="shrink-0 cursor-not-allowed whitespace-nowrap rounded-lg bg-brand-blue px-3 py-2 text-[12px] font-bold text-white opacity-40"
+                      className="shrink-0 cursor-not-allowed whitespace-nowrap rounded-lg bg-brand-blue px-3 py-2 text-[13px] font-bold text-white opacity-40"
                     >
                       {t('ppage.unavailable')}
                     </button>

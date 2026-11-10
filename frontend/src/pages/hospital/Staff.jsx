@@ -22,7 +22,7 @@ function Detail({ icon: Icon, label, value }) {
     <div className="flex items-start gap-2 rounded-xl bg-slate-50 px-3 py-2">
       <Icon className="mt-[3px] h-4 w-4 shrink-0 text-slate-400" />
       <div className="min-w-0">
-        <p className="text-[10.5px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+        <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{label}</p>
         <p className="truncate text-[13px] font-bold text-brand-navy" title={text}>{text}</p>
       </div>
     </div>
@@ -60,7 +60,7 @@ function DoctorAssignment({ doctors, value, onChange, error }) {
         <span className="flex items-center gap-1.5 text-[13px] font-semibold text-brand-navy">
           <Stethoscope className="h-4 w-4 text-slate-400" /> Assigned doctors
         </span>
-        {specific && <span className="text-[11.5px] font-semibold text-brand-blue">{selected.size} selected</span>}
+        {specific && <span className="text-[13px] font-semibold text-brand-blue">{selected.size} selected</span>}
       </div>
       <div className="mb-2 grid grid-cols-2 gap-1 rounded-lg bg-slate-100 p-1">
         {[[false, 'All doctors'], [true, 'Specific doctors']].map(([isSpecific, label]) => (
@@ -68,7 +68,7 @@ function DoctorAssignment({ doctors, value, onChange, error }) {
             key={label}
             type="button"
             onClick={() => onChange(isSpecific ? (value || []) : null)}
-            className={`rounded-md py-1.5 text-[12.5px] font-semibold transition-colors ${
+            className={`rounded-md py-1.5 text-[13.5px] font-semibold transition-colors ${
               specific === isSpecific ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-500 hover:text-slate-700'
             }`}
           >
@@ -77,16 +77,16 @@ function DoctorAssignment({ doctors, value, onChange, error }) {
         ))}
       </div>
       {!specific ? (
-        <p className="text-[12px] text-slate-500">She sees every doctor&apos;s queue and appointments at this hospital.</p>
+        <p className="text-[13px] text-slate-500">She sees every doctor&apos;s queue and appointments at this hospital.</p>
       ) : doctors.length === 0 ? (
-        <p className="text-[12px] text-slate-400">No doctors at this hospital yet.</p>
+        <p className="text-[13px] text-slate-400">No doctors at this hospital yet.</p>
       ) : (
         <>
-          <p className="mb-2 text-[12px] text-slate-500">She only sees the queue, tokens and appointments of the doctors ticked here.</p>
+          <p className="mb-2 text-[13px] text-slate-500">She only sees the queue, tokens and appointments of the doctors ticked here.</p>
           {doctors.length > 5 && (
             <div className="mb-2 flex items-center gap-2 rounded-lg border border-slate-200 px-2.5">
               <Search className="h-3.5 w-3.5 text-slate-400" />
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search doctor or specialty…" className="w-full bg-transparent py-1.5 text-[12.5px] outline-none" />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search doctor or specialty…" className="w-full bg-transparent py-1.5 text-[13.5px] outline-none" />
             </div>
           )}
           <ul className="max-h-48 space-y-1 overflow-y-auto pr-1">
@@ -105,23 +105,23 @@ function DoctorAssignment({ doctors, value, onChange, error }) {
                     <span className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${on ? 'border-brand-blue bg-brand-blue text-white' : 'border-slate-300 bg-white'}`}>
                       {on && <Check className="h-3 w-3" />}
                     </span>
-                    <Avatar name={d.name} className="h-7 w-7 shrink-0 text-[10px]" />
+                    <Avatar name={d.name} className="h-7 w-7 shrink-0 text-[13px]" />
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[12.5px] font-semibold text-brand-navy">{d.name}</span>
-                      <span className="block truncate text-[11px] text-slate-500">{d.specialization || 'General Physician'}</span>
+                      <span className="block truncate text-[13.5px] font-semibold text-brand-navy">{d.name}</span>
+                      <span className="block truncate text-[13px] text-slate-500">{d.specialization || 'General Physician'}</span>
                     </span>
                     {d.status && d.status !== 'active' && (
-                      <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold capitalize text-slate-500">{d.status.replace('_', ' ')}</span>
+                      <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold capitalize text-slate-500">{d.status.replace('_', ' ')}</span>
                     )}
                   </button>
                 </li>
               )
             })}
-            {shown.length === 0 && <li className="py-2 text-center text-[12px] text-slate-400">No match.</li>}
+            {shown.length === 0 && <li className="py-2 text-center text-[13px] text-slate-400">No match.</li>}
           </ul>
         </>
       )}
-      {error && <p className="mt-1.5 text-[12px] text-red-600">{error}</p>}
+      {error && <p className="mt-1.5 text-[13px] text-red-600">{error}</p>}
     </div>
   )
 }
@@ -207,7 +207,7 @@ function AddStaffModal({ doctors, onClose, onAdded }) {
             </button>
           ))}
         </div>
-        <p className="mb-3 text-[12px] text-slate-500">
+        <p className="mb-3 text-[13px] text-slate-500">
           {role === 'pharmacist'
             ? 'Uploads the pharmacy stock list. Doctors see it while prescribing.'
             : 'Runs the front desk: queue, walk-ins and appointments.'}
@@ -423,7 +423,7 @@ function Staff() {
       </PageHeading>
 
       {/* Counts as one line, not a band of cards above the list. */}
-      <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+      <div className="flex flex-wrap items-center gap-2 text-[13px] font-semibold">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-3 py-1 text-blue-700">
           <Users className="h-3.5 w-3.5" /> {staff.length} total
         </span>
@@ -458,9 +458,9 @@ function Staff() {
                 />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[16px] font-bold text-brand-navy">{s.name || ROLES[s.kind].label}</p>
-                  <p className="truncate text-[12.5px] text-slate-500">{s.designation || 'Front desk'}</p>
+                  <p className="truncate text-[13.5px] text-slate-500">{s.designation || 'Front desk'}</p>
                   <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                    <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${ROLES[s.kind].pill}`}>{ROLES[s.kind].label}</span>
+                    <span className={`inline-block rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${ROLES[s.kind].pill}`}>{ROLES[s.kind].label}</span>
                     <StatusBadge status={s.is_active ? 'Active' : 'Inactive'} />
                   </div>
                 </div>
@@ -484,7 +484,7 @@ function Staff() {
                 )}
               </div>
 
-              <div className="mt-3.5 grid grid-cols-1 gap-2 text-[12px] sm:grid-cols-2">
+              <div className="mt-3.5 grid grid-cols-1 gap-2 text-[13px] sm:grid-cols-2">
                 <Detail icon={Mail} label="Login Email" value={s.email} />
                 <Detail icon={Phone} label="Phone" value={s.phone} />
                 {/* The hospital's own code. The old "Staff ID" was the database

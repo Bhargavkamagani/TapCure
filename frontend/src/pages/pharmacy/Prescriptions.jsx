@@ -50,14 +50,14 @@ const fmtTime = (iso) =>
 
 function StateBadge({ state }) {
   const s = RX_STATE[state] || RX_STATE.pending
-  return <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${s.badge}`}>{s.label}</span>
+  return <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${s.badge}`}>{s.label}</span>
 }
 
 /** One recorded hand-over: what, how many, who, when — Undo while it's still today. */
 function HandOver({ record, busy, onUndo }) {
   const given = record.outcome === 'given'
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white/70 px-2.5 py-1.5 text-[12.5px]">
+    <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white/70 px-2.5 py-1.5 text-[13.5px]">
       <span className="flex flex-wrap items-center gap-1.5 text-slate-700">
         <Package className="h-3.5 w-3.5 shrink-0 text-slate-400" />
         {given
@@ -70,7 +70,7 @@ function HandOver({ record, busy, onUndo }) {
         <button
           onClick={onUndo}
           disabled={busy}
-          className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-[11.5px] font-semibold text-slate-500 hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
+          className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2 py-1 text-[13px] font-semibold text-slate-500 hover:border-red-200 hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
         >
           <Undo2 className="h-3.5 w-3.5" /> Undo
         </button>
@@ -194,12 +194,12 @@ function CounterModal({ id, onClose, onChanged }) {
                 <h3 className="text-[17px] font-extrabold text-brand-navy">{rx.family_member_name || rx.patient_name}</h3>
                 <StateBadge state={rx.status} />
               </div>
-              <p className="mt-0.5 text-[12.5px] text-slate-500">
+              <p className="mt-0.5 text-[13.5px] text-slate-500">
                 {rx.family_member_name && <>for {rx.family_member_name} · account {rx.patient_name} · </>}
                 {rx.patient_uhid && <>UHID {rx.patient_uhid} · </>}
                 {rx.patient_phone}
               </p>
-              <p className="mt-0.5 flex items-center gap-1.5 text-[12.5px] text-slate-500">
+              <p className="mt-0.5 flex items-center gap-1.5 text-[13.5px] text-slate-500">
                 <Stethoscope className="h-3.5 w-3.5" /> {rx.doctor_name || 'Doctor'} · written {fmtWhen(rx.created_at)}
               </p>
             </div>
@@ -216,12 +216,12 @@ function CounterModal({ id, onClose, onChanged }) {
               <div className="h-1.5 w-28 overflow-hidden rounded-full bg-slate-100">
                 <div className="h-full rounded-full bg-emerald-500 transition-all" style={{ width: `${Math.round((done / Math.max(rx.items.length, 1)) * 100)}%` }} />
               </div>
-              <span className="text-[12px] font-semibold text-slate-600">{done} of {rx.items.length} recorded</span>
+              <span className="text-[13px] font-semibold text-slate-600">{done} of {rx.items.length} recorded</span>
             </div>
             {['given', 'outside', 'todo'].filter((k) => counts[k]).map((k) => {
               const s = LINE_STATE[k]
               return (
-                <span key={k} className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold ${s.pill}`}>
+                <span key={k} className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${s.pill}`}>
                   <s.icon className="h-3.5 w-3.5" /> {counts[k]} {s.label.toLowerCase()}
                 </span>
               )
@@ -229,7 +229,7 @@ function CounterModal({ id, onClose, onChanged }) {
             {(counts.todo || 0) > 0 && (counts.given || counts.outside) ? (
               <button
                 onClick={() => setPendingOnly((v) => !v)}
-                className="ml-auto text-[12px] font-semibold text-brand-blue hover:underline"
+                className="ml-auto text-[13px] font-semibold text-brand-blue hover:underline"
               >
                 {pendingOnly ? 'Show all medicines' : 'Show only what’s left'}
               </button>
@@ -239,7 +239,7 @@ function CounterModal({ id, onClose, onChanged }) {
 
         <div className="min-h-0 flex-1 space-y-3 overflow-auto bg-slate-50/60 px-5 py-4">
           {warnings.length > 0 && (
-            <div className="space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[12.5px] text-amber-800">
+            <div className="space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[13.5px] text-amber-800">
               {warnings.map((w, i) => <p key={i} className="flex gap-1.5"><AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {w}</p>)}
             </div>
           )}
@@ -259,15 +259,15 @@ function CounterModal({ id, onClose, onChanged }) {
                       <s.icon className={`h-4 w-4 shrink-0 ${s.tone}`} />
                       {it.drug_name}
                     </p>
-                    {detailText && <p className="mt-0.5 pl-6 text-[12.5px] text-slate-500">{detailText}</p>}
+                    {detailText && <p className="mt-0.5 pl-6 text-[13.5px] text-slate-500">{detailText}</p>}
                   </div>
                   <div className="flex items-center gap-1.5">
                     {it.given_total > 0 && (
-                      <span className="rounded-full bg-white px-2 py-0.5 text-[11.5px] font-semibold text-slate-500 ring-1 ring-slate-200">
+                      <span className="rounded-full bg-white px-2 py-0.5 text-[13px] font-semibold text-slate-500 ring-1 ring-slate-200">
                         {it.given_total} given in total
                       </span>
                     )}
-                    <span className={`rounded-full px-2.5 py-0.5 text-[11.5px] font-semibold ${s.pill}`}>{s.label}</span>
+                    <span className={`rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${s.pill}`}>{s.label}</span>
                   </div>
                 </div>
 
@@ -283,7 +283,7 @@ function CounterModal({ id, onClose, onChanged }) {
                     Tapping one fills the give form with it; nothing is swapped silently. */}
                 {d && !hadAny && (it.suggestions.length > 0 || it.other_strength.length > 0) && (
                   <div className="mt-2 rounded-lg bg-emerald-50/70 px-3 py-2">
-                    <p className="text-[12px] text-slate-600">
+                    <p className="text-[13px] text-slate-600">
                       <span className="font-semibold text-brand-navy">{it.drug_name}</span>
                       {it.stock ? ' is not available' : ' is not in your stock list'}
                       {it.suggestions.length > 0 && (
@@ -296,14 +296,14 @@ function CounterModal({ id, onClose, onChanged }) {
                           key={o.stock_id}
                           type="button"
                           onClick={() => setDraft(it.item_id, { mode: 'give', stock: o, picking: false })}
-                          className="rounded-full border border-emerald-200 bg-white px-2 py-0.5 text-[11.5px] font-semibold text-emerald-700 hover:bg-emerald-100"
+                          className="rounded-full border border-emerald-200 bg-white px-2 py-0.5 text-[13px] font-semibold text-emerald-700 hover:bg-emerald-100"
                         >
                           {o.medicine_name}{o.strength ? ` ${o.strength}` : ''} · {o.quantity}
                         </button>
                       ))}
                     </div>
                     {it.other_strength.length > 0 && (
-                      <p className="mt-1.5 text-[11.5px] text-slate-500">
+                      <p className="mt-1.5 text-[13px] text-slate-500">
                         Same brand in a different strength:{' '}
                         {it.other_strength.map((o) => `${o.medicine_name}${o.strength ? ` ${o.strength}` : ''}`).join(', ')}
                         {' '}— only the doctor can change the strength.
@@ -313,7 +313,7 @@ function CounterModal({ id, onClose, onChanged }) {
                 )}
 
                 {d && !hadAny && (
-                  <div className="mt-2 inline-grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1 text-[12px] font-semibold">
+                  <div className="mt-2 inline-grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1 text-[13px] font-semibold">
                     {[['give', 'Give from stock'], ['outside', 'Not from our stock'], ['skip', 'Skip for now']].map(([m, label]) => (
                       <button
                         key={m}
@@ -331,7 +331,7 @@ function CounterModal({ id, onClose, onChanged }) {
                   <button
                     type="button"
                     onClick={() => setDraft(it.item_id, { mode: 'give' })}
-                    className="mt-2 flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-brand-blue hover:bg-slate-50"
+                    className="mt-2 flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-brand-blue hover:bg-slate-50"
                   >
                     <Plus className="h-3.5 w-3.5" /> {it.given_total > 0 ? 'Give more' : 'Give from stock now'}
                   </button>
@@ -348,7 +348,7 @@ function CounterModal({ id, onClose, onChanged }) {
                     ) : (
                       <div className="flex items-center justify-between gap-2 rounded-xl border border-slate-200 px-3 py-2">
                         <StockLine option={d.stock} />
-                        <button type="button" onClick={() => setDraft(it.item_id, { picking: true })} className="shrink-0 text-[12px] font-semibold text-brand-blue hover:underline">
+                        <button type="button" onClick={() => setDraft(it.item_id, { picking: true })} className="shrink-0 text-[13px] font-semibold text-brand-blue hover:underline">
                           Change
                         </button>
                       </div>
@@ -363,7 +363,7 @@ function CounterModal({ id, onClose, onChanged }) {
                         className="field-input"
                       />
                       {hadAny && (
-                        <button type="button" onClick={() => setDraft(it.item_id, { mode: 'skip' })} className="text-[12px] font-semibold text-slate-400 hover:text-slate-600">
+                        <button type="button" onClick={() => setDraft(it.item_id, { mode: 'skip' })} className="text-[13px] font-semibold text-slate-400 hover:text-slate-600">
                           Cancel
                         </button>
                       )}
@@ -378,7 +378,7 @@ function CounterModal({ id, onClose, onChanged }) {
             <Card className="flex flex-col items-center gap-2 py-8 text-center">
               <CheckCircle2 className="h-7 w-7 text-emerald-500" />
               <p className="text-[14px] font-bold text-brand-navy">Everything on this prescription is recorded</p>
-              <button onClick={() => setPendingOnly(false)} className="text-[12.5px] font-semibold text-brand-blue hover:underline">
+              <button onClick={() => setPendingOnly(false)} className="text-[13.5px] font-semibold text-brand-blue hover:underline">
                 Show all medicines
               </button>
             </Card>
@@ -386,7 +386,7 @@ function CounterModal({ id, onClose, onChanged }) {
         </div>
 
         <div className="flex items-center justify-between gap-2 border-t border-slate-100 px-5 py-3">
-          <p className="text-[12px] text-slate-500">
+          <p className="text-[13px] text-slate-500">
             {(counts.todo || 0) > 0
               ? <><b className="text-brand-navy">{counts.todo}</b> still to record · stock updates when you save</>
               : 'All recorded · today’s entries can be undone'}
@@ -465,7 +465,7 @@ export function PrescriptionsPanel({ query, days, active, refreshKey }) {
               <button
                 key={f.key}
                 onClick={() => { setState(f.key); setPage(1) }}
-                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] font-semibold transition-colors ${
+                className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] font-semibold transition-colors ${
                   on ? 'border-teal-500 bg-teal-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-teal-300'
                 }`}
               >
@@ -473,7 +473,7 @@ export function PrescriptionsPanel({ query, days, active, refreshKey }) {
               </button>
             )
           })}
-          {query && <span className="text-[12px] text-slate-400">Searching the last {months} months</span>}
+          {query && <span className="text-[13px] text-slate-400">Searching the last {months} months</span>}
         </div>
       )}
 
@@ -485,13 +485,13 @@ export function PrescriptionsPanel({ query, days, active, refreshKey }) {
         <Card className="flex flex-col items-center gap-2 py-12 text-center">
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-600"><ClipboardList className="h-6 w-6" /></span>
           <p className="text-[15px] font-bold text-brand-navy">No prescriptions {emptyRange}{query || state !== 'all' ? ' matching this' : ' yet'}</p>
-          <p className="text-[12.5px] text-slate-500">New prescriptions from this hospital's doctors show up here automatically.</p>
+          <p className="text-[13.5px] text-slate-500">New prescriptions from this hospital's doctors show up here automatically.</p>
         </Card>
       ) : data ? (
         <Card className="min-h-0 flex-1 overflow-hidden p-0">
           <div className="h-full overflow-auto">
             <table className="w-full min-w-[760px] text-left text-[13px]">
-              <thead className="sticky top-0 z-10 bg-slate-50 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <thead className="sticky top-0 z-10 bg-slate-50 text-[12px] font-semibold uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="px-4 py-2.5">Written</th>
                   <th className="px-3 py-2.5">Patient</th>
@@ -507,7 +507,7 @@ export function PrescriptionsPanel({ query, days, active, refreshKey }) {
                     <td className="whitespace-nowrap px-4 py-2.5 text-slate-500">{fmtWhen(r.created_at)}</td>
                     <td className="px-3 py-2.5">
                       <p className="font-semibold text-brand-navy">{r.family_member_name || r.patient_name}</p>
-                      <p className="text-[11.5px] text-slate-400">
+                      <p className="text-[13px] text-slate-400">
                         {r.family_member_name ? `for ${r.family_member_name} · ${r.patient_name}` : ''}
                         {r.family_member_name && r.patient_uhid ? ' · ' : ''}
                         {r.patient_uhid || ''}
@@ -529,7 +529,7 @@ export function PrescriptionsPanel({ query, days, active, refreshKey }) {
                     <td className="px-4 py-2.5 text-right">
                       <button
                         onClick={(e) => { e.stopPropagation(); setOpenId(r.prescription_id) }}
-                        className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-2.5 py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-2.5 py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark"
                       >
                         <Eye className="h-3.5 w-3.5" /> Open prescription
                       </button>
@@ -543,7 +543,7 @@ export function PrescriptionsPanel({ query, days, active, refreshKey }) {
       ) : null}
 
       {pages > 1 && (
-        <div className="flex items-center justify-end gap-2 text-[12px] font-semibold text-slate-500">
+        <div className="flex items-center justify-end gap-2 text-[13px] font-semibold text-slate-500">
           <span>Page {page} of {pages} · {data.total} prescriptions</span>
           <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-slate-200 bg-white p-1.5 disabled:opacity-40" aria-label="Previous page">
             <ChevronLeft className="h-4 w-4" />

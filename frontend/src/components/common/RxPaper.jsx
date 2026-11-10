@@ -11,9 +11,9 @@ function DoctorLines({ doctor, align = 'right' }) {
   return (
     <div className={align === 'right' ? 'text-right' : 'text-left'}>
       <p className="text-[15px] font-extrabold text-slate-900">{doctor.name}</p>
-      {doctor.qualification && <p className="text-[12px] text-slate-600">{doctor.qualification}</p>}
-      {doctor.specialization && <p className="text-[12px] text-slate-600">{doctor.specialization}</p>}
-      {doctor.registration_number && <p className="text-[12px] text-slate-600">Reg. No: {doctor.registration_number}</p>}
+      {doctor.qualification && <p className="text-[13px] text-slate-600">{doctor.qualification}</p>}
+      {doctor.specialization && <p className="text-[13px] text-slate-600">{doctor.specialization}</p>}
+      {doctor.registration_number && <p className="text-[13px] text-slate-600">Reg. No: {doctor.registration_number}</p>}
     </div>
   )
 }
@@ -63,9 +63,9 @@ export default function RxPaper({ rx, actions = null }) {
               {logo && <img src={logo} alt="" onError={fail('logo')} className="h-14 w-14 shrink-0 rounded-lg object-contain sm:h-16 sm:w-16" />}
               <div className="min-w-0">
                 <p className="text-[18px] font-extrabold leading-tight text-teal-700 sm:text-[20px]">{pr?.name || rx.hospital_name || ''}</p>
-                {(pr?.address_lines || []).map((l) => <p key={l} className="text-[11.5px] text-slate-500">{l}</p>)}
-                {pr?.contact && <p className="text-[11.5px] text-slate-500">{pr.contact}</p>}
-                {pr?.registration && <p className="text-[11.5px] text-slate-500">{pr.registration}</p>}
+                {(pr?.address_lines || []).map((l) => <p key={l} className="text-[13px] text-slate-500">{l}</p>)}
+                {pr?.contact && <p className="text-[13px] text-slate-500">{pr.contact}</p>}
+                {pr?.registration && <p className="text-[13px] text-slate-500">{pr.registration}</p>}
               </div>
             </div>
             <div className="sm:max-w-[45%]"><DoctorLines doctor={doctor} align="right" /></div>
@@ -97,7 +97,7 @@ export default function RxPaper({ rx, actions = null }) {
           <>
             <table className="mt-2 hidden w-full text-left text-[13px] sm:table">
               <thead>
-                <tr className="bg-teal-700 text-[12px] text-white">
+                <tr className="bg-teal-700 text-[13px] text-white">
                   <th className="px-2 py-1.5">#</th><th className="px-2 py-1.5">Medicine</th><th className="px-2 py-1.5">Dosage</th>
                   <th className="px-2 py-1.5">Frequency</th><th className="px-2 py-1.5">Duration</th><th className="px-2 py-1.5">Instructions</th>
                 </tr>
@@ -119,8 +119,8 @@ export default function RxPaper({ rx, actions = null }) {
               {items.map((it, i) => (
                 <li key={it.item_id || i} className="rounded-lg border border-slate-200 px-3 py-2">
                   <p className="text-[14px] font-bold">{i + 1}. {it.drug_name} {it.dosage && <span className="font-normal text-slate-500">· {it.dosage}</span>}</p>
-                  <p className="text-[12.5px] text-slate-600">{[it.frequency, it.duration].filter(Boolean).join(' · ')}</p>
-                  {it.instructions && <p className="text-[12px] text-slate-500">{it.instructions}</p>}
+                  <p className="text-[13.5px] text-slate-600">{[it.frequency, it.duration].filter(Boolean).join(' · ')}</p>
+                  {it.instructions && <p className="text-[13px] text-slate-500">{it.instructions}</p>}
                 </li>
               ))}
             </ol>
@@ -147,7 +147,7 @@ export default function RxPaper({ rx, actions = null }) {
       {footer && <img src={footer} alt="" onError={fail('footer')} className="mt-4 w-full object-contain px-4 sm:px-7" />}
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 bg-slate-50 px-4 py-2.5 sm:px-7">
-        <span className="text-[11px] text-slate-400">Rx #{paper?.ref || ''} · TapCure</span>
+        <span className="text-[13px] text-slate-400">Rx #{paper?.ref || ''} · TapCure</span>
         <div className="flex flex-wrap items-center gap-2">
           {actions}
           <DownloadRxPdf rxId={rx.prescription_id} />

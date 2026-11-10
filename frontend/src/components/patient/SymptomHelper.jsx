@@ -49,7 +49,7 @@ export default function SymptomHelper({ open, onClose, onPick }) {
           >
             <X className="h-5 w-5" />
           </button>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[12px] font-semibold text-white ring-1 ring-white/20">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[13px] font-semibold text-white ring-1 ring-white/20">
             <Sparkles className="h-3.5 w-3.5" /> {t('symptom.badge')}
           </span>
           <h2 className="mt-3 font-serif text-2xl">{t('symptom.title')}</h2>
@@ -105,11 +105,11 @@ export default function SymptomHelper({ open, onClose, onPick }) {
                     <div className="min-w-0 flex-1">
                       <p className="text-[14px] font-bold text-brand-navy">
                         {specialtyLabel(m.specialty, lang)}
-                        {i === 0 && <span className="ml-2 rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-semibold text-teal-700">{t('symptom.bestMatch')}</span>}
+                        {i === 0 && <span className="ml-2 rounded-full bg-teal-100 px-2 py-0.5 text-[13px] font-semibold text-teal-700">{t('symptom.bestMatch')}</span>}
                       </p>
-                      <p className="truncate text-[12px] text-slate-500">{t('symptom.matchesLabel')}: {m.matched.slice(0, 3).join(', ')}</p>
+                      <p className="truncate text-[13px] text-slate-500">{t('symptom.matchesLabel')}: {m.matched.slice(0, 3).join(', ')}</p>
                     </div>
-                    <span className="flex shrink-0 items-center gap-1 text-[12px] font-semibold text-teal-700">
+                    <span className="flex shrink-0 items-center gap-1 text-[13px] font-semibold text-teal-700">
                       {t('symptom.showDoctors')} <ArrowRight className="h-4 w-4" />
                     </span>
                   </button>
@@ -148,7 +148,7 @@ export default function SymptomHelper({ open, onClose, onPick }) {
                         </span>
                         <div className="min-w-0 flex-1">
                           <p className="text-[13.5px] font-bold text-brand-navy">{tr(g.area, lang)}</p>
-                          <p className="truncate text-[11.5px] text-teal-700">{specialtyLabel(g.specialty, lang)}</p>
+                          <p className="truncate text-[13px] text-teal-700">{specialtyLabel(g.specialty, lang)}</p>
                         </div>
                       </button>
                       <div className="mt-2.5 flex flex-wrap gap-1.5">
@@ -156,7 +156,7 @@ export default function SymptomHelper({ open, onClose, onPick }) {
                           <button
                             key={c.en}
                             onClick={() => choose(g.specialty)}
-                            className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11.5px] font-medium text-slate-600 transition-colors hover:border-teal-400 hover:bg-teal-50 hover:text-teal-700"
+                            className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[13px] font-medium text-slate-600 transition-colors hover:border-teal-400 hover:bg-teal-50 hover:text-teal-700"
                           >
                             {tr(c, lang)}
                           </button>
@@ -172,7 +172,7 @@ export default function SymptomHelper({ open, onClose, onPick }) {
 
         {/* Disclaimer */}
         <div className="border-t border-slate-100 bg-slate-50 px-7 py-3">
-          <p className="text-[11px] leading-snug text-slate-400">{t('symptom.disclaimer')}</p>
+          <p className="text-[13px] leading-snug text-slate-400">{t('symptom.disclaimer')}</p>
         </div>
       </div>
     </div>,

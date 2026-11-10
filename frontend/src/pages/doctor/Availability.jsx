@@ -20,7 +20,7 @@ function PracticeTag({ aff, className = '' }) {
   const personal = isPersonal(aff)
   return (
     <span
-      className={`rounded-md px-1.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wide ${
+      className={`rounded-md px-1.5 py-0.5 text-[12px] font-bold uppercase tracking-wide ${
         personal ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-brand-blue'
       } ${className}`}
     >
@@ -41,7 +41,7 @@ export function AddSession({ onAdd, minTime, maxTime }) {
 
   if (!open) {
     return (
-      <button onClick={() => setOpen(true)} className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-slate-300 py-2 text-[12.5px] font-semibold text-brand-blue hover:bg-brand-blueLight/30">
+      <button onClick={() => setOpen(true)} className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-slate-300 py-2 text-[13.5px] font-semibold text-brand-blue hover:bg-brand-blueLight/30">
         <Plus className="h-4 w-4" /> Add session
       </button>
     )
@@ -49,25 +49,25 @@ export function AddSession({ onAdd, minTime, maxTime }) {
   return (
     <div className="space-y-3 rounded-2xl border border-brand-blue/20 bg-brand-blueLight/20 p-3 shadow-sm">
       <div>
-        <p className="text-[12.5px] font-bold text-brand-navy">Set session time</p>
-        <p className="text-[11px] text-slate-400">Choose the booking window, then save below.</p>
+        <p className="text-[13.5px] font-bold text-brand-navy">Set session time</p>
+        <p className="text-[13px] text-slate-400">Choose the booking window, then save below.</p>
       </div>
       <div className="grid gap-2">
         <TimePicker12Hour label="From" value={start} onChange={setStart} />
         <TimePicker12Hour label="To" value={end} onChange={setEnd} />
       </div>
       {(minTime || maxTime) && (
-        <p className="px-0.5 text-[11px] text-slate-400">Hospital hours {minTime || '—'} to {maxTime || '—'}</p>
+        <p className="px-0.5 text-[13px] text-slate-400">Hospital hours {minTime || '—'} to {maxTime || '—'}</p>
       )}
-      <div className="flex items-center gap-2 text-[12px]">
+      <div className="flex items-center gap-2 text-[13px]">
         <label className="text-slate-500">Max tokens</label>
         <input type="number" min="1" value={maxTokens} onChange={(e) => setMaxTokens(e.target.value)} onWheel={(e) => e.currentTarget.blur()} className="w-20 rounded-lg border border-slate-200 px-2 py-1" />
       </div>
-      <p className="rounded-xl bg-white px-3 py-2 text-center text-[12px] font-semibold text-brand-navy">{prettyTime(start)} – {prettyTime(end)} · up to {maxTokens || 0} patients</p>
+      <p className="rounded-xl bg-white px-3 py-2 text-center text-[13px] font-semibold text-brand-navy">{prettyTime(start)} – {prettyTime(end)} · up to {maxTokens || 0} patients</p>
       <div className="flex gap-2">
         <button onClick={() => { onAdd({ start_time: start, end_time: end, max_tokens: Number(maxTokens) }); setOpen(false) }}
-          className="flex-1 rounded-xl bg-brand-blue py-2.5 text-[12.5px] font-bold text-white shadow-sm hover:bg-brand-blueDark">Save session</button>
-        <button onClick={() => setOpen(false)} className="rounded-lg border border-slate-200 px-3 py-1.5 text-[12px] font-semibold text-slate-600">Cancel</button>
+          className="flex-1 rounded-xl bg-brand-blue py-2.5 text-[13.5px] font-bold text-white shadow-sm hover:bg-brand-blueDark">Save session</button>
+        <button onClick={() => setOpen(false)} className="rounded-lg border border-slate-200 px-3 py-1.5 text-[13px] font-semibold text-slate-600">Cancel</button>
       </div>
     </div>
   )
@@ -218,12 +218,12 @@ function Availability() {
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h3 className="text-[15px] font-bold text-brand-navy">Select practice location</h3>
-              <p className="text-[12px] font-medium text-slate-500">
+              <p className="text-[13px] font-medium text-slate-500">
                 Add or edit practice locations from My Profile. This page is only for weekly timings.
               </p>
             </div>
             {!loading && affiliations.length === 0 && (
-              <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[12.5px] font-semibold text-amber-700">
+              <p className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[13.5px] font-semibold text-amber-700">
                 No practice location found. Open My Profile to add one.
               </p>
             )}
@@ -245,7 +245,7 @@ function Availability() {
             ))}
           </div>
           {selectedPractice && (
-            <p className="flex flex-wrap items-center gap-1.5 text-[12px] font-medium text-slate-500">
+            <p className="flex flex-wrap items-center gap-1.5 text-[13px] font-medium text-slate-500">
               <PracticeTag aff={selectedPractice} />
               Sessions below apply only to {selectedPractice.name}
               {isPersonal(selectedPractice)
@@ -254,7 +254,7 @@ function Availability() {
             </p>
           )}
           {selectedPractice && !isPersonal(selectedPractice) && (openDays.length > 0 || hospitalHours) && (
-            <p className="text-[12px] font-medium text-slate-500">
+            <p className="text-[13px] font-medium text-slate-500">
               Sessions must fit the hospital's own opening times
               {openDays.length > 0 && <> — open <span className="font-semibold text-brand-navy">{openDays.join(', ')}</span></>}
               {hospitalHours && <>, <span className="font-semibold text-brand-navy">{hospitalHours}</span></>}. Your personal
@@ -270,7 +270,7 @@ function Availability() {
               <div className="mb-3 flex items-center justify-between gap-2">
                 <h3 className={`text-[15px] font-bold ${open ? 'text-brand-navy' : 'text-slate-400'}`}>{day}</h3>
                 {!open && (
-                  <span className="rounded-md bg-slate-200/70 px-1.5 py-0.5 text-[10.5px] font-bold uppercase tracking-wide text-slate-500">
+                  <span className="rounded-md bg-slate-200/70 px-1.5 py-0.5 text-[12px] font-bold uppercase tracking-wide text-slate-500">
                     Hospital closed
                   </span>
                 )}
@@ -281,13 +281,13 @@ function Availability() {
                     <Clock className="h-4 w-4 text-brand-blue" />
                     <div className="flex-1 leading-tight">
                       <p className="text-[13px] font-semibold text-brand-navy">{prettyTime(s.start_time)} – {prettyTime(s.end_time)}</p>
-                      <p className="text-[11px] text-slate-400">Max {s.max_tokens} · {s.consultation_mins} min/consult</p>
+                      <p className="text-[13px] text-slate-400">Max {s.max_tokens} · {s.consultation_mins} min/consult</p>
                     </div>
                     <button onClick={() => remove(s.schedule_id)} className="text-slate-400 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
                   </div>
                 ))}
                 {byDay(day).length === 0 && (
-                  <p className="text-[12px] text-slate-400">{open ? 'No sessions.' : 'The hospital is not open on this day.'}</p>
+                  <p className="text-[13px] text-slate-400">{open ? 'No sessions.' : 'The hospital is not open on this day.'}</p>
                 )}
                 {open && (
                   <AddSession

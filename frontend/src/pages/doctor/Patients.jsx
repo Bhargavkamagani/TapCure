@@ -118,7 +118,7 @@ function Patients() {
         <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-[12px] font-semibold text-slate-400">
+            <tr className="text-[13px] font-semibold text-slate-400">
               <th className="pb-3 pr-4">Patient</th><th className="pb-3 pr-4">Age / Gender</th><th className="pb-3 pr-4">Mobile</th>
               <th className="pb-3 pr-4">City</th><th className="pb-3 pr-4">Source</th><th className="pb-3 pr-4">Prescriptions</th><th className="pb-3">Tag</th>
             </tr>
@@ -131,7 +131,7 @@ function Patients() {
                     <Avatar name={p.name} className="h-9 w-9 text-xs" />
                     <div className="leading-tight">
                       <span className="font-medium text-brand-navy">{p.name}</span>
-                      {p.uhid && <p className="font-mono text-[11px] font-semibold text-brand-blue">{p.uhid}</p>}
+                      {p.uhid && <p className="font-mono text-[13px] font-semibold text-brand-blue">{p.uhid}</p>}
                     </div>
                   </div>
                 </td>

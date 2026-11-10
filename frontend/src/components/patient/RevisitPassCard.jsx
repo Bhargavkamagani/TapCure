@@ -54,7 +54,7 @@ export default function RevisitPassCard() {
                className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-2.5">
             {p.for_name ? (
               <p className="mb-1 inline-flex items-center gap-1 rounded-full bg-emerald-600/10 px-2 py-0.5
-                            text-[11.5px] font-bold text-emerald-800">
+                            text-[13px] font-bold text-emerald-800">
                 <UserRound className="h-3 w-3" />
                 {t('rvp.for', { name: translitName(p.for_name, lang) })}
               </p>
@@ -65,15 +65,15 @@ export default function RevisitPassCard() {
                 date: fmtDate(p.valid_until),
               })}
             </p>
-            <p className="mt-0.5 text-[12px] text-emerald-800">{t('rvp.walkIn')}</p>
+            <p className="mt-0.5 text-[13px] text-emerald-800">{t('rvp.walkIn')}</p>
             <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
               <span className="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5
-                               text-[11.5px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                               text-[13px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
                 <CalendarClock className="h-3.5 w-3.5" />
                 {p.days_left > 0 ? t('rvp.daysLeft', { n: p.days_left }) : t('rvp.lastDay')}
               </span>
               {p.hospital_name ? (
-                <span className="text-[11.5px] text-emerald-700">
+                <span className="text-[13px] text-emerald-700">
                   {translitName(p.hospital_name, lang)}
                 </span>
               ) : null}

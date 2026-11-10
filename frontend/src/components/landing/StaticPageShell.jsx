@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Languages } from 'lucide-react'
 import { useI18n, LANGS } from '../../i18n/index.jsx'
 import { BRAND } from '../../data/landingData.js'
 import Wordmark from '../common/Wordmark.jsx'
 import { useAuth, homeFor } from '../../context/AuthContext.jsx'
+import { ModernHeader, ModernFooter, MODERN_FONT, MODERN_BG } from './ModernChrome.jsx'
+
+const DEFAULT_TITLE = 'TapCure — One tap to cure'
 
 /**
  * Shared chrome for the public static / content pages (Privacy, Terms, About,
@@ -20,7 +23,7 @@ const FOOTER_LINKS = [
   { labelKey: 'shell.features', to: '/features' },
   { labelKey: 'shell.pricing', to: '/pricing' },
   { labelKey: 'shell.faq', to: '/faq' },
-  { labelKey: 'shell.resources', to: '/resources' },
+  // 2026-11-02: "Resources" removed here too, same as the landing footer.
   { labelKey: 'shell.calculators', to: '/calculators' },
   { labelKey: 'shell.contact', to: '/contact' },
   { labelKey: 'shell.policies', to: '/policies' },
@@ -31,8 +34,14 @@ const FOOTER_LINKS = [
 ]
 
 /** `legal` pages show a note in Telugu/Hindi that the English text is the
- *  binding one — a translation can drift, the policy must not. */
-export default function StaticPageShell({ children, legal = false }) {
+ *  binding one — a translation can drift, the policy must not.
+ *
+ *  `modern` switches a page to the landing page's look (ModernChrome.jsx):
+ *  same header, footer, font and colours. Pages move over one at a time;
+ *  everything without it renders exactly as before. A modern page also opens
+ *  at the top, names its browser tab (`title`) and tells the browser which
+ *  language it is in, so Chrome stops offering to "translate" Telugu. */
+export default function StaticPageShell({ children, legal = false, modern = false, title }) {
   const navigate = useNavigate()
   const { t, lang, setLang } = useI18n()
   const [langOpen, setLangOpen] = useState(false)
@@ -45,6 +54,39 @@ export default function StaticPageShell({ children, legal = false }) {
   // where they came from. homeFor() is the same mapping login already uses.
   const backTo = user?.role_name ? homeFor(user.role_name) : '/'
   const backLabel = user?.role_name ? t('shell.backDashboard') : t('shell.backHome')
+
+  // The router keeps the old scroll position, so a footer link opened the next
+  // page near its bottom.
+  useEffect(() => {
+    if (modern) window.scrollTo(0, 0)
+  }, [modern])
+
+  useEffect(() => {
+    if (!modern) return undefined
+    document.title = title ? `${title} · TapCure` : DEFAULT_TITLE
+    document.documentElement.lang = lang
+    return () => {
+      document.title = DEFAULT_TITLE
+      document.documentElement.lang = 'en'
+    }
+  }, [modern, title, lang])
+
+  if (modern) {
+    return (
+      <div className="tc-type relative min-h-screen w-full overflow-x-clip text-[#0B2150] antialiased" style={{ ...MODERN_BG, fontFamily: MODERN_FONT }}>
+        <ModernHeader />
+        {legal && lang !== 'en' && (
+          <div className="mx-auto mt-6 max-w-[760px] px-5">
+            <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              {t('shell.legalNote')}
+            </p>
+          </div>
+        )}
+        {children}
+        <ModernFooter />
+      </div>
+    )
+  }
 
   return (
     <div className="theme-editorial editorial-grain relative isolate min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-emerald-50 via-background to-teal-50 text-foreground">

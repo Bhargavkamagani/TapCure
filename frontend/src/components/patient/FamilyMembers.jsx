@@ -122,7 +122,7 @@ export default function FamilyMembers({ patientId, showHeader = true }) {
           <PersonAvatar person={person} isSelf={isSelf} />
           <div className="min-w-0 leading-tight">
             <p className="truncate text-[14px] font-bold text-brand-navy">{translitName(person.name, lang)}</p>
-            <p className="truncate text-[11.5px] text-slate-400">
+            <p className="truncate text-[13px] text-slate-400">
               {[isSelf ? t('ppage.accountHolder') : relLabel(t, person.relation), age != null ? `${age} ${t('ppage.years')}` : null]
                 .filter(Boolean).join(' · ') || '—'}
             </p>
@@ -134,25 +134,25 @@ export default function FamilyMembers({ patientId, showHeader = true }) {
           || person.link_status === 'linked' || person.link_status === 'pending_member') && (
           <div className="mt-3 flex flex-wrap gap-1.5">
             {person.gender && (
-              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">{genderLabel(t, person.gender)}</span>
+              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-500">{genderLabel(t, person.gender)}</span>
             )}
             {person.blood_group && (
-              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-500">
+              <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[13px] font-semibold text-red-500">
                 <Droplet className="h-3 w-3" /> {person.blood_group}
               </span>
             )}
             {person.notify_to === 'own' && person.phone && (
-              <span className="flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[11px] font-semibold text-teal-600">
+              <span className="flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[13px] font-semibold text-teal-600">
                 <Bell className="h-3 w-3" /> {t('ppage.ownReminders')}
               </span>
             )}
             {person.link_status === 'linked' && (
-              <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-[11px] font-semibold text-green-600">
+              <span className="flex items-center gap-1 rounded-full bg-green-50 px-2 py-0.5 text-[13px] font-semibold text-green-600">
                 <Link2 className="h-3 w-3" /> {t('ppage.linkLinked')}
               </span>
             )}
             {person.link_status === 'pending_member' && (
-              <span className="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-600">
+              <span className="flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[13px] font-semibold text-amber-600">
                 <Link2 className="h-3 w-3" /> {t('ppage.linkPending')}
               </span>
             )}
@@ -166,7 +166,7 @@ export default function FamilyMembers({ patientId, showHeader = true }) {
           <button
             onClick={(e) => { e.stopPropagation(); invite(person) }}
             disabled={inviting === person.member_id}
-            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-brand-blue/30 bg-white px-3 py-2 text-[12px] font-bold text-brand-blue transition-colors hover:bg-brand-blue hover:text-white disabled:opacity-50"
+            className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-brand-blue/30 bg-white px-3 py-2 text-[13px] font-bold text-brand-blue transition-colors hover:bg-brand-blue hover:text-white disabled:opacity-50"
           >
             <Link2 className="h-3.5 w-3.5" /> {t('ppage.linkInvite')}
           </button>
@@ -176,7 +176,7 @@ export default function FamilyMembers({ patientId, showHeader = true }) {
         <div className="mt-3.5 flex items-center gap-1.5">
           <button
             onClick={(e) => { e.stopPropagation(); bookForPerson(person) }}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-brand-blueLight px-3 py-2 text-[12px] font-semibold text-brand-blue transition-colors hover:bg-brand-blue hover:text-white"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-brand-blueLight px-3 py-2 text-[13px] font-semibold text-brand-blue transition-colors hover:bg-brand-blue hover:text-white"
           >
             <CalendarPlus className="h-3.5 w-3.5" /> {t('ppage.bookAppointment')}
           </button>
@@ -218,12 +218,12 @@ export default function FamilyMembers({ patientId, showHeader = true }) {
             </span>
             <div className="leading-tight">
               <h3 className="text-[15px] font-bold text-brand-navy">{t('ppage.familyTitle')}</h3>
-              <p className="text-[12px] text-slate-400">{t('ppage.familySubtitle')}</p>
+              <p className="text-[13px] text-slate-400">{t('ppage.familySubtitle')}</p>
             </div>
           </div>
         )}
         <div className="shrink-0 text-right">
-          <p className="text-[11.5px] font-semibold text-slate-400">
+          <p className="text-[13px] font-semibold text-slate-400">
             {t('ppage.familyUsed', { used: members.length, max: MAX_MEMBERS })}
           </p>
           <div className="mt-1 h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
@@ -252,14 +252,14 @@ export default function FamilyMembers({ patientId, showHeader = true }) {
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100">
                 <Plus className="h-5 w-5" />
               </span>
-              <span className="text-[12.5px] font-semibold">{t('ppage.addMember')}</span>
+              <span className="text-[13.5px] font-semibold">{t('ppage.addMember')}</span>
             </button>
           )}
         </div>
       )}
 
       {!loading && (
-        <p className="mt-3 text-center text-[11.5px] text-slate-400">
+        <p className="mt-3 text-center text-[13px] text-slate-400">
           {atCap ? t('ppage.familyMax') : t('ppage.viewHistoryHint')}
         </p>
       )}

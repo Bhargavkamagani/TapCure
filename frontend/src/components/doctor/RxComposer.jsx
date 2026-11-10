@@ -43,7 +43,7 @@ const writeFrequency = (slots, food) => {
 const Toggle = ({ on, children, ...props }) => (
   <button
     type="button"
-    className={`rounded-lg border px-2.5 py-1 text-[12px] font-semibold transition-colors ${
+    className={`rounded-lg border px-2.5 py-1 text-[13px] font-semibold transition-colors ${
       on ? 'border-brand-blue bg-brand-blue text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-brand-blue/50'
     }`}
     {...props}
@@ -252,9 +252,9 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-blueLight text-brand-blue"><Pill className="h-5 w-5" /></span>
             <div>
               <h3 className="text-[17px] font-bold text-brand-navy">{appending ? 'Add to Prescription' : 'Write Prescription'}</h3>
-              {patientName && <p className="text-[12px] text-slate-400">For {patientName}</p>}
+              {patientName && <p className="text-[13px] text-slate-400">For {patientName}</p>}
               {hasPharmacy && (
-                <p className={`text-[11.5px] font-semibold ${isStale(pharmacy.last_updated_at) ? 'text-amber-600' : 'text-emerald-700'}`}>
+                <p className={`text-[13px] font-semibold ${isStale(pharmacy.last_updated_at) ? 'text-amber-600' : 'text-emerald-700'}`}>
                   Hospital pharmacy stock · updated {timeAgo(pharmacy.last_updated_at)}
                 </p>
               )}
@@ -267,7 +267,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
         {existing && (
           <div className={`mb-3 rounded-xl border px-3 py-2.5 ${separate ? 'border-slate-200 bg-slate-50' : 'border-emerald-100 bg-emerald-50/70'}`}>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="flex items-center gap-1.5 text-[12.5px] font-semibold text-brand-navy">
+              <p className="flex items-center gap-1.5 text-[13.5px] font-semibold text-brand-navy">
                 <FileText className="h-4 w-4 text-emerald-700" />
                 {separate
                   ? 'You already prescribed at this visit'
@@ -276,7 +276,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
               <button
                 type="button"
                 onClick={() => setSeparate((v) => !v)}
-                className="text-[12px] font-semibold text-brand-blue hover:underline"
+                className="text-[13px] font-semibold text-brand-blue hover:underline"
               >
                 {separate ? 'Add to that prescription instead' : 'Write a separate prescription instead'}
               </button>
@@ -285,40 +285,40 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
                 belong to the other one, and offering to edit them there would
                 blur which prescription the doctor is working on. */}
             {separate ? (
-              <p className="mt-1 text-[12px] text-slate-600">
+              <p className="mt-1 text-[13px] text-slate-600">
                 {(existing.items || []).map((m) => m.drug_name).join(', ') || 'No medicines on it'}
                 {existing.diagnosis ? ` · ${existing.diagnosis}` : ''}
               </p>
             ) : (
               <div className="mt-1.5 space-y-1">
                 {(existing.items || []).length === 0 && (
-                  <p className="text-[12px] text-slate-600">No medicines on it</p>
+                  <p className="text-[13px] text-slate-600">No medicines on it</p>
                 )}
                 {(existing.items || []).map((m) => {
                   const editing = items.some((it) => it.item_id === m.item_id)
                   const detail = [m.dosage, m.frequency, m.duration].filter(Boolean).join(' · ')
                   return (
                     <div key={m.item_id} className="flex items-center gap-1.5 rounded-lg bg-white/70 px-2 py-1">
-                      <span className="min-w-0 flex-1 truncate text-[12px] text-slate-600">
+                      <span className="min-w-0 flex-1 truncate text-[13px] text-slate-600">
                         <span className="font-semibold text-brand-navy">{m.drug_name}</span>
                         {detail ? ` · ${detail}` : ''}
                       </span>
                       {editing ? (
-                        <span className="shrink-0 text-[11.5px] font-semibold text-brand-blue">Editing below</span>
+                        <span className="shrink-0 text-[13px] font-semibold text-brand-blue">Editing below</span>
                       ) : confirmRemove === m.item_id ? (
                         <>
                           <button
                             type="button"
                             disabled={busy}
                             onClick={() => removeExisting(m)}
-                            className="shrink-0 rounded-lg bg-red-500 px-2 py-0.5 text-[11.5px] font-semibold text-white disabled:opacity-60"
+                            className="shrink-0 rounded-lg bg-red-500 px-2 py-0.5 text-[13px] font-semibold text-white disabled:opacity-60"
                           >
                             Remove
                           </button>
                           <button
                             type="button"
                             onClick={() => setConfirmRemove(null)}
-                            className="shrink-0 px-1 text-[11.5px] font-semibold text-slate-500 hover:underline"
+                            className="shrink-0 px-1 text-[13px] font-semibold text-slate-500 hover:underline"
                           >
                             Keep
                           </button>
@@ -347,7 +347,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
                   )
                 })}
                 {existing.diagnosis && (
-                  <p className="px-2 text-[12px] text-slate-500">{existing.diagnosis}</p>
+                  <p className="px-2 text-[13px] text-slate-500">{existing.diagnosis}</p>
                 )}
               </div>
             )}
@@ -356,7 +356,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
 
         {!appending && family.length > 0 && (
           <div className="mb-3">
-            <label className="mb-1 block text-[12px] font-semibold text-slate-600">Prescription for</label>
+            <label className="mb-1 block text-[13px] font-semibold text-slate-600">Prescription for</label>
             <select value={forWhom} onChange={(e) => setForWhom(e.target.value)} className="field-input">
               <option value="self">{patientName || 'Self'}</option>
               {family.map((m) => (
@@ -368,14 +368,14 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
 
         {!appending && (
           <div className="mb-3">
-            <label className="mb-1 block text-[12px] font-semibold text-slate-600">Diagnosis</label>
+            <label className="mb-1 block text-[13px] font-semibold text-slate-600">Diagnosis</label>
             <input value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)} placeholder="e.g. Viral fever" className="field-input" />
           </div>
         )}
 
         <div className="mb-2 flex items-center justify-between">
-          <label className="text-[12px] font-semibold text-slate-600">{appending ? 'More medicines' : 'Medicines'}</label>
-          <button onClick={addItem} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-brand-blue hover:bg-brand-blueLight/40">
+          <label className="text-[13px] font-semibold text-slate-600">{appending ? 'More medicines' : 'Medicines'}</label>
+          <button onClick={addItem} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-brand-blue hover:bg-brand-blueLight/40">
             <Plus className="h-3.5 w-3.5" /> Add
           </button>
         </div>
@@ -397,7 +397,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
                   <button onClick={() => removeItem(i)} className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>
                 </div>
                 {hasPharmacy && it.drug_name.trim() && (
-                  <p className="mt-1.5 flex items-center gap-1.5 px-1 text-[11.5px]">
+                  <p className="mt-1.5 flex items-center gap-1.5 px-1 text-[13px]">
                     {it.stock ? (
                       <>
                         <span className={`h-2 w-2 rounded-full ${STOCK_STATUS[it.stock.status].dot}`} />
@@ -413,7 +413,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
                 )}
 
                 <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Dose</span>
+                  <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">Dose</span>
                   {doseChoices(it).map((dose) => (
                     <Toggle
                       key={dose}
@@ -442,20 +442,20 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
                     <button
                       type="button"
                       onClick={() => patchItem(i, { custom: false, frequency: readFrequency(it.frequency) ? it.frequency : '' })}
-                      className="shrink-0 text-[12px] font-semibold text-brand-blue hover:underline"
+                      className="shrink-0 text-[13px] font-semibold text-brand-blue hover:underline"
                     >
                       Use buttons
                     </button>
                   </div>
                 ) : (
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <span className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">When</span>
+                    <span className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">When</span>
                     {SLOTS.map(([label, position]) => (
                       <Toggle key={label} on={!!current.slots[position]} onClick={() => toggleSlot(i, position, current)}>
                         {label}
                       </Toggle>
                     ))}
-                    <span className="ml-1 text-[11px] font-semibold uppercase tracking-wide text-slate-400">Food</span>
+                    <span className="ml-1 text-[12px] font-semibold uppercase tracking-wide text-slate-400">Food</span>
                     {FOODS.map((food) => (
                       <Toggle key={food} on={current.food === food} onClick={() => toggleFood(i, food, current)}>
                         {food === 'before food' ? 'Before food' : 'After food'}
@@ -464,7 +464,7 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
                     <button
                       type="button"
                       onClick={() => patchItem(i, { custom: true })}
-                      className="ml-auto text-[12px] font-semibold text-brand-blue hover:underline"
+                      className="ml-auto text-[13px] font-semibold text-brand-blue hover:underline"
                     >
                       Type instead
                     </button>
@@ -502,18 +502,18 @@ export default function RxComposer({ patientId, doctorId, appointmentId, patient
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {!appending && (
             <div>
-              <label className="mb-1 block text-[12px] font-semibold text-slate-600">Advice</label>
+              <label className="mb-1 block text-[13px] font-semibold text-slate-600">Advice</label>
               <input value={advice} onChange={(e) => setAdvice(e.target.value)} placeholder="Rest, fluids…" className="field-input" />
             </div>
           )}
           {(!appending || !existing?.follow_up_date) && (
             <div>
-              <label className="mb-1 block text-[12px] font-semibold text-slate-600">Follow-up date</label>
+              <label className="mb-1 block text-[13px] font-semibold text-slate-600">Follow-up date</label>
               <input type="date" value={followUp} onChange={(e) => setFollowUp(e.target.value)} className="field-input" />
             </div>
           )}
           {appending && existing?.follow_up_date && (
-            <p className="self-end text-[12px] text-slate-500">Follow-up already set for {existing.follow_up_date}</p>
+            <p className="self-end text-[13px] text-slate-500">Follow-up already set for {existing.follow_up_date}</p>
           )}
         </div>
 

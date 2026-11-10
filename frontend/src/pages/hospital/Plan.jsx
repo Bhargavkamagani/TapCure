@@ -155,7 +155,7 @@ export default function HospitalPlan() {
               </p>
             </div>
             {!data.online_booking_open && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-[12px] font-bold text-red-600">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-[13px] font-bold text-red-600">
                 <AlertTriangle className="h-3.5 w-3.5" /> Online booking is off
               </span>
             )}
@@ -227,9 +227,9 @@ export default function HospitalPlan() {
                     </p>
                   </>
                 )}
-                <p className="mt-3 text-[12px] text-slate-400">
-                  Counted: bookings patients make online or on WhatsApp ({data.counts.online}) and walk-ins sent WhatsApp queue alerts ({data.counts.walkin_with_alerts}).
-                  Not counted: walk-ins, and visits the hospital cancelled ({data.counts.not_counted_hospital_cancelled}).
+                <p className="mt-3 text-[13px] text-slate-400">
+                  Counted: bookings patients make online or on WhatsApp ({data.counts.online}).
+                  Not counted: walk-ins (always free), visits the hospital cancelled ({data.counts.not_counted_hospital_cancelled}), and free revisits ({data.counts.not_counted_free_revisit ?? 0}).
                 </p>
               </Card>
 
@@ -243,7 +243,7 @@ export default function HospitalPlan() {
                     <BillRow label="Total" value={inr(bill.total)} strong />
                   </div>
                   {bill.limit != null && (
-                    <p className="mt-2 text-[12px] text-slate-400">
+                    <p className="mt-2 text-[13px] text-slate-400">
                       {bill.overage_capped ? 'Limit reached — no more booking charges this month. ' : ''}
                       Plan and bookings never go above {shownPrice(plan.code, 'limit', inr(bill.limit))} a month (+ GST{plan.extra_doctors > 0 ? ', + extra doctors' : ''}).
                     </p>
@@ -253,10 +253,12 @@ export default function HospitalPlan() {
             </div>
           )}
 
-          {(data.state === 'near' || data.state === 'full' || data.state === 'over_chosen') && data.options?.length > 0 && (
-            <Card className={data.state === 'full' ? 'border-red-200' : 'border-amber-200'}>
+          {['ok', 'near', 'full', 'over_chosen'].includes(data.state) && data.options?.length > 0 && (
+            <Card className={data.state === 'full' ? 'border-red-200' : data.state === 'ok' ? '' : 'border-amber-200'}>
               <div className="flex items-start gap-3">
-                {data.state === 'over_chosen'
+                {data.state === 'ok'
+                  ? <Info className="mt-0.5 h-5 w-5 shrink-0 text-teal-600" />
+                  : data.state === 'over_chosen'
                   ? <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
                   : <AlertTriangle className={`mt-0.5 h-5 w-5 shrink-0 ${data.state === 'full' ? 'text-red-500' : 'text-amber-500'}`} />}
                 <div>
@@ -264,6 +266,7 @@ export default function HospitalPlan() {
                     {data.state === 'full' && 'Your free bookings are used up. What would you like to do?'}
                     {data.state === 'near' && `You've used ${data.used} of ${data.allowance} free bookings. Plan ahead:`}
                     {data.state === 'over_chosen' && 'You can still change your choice for this month:'}
+                    {data.state === 'ok' && 'Need more bookings or doctors? You can upgrade anytime:'}
                   </p>
                   {data.state === 'full' && (
                     <p className="mt-1 text-[13px] text-slate-500">
@@ -288,8 +291,8 @@ export default function HospitalPlan() {
                     >
                       <Icon className="h-5 w-5 text-teal-600" />
                       <span className="text-[14px] font-bold text-brand-navy">{opt.title}</span>
-                      <span className="text-[12.5px] text-slate-500">{opt.detail}</span>
-                      {picked && <span className="text-[11.5px] font-bold text-teal-700">Your choice this month</span>}
+                      <span className="text-[13.5px] text-slate-500">{opt.detail}</span>
+                      {picked && <span className="text-[13px] font-bold text-teal-700">Your choice this month</span>}
                     </button>
                   )
                 })}
@@ -420,9 +423,10 @@ function PlanPicker({ title = 'Choose your plan', choices, busy, onPick }) {
           >
             <span className="text-[15px] font-bold text-brand-navy">{p.name}</span>
             <span className="text-[14px] font-semibold text-teal-700">{shownPrice(p.code, 'price', inr(p.price))} / month</span>
-            <span className="text-[12.5px] text-slate-500">
+            <span className="text-[13.5px] text-slate-500">
               {p.included} free online bookings a month · {p.doctors} doctor{p.doctors > 1 ? 's' : ''}
             </span>
+            <span className="text-[13px] text-teal-700">Free revisits don't use your bookings</span>
           </button>
         ))}
       </div>
@@ -478,7 +482,7 @@ function Autopay({ status, onChanged }) {
           </button>
         )
       ) : (
-        <span className="text-[12px] text-slate-400">Online payment isn't set up yet — contact TapCure.</span>
+        <span className="text-[13px] text-slate-400">Online payment isn't set up yet — contact TapCure.</span>
       )}
     </Card>
   )
@@ -528,18 +532,18 @@ function Invoices() {
               <button type="button" onClick={() => setOpen(open === inv.invoice_id ? null : inv.invoice_id)}
                 className="min-w-0 flex-1 text-left">
                 <p className="text-[14px] font-semibold text-brand-navy">
-                  {inv.billing_month ? monthLabel(inv.billing_month) : 'Yearly plan'} <span className="font-mono text-[12px] text-slate-400">{inv.invoice_number}</span>
+                  {inv.billing_month ? monthLabel(inv.billing_month) : 'Yearly plan'} <span className="font-mono text-[13px] text-slate-400">{inv.invoice_number}</span>
                 </p>
-                <p className="text-[12px] text-slate-500">
+                <p className="text-[13px] text-slate-500">
                   {inr(inv.total_amount)} incl. GST{inv.status === 'paid' && inv.paid_date ? ` · paid ${inv.paid_date}` : inv.due_date ? ` · due ${inv.due_date}` : ''}
                 </p>
               </button>
-              <span className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold capitalize ${INVOICE_TONE[inv.status] || 'bg-slate-100 text-slate-600'}`}>
+              <span className={`rounded-full px-2.5 py-0.5 text-[13px] font-bold capitalize ${INVOICE_TONE[inv.status] || 'bg-slate-100 text-slate-600'}`}>
                 {inv.status === 'sent' ? 'Unpaid' : inv.status}
               </span>
               {inv.status !== 'paid' && inv.status !== 'void' && (
                 <button type="button" onClick={() => pay(inv)} disabled={paying === inv.invoice_id}
-                  className="rounded-lg border border-teal-300 px-3 py-1 text-[12.5px] font-semibold text-teal-700 hover:bg-teal-50 disabled:opacity-50">
+                  className="rounded-lg border border-teal-300 px-3 py-1 text-[13.5px] font-semibold text-teal-700 hover:bg-teal-50 disabled:opacity-50">
                   {paying === inv.invoice_id ? 'Opening…' : 'Pay now'}
                 </button>
               )}

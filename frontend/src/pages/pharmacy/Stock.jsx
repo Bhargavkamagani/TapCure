@@ -45,7 +45,7 @@ function ThresholdEditor({ value, onSaved }) {
     return (
       <button
         onClick={() => setEditing(true)}
-        className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[12px] font-semibold text-amber-700 hover:bg-amber-100"
+        className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1 text-[13px] font-semibold text-amber-700 hover:bg-amber-100"
         title="Change when a medicine counts as low stock"
       >
         Low stock = {value} or fewer <Pencil className="h-3 w-3" />
@@ -53,7 +53,7 @@ function ThresholdEditor({ value, onSaved }) {
     )
   }
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-slate-600">
+    <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-slate-600">
       Low stock =
       <input
         autoFocus
@@ -153,7 +153,7 @@ export default function PharmacyStock() {
         </Card>
       ) : data ? (
         <>
-          <div className="flex flex-wrap items-center gap-2 text-[12px]">
+          <div className="flex flex-wrap items-center gap-2 text-[13px]">
             {data.last_updated_at && (
               <span
                 className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold ${
@@ -176,7 +176,7 @@ export default function PharmacyStock() {
                 <button
                   key={f.key}
                   onClick={() => { setFilter(f.key); setPage(1) }}
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[12px] font-semibold transition-colors ${
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[13px] font-semibold transition-colors ${
                     active ? 'border-teal-500 bg-teal-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-teal-300'
                   }`}
                 >
@@ -190,7 +190,7 @@ export default function PharmacyStock() {
           <Card className="min-h-0 flex-1 overflow-hidden p-0">
             <div className="h-full overflow-auto">
               <table className="w-full min-w-[820px] text-left text-[13px]">
-                <thead className="sticky top-0 z-10 bg-slate-50 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                <thead className="sticky top-0 z-10 bg-slate-50 text-[12px] font-semibold uppercase tracking-wide text-slate-500">
                   <tr>
                     <th className="px-4 py-2.5">Medicine</th>
                     <th className="px-3 py-2.5">Strength</th>
@@ -214,7 +214,7 @@ export default function PharmacyStock() {
                         <tr key={it.stock_id} className="border-t border-slate-100 hover:bg-slate-50/60">
                           <td className="px-4 py-2.5">
                             <p className="font-semibold text-brand-navy">{it.medicine_name}</p>
-                            {it.generic_name && <p className="text-[11.5px] text-slate-400">{it.generic_name}</p>}
+                            {it.generic_name && <p className="text-[13px] text-slate-400">{it.generic_name}</p>}
                           </td>
                           <td className="px-3 py-2.5 text-slate-600">{it.strength || '—'}</td>
                           <td className="px-3 py-2.5 text-slate-600">{it.form || '—'}</td>
@@ -223,7 +223,7 @@ export default function PharmacyStock() {
                           <td className="px-3 py-2.5 text-right text-slate-600">{it.mrp != null ? `₹${it.mrp.toFixed(2)}` : '—'}</td>
                           <td className="px-3 py-2.5 text-right font-bold text-brand-navy">{it.quantity}</td>
                           <td className="px-4 py-2.5">
-                            <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${st.badge}`}>{st.label}</span>
+                            <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-0.5 text-[13px] font-semibold ${st.badge}`}>{st.label}</span>
                           </td>
                         </tr>
                       )
@@ -235,7 +235,7 @@ export default function PharmacyStock() {
           </Card>
 
           {pages > 1 && (
-            <div className="flex items-center justify-end gap-2 text-[12px] font-semibold text-slate-500">
+            <div className="flex items-center justify-end gap-2 text-[13px] font-semibold text-slate-500">
               <span>Page {page} of {pages} · {data.total} medicines</span>
               <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-slate-200 bg-white p-1.5 disabled:opacity-40" aria-label="Previous page">
                 <ChevronLeft className="h-4 w-4" />

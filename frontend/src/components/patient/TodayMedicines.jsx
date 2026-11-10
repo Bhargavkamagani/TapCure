@@ -152,7 +152,7 @@ export default function TodayMedicines({ onVisibleChange }) {
         </span>
         <div className="min-w-0 flex-1 leading-tight">
           <h3 className="text-[15.5px] font-bold tracking-tight text-brand-navy">{t('pm.todayTitle')}</h3>
-          <p className="mt-0.5 text-[12px] text-slate-400">{t('pm.todaySub')}</p>
+          <p className="mt-0.5 text-[13px] text-slate-400">{t('pm.todaySub')}</p>
         </div>
         <div className="shrink-0 text-right">
           {/* Straight to the Medicine Reminders tab, not the records list —
@@ -160,12 +160,12 @@ export default function TodayMedicines({ onVisibleChange }) {
               running medicines, not their lab reports. */}
           <Link
             to="prescriptions?tab=reminders"
-            className="group inline-flex items-center gap-1 text-[12.5px] font-bold text-brand-blue transition-colors hover:text-brand-blueDark"
+            className="group inline-flex items-center gap-1 text-[13.5px] font-bold text-brand-blue transition-colors hover:text-brand-blueDark"
           >
             {t('pm.viewAll')}
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>
-          <p className="mt-1 text-[11.5px] font-semibold tabular-nums text-slate-500">
+          <p className="mt-1 text-[13px] font-semibold tabular-nums text-slate-500">
             {t('pm.takenCount', { n: taken, total })}
           </p>
           {/* Progress of the day, not of the course — this bar resets tomorrow. */}
@@ -180,7 +180,7 @@ export default function TodayMedicines({ onVisibleChange }) {
         </div>
       </div>
 
-      {error && <p className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-[12.5px] text-red-600">{error}</p>}
+      {error && <p className="mb-3 rounded-xl bg-red-50 px-3 py-2 text-[13.5px] text-red-600">{error}</p>}
 
       <AnimatePresence initial={false}>
         {shown.map((d) => {
@@ -214,25 +214,25 @@ export default function TodayMedicines({ onVisibleChange }) {
                   strokeWidth={2.75}
                 />
               </span>
-              <span className="w-[62px] shrink-0 text-[12.5px] font-bold tabular-nums text-slate-600">
+              <span className="w-[62px] shrink-0 text-[13.5px] font-bold tabular-nums text-slate-600">
                 {clockIST(d.send_at)}
               </span>
               <div className="min-w-0 flex-1 leading-tight">
                 <p className={`truncate text-[13.5px] font-bold ${isTaken ? 'text-slate-500' : 'text-brand-navy'}`}>
                   {d.drug_name}
                   {d.family_member_name && (
-                    <span className="ml-1 text-[11.5px] font-semibold text-brand-blue">
+                    <span className="ml-1 text-[13px] font-semibold text-brand-blue">
                       {t('pm.forPerson', { name: translitName(d.family_member_name, lang) })}
                     </span>
                   )}
                 </p>
-                <p className="truncate text-[11.5px] text-slate-400">
+                <p className="truncate text-[13px] text-slate-400">
                   {[d.dosage, d.food_note].filter(Boolean).join(' · ')}
                 </p>
               </div>
 
               {isTaken ? (
-                <span className="shrink-0 rounded-xl bg-emerald-50 px-2.5 py-1.5 text-right text-[11.5px] font-bold text-emerald-700 ring-1 ring-emerald-100">
+                <span className="shrink-0 rounded-xl bg-emerald-50 px-2.5 py-1.5 text-right text-[13px] font-bold text-emerald-700 ring-1 ring-emerald-100">
                   <span className="flex items-center gap-1">
                     <span className="grid h-4 w-4 place-items-center rounded-full bg-emerald-500 text-white">
                       <Check className="h-2.5 w-2.5" strokeWidth={3} />
@@ -251,12 +251,12 @@ export default function TodayMedicines({ onVisibleChange }) {
                   onClick={() => markTaken(d)}
                   disabled={busy === d.reminder_id}
                   whileTap={{ scale: 0.96 }}
-                  className="shrink-0 rounded-xl bg-rose-500 px-3.5 py-1.5 text-[12px] font-bold text-white shadow-sm shadow-rose-500/30 transition-colors hover:bg-rose-600 disabled:opacity-60"
+                  className="shrink-0 rounded-xl bg-rose-500 px-3.5 py-1.5 text-[13px] font-bold text-white shadow-sm shadow-rose-500/30 transition-colors hover:bg-rose-600 disabled:opacity-60"
                 >
                   {busy === d.reminder_id ? '…' : t('pm.takeNow')}
                 </motion.button>
               ) : (
-                <span className="shrink-0 rounded-xl bg-white px-2.5 py-1.5 text-[12px] font-semibold text-slate-400 ring-1 ring-slate-200">
+                <span className="shrink-0 rounded-xl bg-white px-2.5 py-1.5 text-[13px] font-semibold text-slate-400 ring-1 ring-slate-200">
                   {t('pm.upcoming')}
                 </span>
               )}
@@ -269,7 +269,7 @@ export default function TodayMedicines({ onVisibleChange }) {
       {hiddenCount > 0 && (
         <Link
           to="prescriptions?tab=reminders"
-          className="mb-2 flex items-center justify-center gap-1 rounded-2xl bg-slate-50/60 px-3 py-2 text-[12.5px] font-bold text-brand-blue ring-1 ring-slate-100 transition-colors hover:bg-slate-50"
+          className="mb-2 flex items-center justify-center gap-1 rounded-2xl bg-slate-50/60 px-3 py-2 text-[13.5px] font-bold text-brand-blue ring-1 ring-slate-100 transition-colors hover:bg-slate-50"
         >
           {t('pm.moreToday', { n: hiddenCount })}
           <ArrowRight className="h-3.5 w-3.5" />
@@ -281,8 +281,8 @@ export default function TodayMedicines({ onVisibleChange }) {
           <Leaf className="h-4 w-4" />
         </span>
         <div className="leading-snug">
-          <p className="text-[12.5px] font-bold text-emerald-800">{t('pm.consistencyTitle')}</p>
-          <p className="text-[11.5px] text-emerald-700/90">{t('pm.consistencyBody')}</p>
+          <p className="text-[13.5px] font-bold text-emerald-800">{t('pm.consistencyTitle')}</p>
+          <p className="text-[13px] text-emerald-700/90">{t('pm.consistencyBody')}</p>
         </div>
       </div>
     </Card>

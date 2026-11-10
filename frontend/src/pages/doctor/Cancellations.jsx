@@ -53,7 +53,7 @@ function Cancellations() {
         <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-[12px] font-semibold text-slate-400">
+            <tr className="text-[13px] font-semibold text-slate-400">
               <th className="pb-3 pr-4">Date</th><th className="pb-3 pr-4">Patient</th>
               <th className="pb-3 pr-4">Reason</th><th className="pb-3 pr-4">Type</th><th className="pb-3">Refund</th>
             </tr>

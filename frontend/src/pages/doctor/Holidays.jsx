@@ -121,7 +121,7 @@ export function HolidaysPanel() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h3 className="text-[15px] font-bold text-brand-navy">Holidays &amp; Leave</h3>
-          <p className="text-[12px] font-medium text-slate-500">Mark days you&apos;re unavailable.</p>
+          <p className="text-[13px] font-medium text-slate-500">Mark days you&apos;re unavailable.</p>
         </div>
         <ToolButton icon={Plus} tone="primary" onClick={() => setAdding(true)}>Add Holiday</ToolButton>
       </div>
@@ -140,7 +140,7 @@ export function HolidaysPanel() {
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-500"><CalendarOff className="h-5 w-5" /></span>
               <div className="min-w-0 flex-1">
                 <p className="text-[15px] font-bold text-brand-navy">{h.reason || 'Holiday'}</p>
-                <p className="text-[12.5px] text-slate-500">{prettyDate(h.holiday_date)}</p>
+                <p className="text-[13.5px] text-slate-500">{prettyDate(h.holiday_date)}</p>
                 <div className="mt-2"><StatusBadge status={h.is_full_day ? 'Unavailable' : 'Partial'} /></div>
               </div>
               <button onClick={() => remove(h.holiday_id)} className="text-slate-400 hover:text-red-500"><Trash2 className="h-4 w-4" /></button>

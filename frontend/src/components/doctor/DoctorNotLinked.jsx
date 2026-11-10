@@ -23,7 +23,7 @@ export default function DoctorNotLinked() {
           You&apos;re signed in{user?.email ? <> as <span className="font-semibold text-ink">{user.email}</span></> : ''},
           but no doctor profile is attached to this account, so there is no practice to show.
         </p>
-        <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-[12.5px] leading-relaxed text-slate-500">
+        <p className="mt-3 rounded-xl bg-slate-50 px-4 py-3 text-[13.5px] leading-relaxed text-slate-500">
           Ask your hospital admin to link this login to your doctor record. If you registered your own
           practice, contact support and quote this email.
         </p>

@@ -81,7 +81,7 @@ export function OnboardingQuote({ className = '' }) {
               className="text-[13px] italic leading-[1.55] text-ink-soft"
             >
               {quote.text}
-              <footer className="mt-2.5 flex items-center gap-2 text-[10px] font-bold not-italic uppercase tracking-[0.16em] text-teal-600">
+              <footer className="mt-2.5 flex items-center gap-2 text-[12px] font-bold not-italic uppercase tracking-[0.16em] text-teal-600">
                 <span className="h-px w-4 shrink-0 bg-teal-400/60" />
                 {quote.author}
               </footer>
@@ -98,7 +98,7 @@ export default function OnboardingHeader({ eyebrow, title, sub, animateKey, chil
     <header className="mb-7 flex items-start justify-between gap-10">
       <div className="min-w-0 flex-1">
         {eyebrow && (
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-teal-600">{eyebrow}</p>
+          <p className="text-[12px] font-bold uppercase tracking-[0.18em] text-teal-600">{eyebrow}</p>
         )}
         <AnimatePresence mode="wait">
           <motion.div

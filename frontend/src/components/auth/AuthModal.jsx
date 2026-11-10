@@ -265,9 +265,9 @@ function AuthModal({ open, onClose, role = 'patient', initialMode = 'login', pag
                     <Icon className="h-[18px] w-[18px]" />
                   </span>
                   <span className="leading-tight">
-                    <span className="block text-[10.5px] font-medium text-slate-500">{t(label)}</span>
+                    <span className="block text-[13px] font-medium text-slate-500">{t(label)}</span>
                     <b className="block text-[19px] font-extrabold tracking-tight text-[#0f2742]">{value}</b>
-                    <span className="block text-[10px] text-slate-400">{t(note)}</span>
+                    <span className="block text-[13px] text-slate-400">{t(note)}</span>
                   </span>
                 </span>
               ))}

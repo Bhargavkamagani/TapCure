@@ -777,7 +777,7 @@
   background-image: linear-gradient(90deg, hsla(0 0% 100% / 1) 0%, hsla(0 0% 100% / var(--active, 0)) 120%);
   background-clip: text;
   -webkit-background-clip: text;
-  font-size: 0.95rem;
+  font-size: 15px;
   font-weight: 700;
   color: transparent;
 }
@@ -931,7 +931,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
   color: #9aa4b2;
   transition: color 0.3s ease-in-out;
@@ -955,7 +955,7 @@
    Size: the glider is sized as a fraction of the container
    (100% / --total-radio), so taller rows need no other change. */
 .radio-container.nav-hospital .nav-item {
-  font-size: 0.9375rem;
+  font-size: 15px;
   padding: 0.95rem 1rem;
   color: rgba(204, 251, 241, 0.8);   /* teal-100/80 */
 }
@@ -1073,12 +1073,12 @@
        bold weight, and force all `<em>` / `.italic` text upright. Scoped rules
        (0,2,0 / 0,1,1) beat the utility classes they override. */
 .theme-editorial .font-serif {
-  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-family: var(--font-head);
 }
 .theme-editorial h1,
 .theme-editorial h2,
 .theme-editorial h3 {
-  font-family: 'Instrument Sans', system-ui, sans-serif;
+  font-family: var(--font-head);
   font-weight: 700;
   letter-spacing: -0.015em;
 }
@@ -2055,3 +2055,29 @@
 .signup-lg input::placeholder,
 .signup-lg textarea::placeholder,
 .signup-lg .field-input::placeholder { font-size: 15.5px; }
+
+/* ---- One text style for the whole app (2026-11-08) ------------------------
+   Headings: Plus Jakarta Sans. Reading text: Inter. Telugu/Hindi: Noto Sans.
+   A page opts in with the `tc-type` class on its root (modern pages, signup,
+   login); the landing page sets the same faces through its own --sans/--head.
+   The tc-* classes are the type scale every redesigned screen should use. */
+:root {
+  --font-head: "Plus Jakarta Sans", "Noto Sans Telugu", "Noto Sans Devanagari", Inter, system-ui, sans-serif;
+  --font-body: Inter, "Noto Sans Telugu", "Noto Sans Devanagari", system-ui, sans-serif;
+}
+.tc-type :is(h1, h2, h3, h4) { font-family: var(--font-head); letter-spacing: -0.015em; }
+.tc-type :is(h1, h2, h3, h4):lang(te), .tc-type :is(h1, h2, h3, h4):lang(hi) { letter-spacing: 0; }
+
+.tc-page-title    { font-family: var(--font-head); font-size: 32px; font-weight: 800; line-height: 1.15; letter-spacing: -0.02em; }
+.tc-big-number    { font-family: var(--font-head); font-size: 56px; font-weight: 800; line-height: 1;    letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.tc-section-title { font-family: var(--font-head); font-size: 22px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; }
+.tc-card-title    { font-family: var(--font-head); font-size: 18px; font-weight: 700; line-height: 1.3; }
+.tc-body          { font-family: var(--font-body); font-size: 16px; font-weight: 400; line-height: 1.55; }
+.tc-small         { font-family: var(--font-body); font-size: 14px; font-weight: 400; line-height: 1.5; }
+.tc-label         { font-family: var(--font-body); font-size: 13px; font-weight: 600; line-height: 1.4; }
+
+/* Every heading in the app uses the heading face (patient app and staff
+   screens included). A class like font-sans on a heading still wins. */
+@layer base {
+  h1, h2, h3 { font-family: var(--font-head); }
+}

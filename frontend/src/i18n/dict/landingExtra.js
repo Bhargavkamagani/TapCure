@@ -66,18 +66,18 @@ export const landingExtraT = {
   'lx.doc.langs.urHiEn': { en: 'Urdu, Hindi, English', te: 'ఉర్దూ, హిందీ, ఇంగ్లీష్', hi: 'उर्दू, हिंदी, अंग्रेज़ी' },
 
   // ---- TcSections: phone mock ----
-  'lx.phone.traffic': { en: 'Traffic on ORR', te: 'ORR పై ట్రాఫిక్', hi: 'ORR पर ट्रैफ़िक' },
+  'lx.phone.traffic': { en: 'Traffic on your road', te: 'మీ దారిలో ట్రాఫిక్', hi: 'आपके रास्ते पर ट्रैफ़िक' },
   'lx.phone.trafficSub': { en: '+4 min vs. usual · route updated', te: 'సాధారణం కంటే +4 నిమి · మార్గం మార్చబడింది', hi: 'सामान्य से +4 मिनट · रास्ता अपडेट हुआ' },
   'lx.phone.onSchedule': { en: 'Hospital on schedule', te: 'ఆసుపత్రి సమయానికి నడుస్తోంది', hi: 'अस्पताल समय पर चल रहा है' },
-  'lx.phone.onScheduleSub': { en: '3 patients ahead · 12 min wait', te: 'మీ ముందు 3 రోగులు · 12 నిమి వేచి ఉండాలి', hi: 'आपसे आगे 3 मरीज़ · 12 मिनट इंतज़ार' },
+  'lx.phone.onScheduleSub': { en: '3 patients before you · 12 min wait', te: 'మీ ముందు 3 మంది · 12 నిమి వేచి ఉండాలి', hi: 'आपसे पहले 3 मरीज़ · 12 मिनट इंतज़ार' },
   'lx.phone.saved': { en: 'Your details are saved', te: 'మీ వివరాలు సేవ్ అయ్యాయి', hi: 'आपकी जानकारी सेव है' },
   'lx.phone.savedSub': { en: 'No forms to fill at the desk', te: 'డెస్క్ వద్ద ఫారాలు నింపాల్సిన పని లేదు', hi: 'डेस्क पर कोई फ़ॉर्म नहीं भरना' },
 
   // ---- TcLeaveNow ----
   'lx.ln.nowSlot': {
-    en: 'It is {now} {nowAp} · your slot is {slot} {slotAp}',
-    te: 'ఇప్పుడు సమయం {now} {nowAp} · మీ స్లాట్ {slot} {slotAp}',
-    hi: 'अभी {now} {nowAp} बजे हैं · आपका स्लॉट {slot} {slotAp} है',
+    en: 'Now {now} {nowAp} · Your turn at {slot} {slotAp}',
+    te: 'ఇప్పుడు {now} {nowAp} · మీ వంతు {slot} {slotAp}కి',
+    hi: 'अभी {now} {nowAp} · आपकी बारी {slot} {slotAp} पर',
   },
 
   // ---- TcLedger: questions ----
@@ -288,7 +288,7 @@ export const landingExtraT = {
 
   // Demo people, places and hospitals on the landing page. Keyed by the
   // exact English shown, so a render site is just t('lx.demo.' + name).
-  'lx.demo.Dr. Anaya Rao': { en: 'Dr. Anaya Rao', te: 'డా. అనయా రావు', hi: 'डॉ. अनया राव' },
+  'lx.demo.Dr. Anaya Rao': { en: 'Dr. Ananya Rao', te: 'డా. అనన్య రావు', hi: 'डॉ. अनन्या राव' },
   'lx.demo.Dr. Ananya Rao': { en: 'Dr. Ananya Rao', te: 'డా. అనన్య రావు', hi: 'डॉ. अनन्या राव' },
   'lx.demo.Dr. Vikram Nair': { en: 'Dr. Vikram Nair', te: 'డా. విక్రమ్ నాయర్', hi: 'डॉ. विक्रम नायर' },
   'lx.demo.Dr. Meher Iqbal': { en: 'Dr. Meher Iqbal', te: 'డా. మెహర్ ఇక్బాల్', hi: 'डॉ. मेहर इक़बाल' },

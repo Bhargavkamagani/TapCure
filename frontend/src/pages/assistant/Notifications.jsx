@@ -90,18 +90,18 @@ function AssistantNotifications() {
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-red-100 bg-red-50 px-4 py-2.5 text-sm text-red-600">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span className="font-semibold">{error}</span>
-          <span className="text-[12.5px] text-red-500">This is a load failure, not an empty inbox.</span>
+          <span className="text-[13.5px] text-red-500">This is a load failure, not an empty inbox.</span>
           <button type="button" onClick={load}
-            className="ml-auto rounded-lg border border-red-200 bg-white px-3 py-1 text-[12.5px] font-semibold text-red-600 hover:bg-red-50">
+            className="ml-auto rounded-lg border border-red-200 bg-white px-3 py-1 text-[13.5px] font-semibold text-red-600 hover:bg-red-50">
             Retry
           </button>
         </div>
       )}
       {actionError && (
-        <p className="rounded-xl bg-amber-50 px-3 py-2 text-[12.5px] font-medium text-amber-700">{actionError}</p>
+        <p className="rounded-xl bg-amber-50 px-3 py-2 text-[13.5px] font-medium text-amber-700">{actionError}</p>
       )}
       {truncated && (
-        <p className="rounded-xl bg-slate-50 px-3 py-2 text-[12px] font-medium text-slate-500">
+        <p className="rounded-xl bg-slate-50 px-3 py-2 text-[13px] font-medium text-slate-500">
           Showing the latest {PAGE_SIZE} notifications — older ones aren’t listed.
         </p>
       )}
@@ -130,8 +130,8 @@ function AssistantNotifications() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[13.5px] font-semibold text-brand-navy">{n.title || 'Notification'}</p>
-                    {n.message && <p className="text-[12.5px] text-slate-500">{n.message}</p>}
-                    <p className="mt-0.5 text-[11px] text-slate-400">{relativeTime(n.created_at)}</p>
+                    {n.message && <p className="text-[13.5px] text-slate-500">{n.message}</p>}
+                    <p className="mt-0.5 text-[13px] text-slate-400">{relativeTime(n.created_at)}</p>
                   </div>
                   {unreadRow && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-amber-500" />}
                 </li>

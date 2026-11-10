@@ -110,9 +110,9 @@ function ApptRow({ appt, doctor, hospital, onCancel, onReschedule, canManage }) 
       <Avatar name={doctorName} className="h-12 w-12" />
       <div className="min-w-[160px] leading-tight">
         <p className="text-[15px] font-bold text-brand-navy">{doctorName}</p>
-        <p className="text-[12.5px] text-slate-500">{specialtyLabel(doctor?.specialization, lang) || appt.appointment_type}</p>
+        <p className="text-[13.5px] text-slate-500">{specialtyLabel(doctor?.specialization, lang) || appt.appointment_type}</p>
         {appt.family_member_name && (
-          <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[10.5px] font-semibold text-purple-600">
+          <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[13px] font-semibold text-purple-600">
             <UserRound className="h-3 w-3" /> {t('pm.forPerson', { name: translitName(appt.family_member_name, lang) })}
           </span>
         )}
@@ -120,7 +120,7 @@ function ApptRow({ appt, doctor, hospital, onCancel, onReschedule, canManage }) 
       <div className="flex items-center gap-2">
         <div className="rounded-lg bg-brand-blueLight px-3 py-1.5 text-center">
           <p className="text-[18px] font-extrabold leading-none text-brand-blue">{chip.day}</p>
-          <p className="text-[10px] text-slate-500">{chip.month}</p>
+          <p className="text-[13px] text-slate-500">{chip.month}</p>
         </div>
         {appt.slot_time && (
           <span className="flex items-center gap-1 text-[13px] font-semibold text-slate-600">
@@ -131,7 +131,7 @@ function ApptRow({ appt, doctor, hospital, onCancel, onReschedule, canManage }) 
       <div className="min-w-[170px] leading-tight">
         <p className="text-[13.5px] font-semibold text-brand-navy">{translitName(hospital?.name, lang) || '—'}</p>
         {hospital && (
-          <p className="flex items-center gap-1 text-[12px] text-slate-400">
+          <p className="flex items-center gap-1 text-[13px] text-slate-400">
             <MapPin className="h-3.5 w-3.5" />{translitName([hospital.city, hospital.state].filter(Boolean).join(', '), lang)}
           </p>
         )}
@@ -148,7 +148,7 @@ function ApptRow({ appt, doctor, hospital, onCancel, onReschedule, canManage }) 
                 onClick={() => onReschedule(appt)}
                 disabled={rescheduleUsedUp}
                 title={rescheduleUsedUp ? t('ppage.rescheduleUsedHint') : undefined}
-                className={`flex items-center gap-1 text-[12px] font-semibold ${
+                className={`flex items-center gap-1 text-[13px] font-semibold ${
                   rescheduleUsedUp
                     ? 'cursor-not-allowed text-slate-300'
                     : 'text-brand-blue hover:underline'
@@ -156,10 +156,10 @@ function ApptRow({ appt, doctor, hospital, onCancel, onReschedule, canManage }) 
               >
                 <CalendarClock className="h-3.5 w-3.5" />{t('ppage.reschedule')}
               </button>
-              <button onClick={() => onCancel(appt)} className="text-[12px] font-semibold text-red-500 hover:underline">{t('ppage.cancel')}</button>
+              <button onClick={() => onCancel(appt)} className="text-[13px] font-semibold text-red-500 hover:underline">{t('ppage.cancel')}</button>
             </div>
             {rescheduleUsedUp && (
-              <p className="max-w-[190px] text-[10.5px] leading-tight text-slate-400">{t('ppage.rescheduleUsed')}</p>
+              <p className="max-w-[190px] text-[13px] leading-tight text-slate-400">{t('ppage.rescheduleUsed')}</p>
             )}
           </>
         )}
@@ -219,26 +219,26 @@ function TravelPlanCard({ appt, doctor, hospital }) {
           </span>
           <div className="leading-tight">
             <p className="text-[14px] font-bold text-brand-navy">{doctorName}</p>
-            <p className="text-[12px] text-slate-500">{translitName(hospital?.name, lang) || t('ppage.hospital')}{appt.slot_time ? ` · ${t('ppage.slot', { time: prettyTime(appt.slot_time) })}` : ''}</p>
+            <p className="text-[13px] text-slate-500">{translitName(hospital?.name, lang) || t('ppage.hospital')}{appt.slot_time ? ` · ${t('ppage.slot', { time: prettyTime(appt.slot_time) })}` : ''}</p>
             {/* Whose visit this is. The rows below already say it; this card —
                 the one a patient actually reads on the day — did not, so a
                 parent travelling for a child had nothing naming the child. */}
             {appt.family_member_name && (
-              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[10.5px] font-semibold text-purple-600">
+              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-purple-50 px-2 py-0.5 text-[13px] font-semibold text-purple-600">
                 <UserRound className="h-3 w-3" /> {t('pm.forPerson', { name: translitName(appt.family_member_name, lang) })}
               </span>
             )}
           </div>
         </div>
         {phase === 'ready' && est?.queue_position > 0 && (
-          <span className="rounded-full bg-white px-3 py-1 text-[12px] font-bold text-brand-navy shadow-sm">
+          <span className="rounded-full bg-white px-3 py-1 text-[13px] font-bold text-brand-navy shadow-sm">
             {t('ppage.inQueue', { n: est.queue_position })}
           </span>
         )}
       </div>
 
       {phase === 'pending' && (
-        <p className="mt-3 text-[12.5px] text-slate-500">
+        <p className="mt-3 text-[13.5px] text-slate-500">
           {t('ppage.waitingForHospital')}
         </p>
       )}
@@ -258,20 +258,20 @@ function TravelPlanCard({ appt, doctor, hospital }) {
             <div className="grid grid-cols-2 gap-3 text-[13px] sm:grid-cols-3">
               {est.leave_by && (
                 <div className="rounded-xl bg-white px-3 py-2 shadow-sm">
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{t('pdash.leaveByTitle')}</p>
+                  <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{t('pdash.leaveByTitle')}</p>
                   <p className="flex items-center gap-1.5 text-[15px] font-extrabold text-amber-600">
                     <Footprints className="h-4 w-4" />{clockISTWithDay(est.leave_by)}
                   </p>
                 </div>
               )}
               <div className="rounded-xl bg-white px-3 py-2 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">{t('ppage.tokenExpected')}</p>
+                <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">{t('ppage.tokenExpected')}</p>
                 <p className="flex items-center gap-1.5 text-[15px] font-extrabold text-brand-navy">
                   <Clock className="h-4 w-4 text-brand-blue" />{clockISTWithDay(est.estimated_time)}
                 </p>
               </div>
               <div className="rounded-xl bg-white px-3 py-2 shadow-sm">
-                <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-400">
                   {est.arrive_by ? t('px.appt.reachBy') : t('ppage.waitTime')}
                 </p>
                 <p className="flex items-center gap-1.5 text-[15px] font-extrabold text-brand-navy">
@@ -282,12 +282,12 @@ function TravelPlanCard({ appt, doctor, hospital }) {
             </div>
           )}
           {hasLeaveBy && !leaveNow && (
-            <p className="mt-2 text-[12px] text-slate-500">
+            <p className="mt-2 text-[13px] text-slate-500">
               {t('ppage.travelRemind', { d: humanMins(t, est.travel_min), from: est.origin_label ? t('ppage.travelFrom', { place: originLabelText(est.origin_label, t, lang) }) : '' })}
             </p>
           )}
           {!est?.travel_min && (
-            <p className="mt-2 text-[12px] text-slate-400">
+            <p className="mt-2 text-[13px] text-slate-400">
               {t('ppage.addStartLocation')}
             </p>
           )}
@@ -299,7 +299,7 @@ function TravelPlanCard({ appt, doctor, hospital }) {
           href={navUrl}
           target="_blank"
           rel="noreferrer"
-          className={`mt-3 inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-[12.5px] font-bold text-white transition-colors ${
+          className={`mt-3 inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-[13.5px] font-bold text-white transition-colors ${
             leaveNow ? 'bg-amber-500 hover:bg-amber-600' : 'bg-brand-blue hover:bg-brand-blueDark'
           }`}
         >

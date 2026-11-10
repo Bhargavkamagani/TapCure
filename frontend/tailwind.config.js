@@ -62,12 +62,30 @@ export default {
         muted: { DEFAULT: '#eef5f3', foreground: '#64748b' },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['"Instrument Serif"', 'ui-serif', 'Georgia', 'serif'],
-        // Rounded display face for headings that should feel warm rather than
-        // clinical. Loaded in index.html alongside Inter; used by doctor
-        // first-login setup.
-        display: ['Fredoka', 'Inter', 'system-ui', 'sans-serif'],
+        // One text style for the whole app (2026-11-08): Inter for reading text,
+        // Plus Jakarta Sans for headings, Noto for Telugu and Hindi letters
+        // (Inter and Jakarta have none, so phones each picked their own font).
+        sans: ['Inter', '"Noto Sans Telugu"', '"Noto Sans Devanagari"', 'system-ui', 'sans-serif'],
+        heading: ['"Plus Jakarta Sans"', '"Noto Sans Telugu"', '"Noto Sans Devanagari"', 'Inter', 'system-ui', 'sans-serif'],
+        // The old serif and rounded heading faces now point at the heading font,
+        // so every `font-serif` / `font-display` heading matches the rest.
+        serif: ['"Plus Jakarta Sans"', '"Noto Sans Telugu"', '"Noto Sans Devanagari"', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['"Plus Jakarta Sans"', '"Noto Sans Telugu"', '"Noto Sans Devanagari"', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      // Text sizes in px (2026-11-08). index.css shrinks the root to 80%, which
+      // made the rem defaults tiny (text-xs was 9.6px, text-sm 11.2px). Fixed px
+      // keep every label readable (13px and up) while spacing stays as it is.
+      fontSize: {
+        xs: ['13px', { lineHeight: '18px' }],
+        sm: ['14px', { lineHeight: '20px' }],
+        base: ['16px', { lineHeight: '24px' }],
+        lg: ['17px', { lineHeight: '26px' }],
+        xl: ['19px', { lineHeight: '28px' }],
+        '2xl': ['22px', { lineHeight: '30px' }],
+        '3xl': ['27px', { lineHeight: '34px' }],
+        '4xl': ['32px', { lineHeight: '38px' }],
+        '5xl': ['40px', { lineHeight: '1.1' }],
+        '6xl': ['50px', { lineHeight: '1.05' }],
       },
       boxShadow: {
         card: '0 2px 10px rgba(15, 39, 66, 0.06)',
