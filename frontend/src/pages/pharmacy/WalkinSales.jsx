@@ -58,7 +58,7 @@ function NewSaleModal({ onClose, onSaved }) {
         <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
           <div>
             <h3 className="text-[17px] font-extrabold text-brand-navy">New walk-in sale</h3>
-            <p className="text-[12.5px] text-slate-500">For customers without a prescription from this hospital. Stock goes down when you save.</p>
+            <p className="text-[13.5px] text-slate-500">For customers without a prescription from this hospital. Stock goes down when you save.</p>
           </div>
           <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100" aria-label="Close"><X className="h-5 w-5" /></button>
         </div>
@@ -88,7 +88,7 @@ function NewSaleModal({ onClose, onSaved }) {
                 ) : (
                   <div className="flex items-center justify-between gap-2 rounded-xl border border-slate-200 px-3 py-2">
                     <StockLine option={l.stock} />
-                    <button type="button" onClick={() => setLine(l.key, { picking: true })} className="shrink-0 text-[12px] font-semibold text-brand-blue hover:underline">
+                    <button type="button" onClick={() => setLine(l.key, { picking: true })} className="shrink-0 text-[13px] font-semibold text-brand-blue hover:underline">
                       Change
                     </button>
                   </div>
@@ -114,7 +114,7 @@ function NewSaleModal({ onClose, onSaved }) {
             <button
               type="button"
               onClick={() => setLines((ls) => [...ls, blankLine()])}
-              className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-brand-blue hover:bg-slate-50"
+              className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-brand-blue hover:bg-slate-50"
             >
               <Plus className="h-3.5 w-3.5" /> Add medicine
             </button>
@@ -222,7 +222,7 @@ export function WalkinSalesPanel({ query, days, active, refreshKey, showNew, set
         </div>
       )}
       {warnings.length > 0 && (
-        <div className="space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-[12.5px] text-amber-800">
+        <div className="space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2 text-[13.5px] text-amber-800">
           {warnings.map((w, i) => <p key={i} className="flex gap-1.5"><AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" /> {w}</p>)}
         </div>
       )}
@@ -236,13 +236,13 @@ export function WalkinSalesPanel({ query, days, active, refreshKey, showNew, set
           <p className="text-[15px] font-bold text-brand-navy">
             No walk-in sales {days === 1 ? 'today' : `in the last ${days} days`}{query ? ' matching this' : ' yet'}
           </p>
-          <p className="text-[12.5px] text-slate-500">Use <span className="font-semibold">New walk-in sale</span> when an outside customer buys medicines.</p>
+          <p className="text-[13.5px] text-slate-500">Use <span className="font-semibold">New walk-in sale</span> when an outside customer buys medicines.</p>
         </Card>
       ) : data ? (
         <Card className="min-h-0 flex-1 overflow-hidden p-0">
           <div className="h-full overflow-auto">
             <table className="w-full min-w-[760px] text-left text-[13px]">
-              <thead className="sticky top-0 z-10 bg-slate-50 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <thead className="sticky top-0 z-10 bg-slate-50 text-[12px] font-semibold uppercase tracking-wide text-slate-500">
                 <tr>
                   <th className="px-4 py-2.5">Time</th>
                   <th className="px-3 py-2.5">Customer</th>
@@ -258,14 +258,14 @@ export function WalkinSalesPanel({ query, days, active, refreshKey, showNew, set
                     <td className="whitespace-nowrap px-4 py-2.5 text-slate-500">{fmtWhen(s.sold_at)}</td>
                     <td className="px-3 py-2.5">
                       <p className="font-semibold text-brand-navy">{s.customer_name || 'Walk-in customer'}</p>
-                      {s.customer_phone && <p className="text-[11.5px] text-slate-400">{s.customer_phone}</p>}
+                      {s.customer_phone && <p className="text-[13px] text-slate-400">{s.customer_phone}</p>}
                     </td>
                     <td className="px-3 py-2.5 text-slate-600">{s.prescribed_by || '—'}</td>
                     <td className="px-3 py-2.5 text-slate-600">
                       {s.items.map((it) => (
                         <p key={it.dispense_id}>
                           {it.medicine_name}{it.strength ? ` ${it.strength}` : ''} <span className="font-semibold text-brand-navy">× {it.quantity}</span>
-                          {it.batch_no && <span className="text-[11.5px] text-slate-400"> · batch {it.batch_no}</span>}
+                          {it.batch_no && <span className="text-[13px] text-slate-400"> · batch {it.batch_no}</span>}
                         </p>
                       ))}
                     </td>
@@ -274,7 +274,7 @@ export function WalkinSalesPanel({ query, days, active, refreshKey, showNew, set
                       {s.can_undo && (
                         <button
                           onClick={() => undo(s)}
-                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[12px] font-semibold text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+                          className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-1 text-[13px] font-semibold text-slate-600 hover:border-red-200 hover:bg-red-50 hover:text-red-600"
                         >
                           <Undo2 className="h-3.5 w-3.5" /> Undo
                         </button>
@@ -289,7 +289,7 @@ export function WalkinSalesPanel({ query, days, active, refreshKey, showNew, set
       ) : null}
 
       {pages > 1 && (
-        <div className="flex items-center justify-end gap-2 text-[12px] font-semibold text-slate-500">
+        <div className="flex items-center justify-end gap-2 text-[13px] font-semibold text-slate-500">
           <span>Page {page} of {pages} · {data.total} sales</span>
           <button disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="rounded-lg border border-slate-200 bg-white p-1.5 disabled:opacity-40" aria-label="Previous page">
             <ChevronLeft className="h-4 w-4" />

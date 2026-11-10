@@ -127,7 +127,7 @@ function PatientTopbar({ onMenu, dark, onToggleTheme }) {
         >
           <Bell className="h-6 w-6" />
           {unread > 0 && (
-            <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+            <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[13px] font-bold text-white">
               {unread}
             </span>
           )}
@@ -140,7 +140,7 @@ function PatientTopbar({ onMenu, dark, onToggleTheme }) {
           <Avatar name={name} src={patient?.photo_url} tone="bg-brand-blue" className="h-10 w-10 text-sm" />
           <span className="text-left leading-tight">
             <span className="block text-[13px] font-bold text-brand-navy">{name}</span>
-            <span className="block text-[11px] text-slate-400">{t('pnav.patient')}</span>
+            <span className="block text-[13px] text-slate-400">{t('pnav.patient')}</span>
           </span>
         </button>
       </div>

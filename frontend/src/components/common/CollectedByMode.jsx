@@ -22,7 +22,7 @@ export default function CollectedByMode({ rows = [], subtitle }) {
         <h3 className="text-[15px] font-bold text-brand-navy">Collected by payment mode</h3>
         <span className="text-[13px] font-extrabold text-brand-navy">{inr(total)}</span>
       </div>
-      {subtitle && <p className="-mt-2 mb-3 text-[11.5px] text-slate-400">{subtitle}</p>}
+      {subtitle && <p className="-mt-2 mb-3 text-[13px] text-slate-400">{subtitle}</p>}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {rows.map((r) => {
           const m = MODES[r.mode] || MODES.other
@@ -35,7 +35,7 @@ export default function CollectedByMode({ rows = [], subtitle }) {
                 <span className="text-[13px] font-semibold text-slate-600">{m.label}</span>
               </div>
               <p className="mt-2 text-[19px] font-extrabold leading-none text-brand-navy">{inr(r.amount)}</p>
-              <p className="mt-1 text-[11px] text-slate-400">{r.count} {r.count === 1 ? 'visit' : 'visits'} · {share}%</p>
+              <p className="mt-1 text-[13px] text-slate-400">{r.count} {r.count === 1 ? 'visit' : 'visits'} · {share}%</p>
               <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
                 <div className={`h-full rounded-full ${m.bar}`} style={{ width: `${share}%` }} />
               </div>

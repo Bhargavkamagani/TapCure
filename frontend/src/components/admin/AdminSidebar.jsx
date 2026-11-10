@@ -70,7 +70,7 @@ function AdminSidebar({ open = false, onClose, counts = {} }) {
                 <Icon className="h-5 w-5 shrink-0" />
                 <span className="flex-1">{label}</span>
                 {n > 0 && (
-                  <span className="ml-auto rounded-full bg-amber-400 px-1.5 py-0.5 text-[10.5px] font-extrabold text-amber-950">
+                  <span className="ml-auto rounded-full bg-amber-400 px-1.5 py-0.5 text-[13px] font-extrabold text-amber-950">
                     {n}
                   </span>
                 )}
@@ -83,7 +83,7 @@ function AdminSidebar({ open = false, onClose, counts = {} }) {
       {/* Scope reminder — a super admin acts across every tenant, not one hospital. */}
       <div className="mx-3 mb-2 flex items-start gap-2 rounded-xl bg-teal-800/60 px-3 py-2.5">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-teal-300" />
-        <p className="text-[11px] leading-snug text-teal-100/70">
+        <p className="text-[13px] leading-snug text-teal-100/70">
           You are acting across <span className="font-semibold text-teal-50">all hospitals</span> on the platform.
         </p>
       </div>

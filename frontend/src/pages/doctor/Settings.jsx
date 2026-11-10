@@ -32,7 +32,7 @@ function Settings() {
                   <li key={k} className="flex items-center justify-between gap-4 py-3">
                     <div>
                       <p className="text-[13.5px] font-semibold text-brand-navy">{it.label}</p>
-                      <p className="text-[12px] text-slate-500">{it.desc}</p>
+                      <p className="text-[13px] text-slate-500">{it.desc}</p>
                     </div>
                     <Toggle on={state[k]} onClick={() => toggle(k)} />
                   </li>

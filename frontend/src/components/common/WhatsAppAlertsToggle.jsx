@@ -14,7 +14,7 @@ export default function WhatsAppAlertsToggle({ checked, onChange }) {
       />
       <span className="leading-tight">
         <span className="block text-[13px] font-semibold text-brand-navy">Send WhatsApp alerts</span>
-        <span className="block text-[11.5px] text-slate-500">"Almost your turn" message. Counts as 1 online booking on your plan.</span>
+        <span className="block text-[13px] text-slate-500">"Almost your turn" message. Counts as 1 online booking on your plan.</span>
       </span>
     </label>
   )

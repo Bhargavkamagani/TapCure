@@ -17,7 +17,7 @@ export default function OnboardingFooter({ checklist = [], onBack, backLabel = '
     <div className="sticky bottom-0 z-20 -mx-5 mt-5 border-t border-slate-200/70 bg-[#f6fbfa]/85 px-5 py-4 backdrop-blur-xl sm:-mx-9 sm:px-9">
       <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0">
-          <p className={`text-[12.5px] font-bold ${complete ? 'text-emerald-600' : 'text-slate-500'}`}>
+          <p className={`text-[13.5px] font-bold ${complete ? 'text-emerald-600' : 'text-slate-500'}`}>
             {complete ? 'All set — you can continue.' : `${remaining} ${remaining === 1 ? 'thing' : 'things'} left${hint ? ` — ${hint}` : ''}`}
           </p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
@@ -25,7 +25,7 @@ export default function OnboardingFooter({ checklist = [], onBack, backLabel = '
               <li key={item.label}>
                 <motion.span
                   layout
-                  className={`flex items-center gap-1.5 rounded-full py-1 pl-1.5 pr-3 text-[12px] font-semibold transition-colors ${
+                  className={`flex items-center gap-1.5 rounded-full py-1 pl-1.5 pr-3 text-[13px] font-semibold transition-colors ${
                     item.done ? 'bg-emerald-50 text-emerald-700' : 'bg-white text-slate-400 ring-1 ring-slate-200'
                   }`}
                 >

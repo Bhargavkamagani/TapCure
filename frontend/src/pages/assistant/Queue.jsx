@@ -130,7 +130,7 @@ export default function AssistantQueue() {
     <div className="flex flex-col gap-5">
       <PageHeading title="Live Queue" subtitle="Call, serve and clear tokens in real time.">
         <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3">
-          <Avatar name={doctor?.name || 'Dr'} className="h-6 w-6 text-[9px]" />
+          <Avatar name={doctor?.name || 'Dr'} className="h-6 w-6 text-[13px]" />
           <select
             value={doctorId}
             onChange={(e) => setDoctorId(e.target.value)}
@@ -148,7 +148,7 @@ export default function AssistantQueue() {
         </div>
         {/* The desk needs to know whether what it's reading is current — a live
             queue that quietly stopped updating is worse than an obviously stale one. */}
-        <span className={`hidden items-center gap-1.5 text-[11.5px] font-semibold sm:inline-flex ${
+        <span className={`hidden items-center gap-1.5 text-[13px] font-semibold sm:inline-flex ${
           refreshFailed ? 'text-amber-600' : 'text-slate-400'
         }`}>
           <span className={`h-1.5 w-1.5 rounded-full ${refreshFailed ? 'bg-amber-500' : 'animate-pulse bg-teal-500'}`} />
@@ -232,7 +232,7 @@ export default function AssistantQueue() {
                     />
                     <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
                   </span>
-                  <span className="text-[11px] font-semibold uppercase tracking-wide text-white/70">Now Serving</span>
+                  <span className="text-[12px] font-semibold uppercase tracking-wide text-white/70">Now Serving</span>
                   <span className="text-[40px] font-extrabold leading-none text-white">{current.display_code}</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-white">
@@ -242,7 +242,7 @@ export default function AssistantQueue() {
                     <p className="text-[13px] text-white/70">
                       {[current.patient_age && `${current.patient_age}y`, current.patient_gender].filter(Boolean).join(' · ') || 'In consultation'}
                     </p>
-                    {current.reason && <p className="truncate text-[12.5px] text-white/85" title={current.reason}>Here for: {current.reason}</p>}
+                    {current.reason && <p className="truncate text-[13.5px] text-white/85" title={current.reason}>Here for: {current.reason}</p>}
                   </div>
                 </div>
               </motion.div>
@@ -306,13 +306,13 @@ export default function AssistantQueue() {
             key={waiting.length}
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[11px] font-semibold text-orange-600"
+            className="rounded-full bg-orange-50 px-2.5 py-0.5 text-[13px] font-semibold text-orange-600"
           >
             {waiting.length} waiting
           </motion.span>
         </div>
         {unpaidCount > 0 && (
-          <div className="flex items-center gap-2 border-b border-amber-100 bg-amber-50 px-5 py-2.5 text-[12.5px] font-medium text-amber-800">
+          <div className="flex items-center gap-2 border-b border-amber-100 bg-amber-50 px-5 py-2.5 text-[13.5px] font-medium text-amber-800">
             <Wallet className="h-4 w-4 shrink-0 text-amber-500" />
             <span>
               {unpaidCount} {unpaidCount === 1 ? 'patient hasn’t' : 'patients haven’t'} paid.
@@ -342,18 +342,18 @@ export default function AssistantQueue() {
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-blueLight text-[13px] font-extrabold text-brand-blue">
                       {t.queue_position}
                     </span>
-                    <Avatar name={seenName(t)} className="h-9 w-9 text-[11px]" />
+                    <Avatar name={seenName(t)} className="h-9 w-9 text-[13px]" />
                     <div className="min-w-0 leading-tight">
                       <p className="flex items-center gap-1.5 truncate text-[14px] font-bold text-brand-navy">
                         {seenName(t)}
-                        {bookedBy(t) && <span className="shrink-0 rounded-full bg-purple-100 px-1.5 py-0.5 text-[9px] font-bold text-purple-600">by {bookedBy(t)}</span>}
+                        {bookedBy(t) && <span className="shrink-0 rounded-full bg-purple-100 px-1.5 py-0.5 text-[13px] font-bold text-purple-600">by {bookedBy(t)}</span>}
                       </p>
                       <div className="mt-0.5 flex items-center gap-2">
-                        <span className="text-[12px] font-semibold text-slate-500">{t.display_code}</span>
+                        <span className="text-[13px] font-semibold text-slate-500">{t.display_code}</span>
                         {t.priority !== 'normal' && (
-                          <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${PRIORITY_PILL[t.priority] || 'bg-slate-100 text-slate-500'}`}>{t.priority}</span>
+                          <span className={`rounded-full px-2 py-0.5 text-[13px] font-semibold capitalize ${PRIORITY_PILL[t.priority] || 'bg-slate-100 text-slate-500'}`}>{t.priority}</span>
                         )}
-                        {t.is_walkin && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">walk-in</span>}
+                        {t.is_walkin && <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500">walk-in</span>}
                         {/* Journey recorded at booking — tells the desk whether
                             this patient is round the corner or hours out. */}
                         <TravelChip minutes={t.travel_minutes} origin={t.origin_label} />
@@ -366,7 +366,7 @@ export default function AssistantQueue() {
                             whileTap={{ scale: 0.95 }}
                             animate={{ boxShadow: ['0 0 0 0 rgba(245,158,11,0.5)', '0 0 0 6px rgba(245,158,11,0)', '0 0 0 0 rgba(245,158,11,0)'] }}
                             transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1 text-[11.5px] font-bold text-white hover:bg-amber-600 disabled:opacity-60"
+                            className="inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1 text-[13px] font-bold text-white hover:bg-amber-600 disabled:opacity-60"
                           >
                             <Wallet className="h-3.5 w-3.5" />
                             Collect ₹{t.consultation_fee}
@@ -378,13 +378,13 @@ export default function AssistantQueue() {
                           // which would otherwise hide why the fee is zero.
                           <FreeRevisitChip info={t.free_revisit} detail />
                         ) : t.consultation_paid ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-semibold text-green-700">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-[13px] font-semibold text-green-700">
                             <CheckCircle2 className="h-3 w-3" /> Paid{t.consultation_payment_method ? ` · ${paymentModeLabel(t.consultation_payment_method)}` : ''}
                           </span>
                         ) : (
                           // Fee is zero — nothing was collected, so don't claim
                           // "Paid" on a row the hospital may reconcile against.
-                          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500">
                             No fee
                           </span>
                         )}
@@ -393,14 +393,14 @@ export default function AssistantQueue() {
                           walk-in). Stored on the appointment; the queue API
                           carries it onto the token row. */}
                       {t.reason && (
-                        <p className="mt-1 truncate text-[11.5px] text-slate-500" title={t.reason}>
+                        <p className="mt-1 truncate text-[13px] text-slate-500" title={t.reason}>
                           <span className="font-semibold text-slate-400">Reason:</span> {t.reason}
                         </p>
                       )}
                       {t.latest_vitals && (
-                        <p className={`mt-1 flex items-center gap-1 text-[11px] font-medium ${t.latest_vitals.abnormal ? 'text-red-600' : 'text-emerald-600'}`}>
+                        <p className={`mt-1 flex items-center gap-1 text-[13px] font-medium ${t.latest_vitals.abnormal ? 'text-red-600' : 'text-emerald-600'}`}>
                           <Activity className="h-3 w-3 shrink-0" /> {vitalsSummary(t.latest_vitals) || 'Vitals recorded'}
-                          {t.latest_vitals.abnormal && <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-red-600">Check</span>}
+                          {t.latest_vitals.abnormal && <span className="rounded-full bg-red-100 px-1.5 py-0.5 text-[12px] font-bold uppercase text-red-600">Check</span>}
                         </p>
                       )}
                     </div>

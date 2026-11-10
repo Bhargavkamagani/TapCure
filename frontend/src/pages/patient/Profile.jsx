@@ -27,7 +27,7 @@ function Field({ icon: Icon, label, value }) {
         <Icon className="h-[18px] w-[18px]" />
       </span>
       <div className="min-w-0 leading-tight">
-        <p className="text-[11.5px] font-semibold text-slate-400">{label}</p>
+        <p className="text-[13px] font-semibold text-slate-400">{label}</p>
         <p className="text-[13.5px] font-semibold text-brand-navy">{value || '—'}</p>
       </div>
     </div>
@@ -145,7 +145,7 @@ function EditProfileModal({ patient, onClose, onSaved }) {
               <input type="file" accept="image/*" className="hidden" onChange={onPhoto} disabled={photoBusy} />
             </label>
           </div>
-          <p className="text-[12px] text-slate-400">{photoBusy ? t('pcommon.uploading') : t('px.profile.photoHint')}</p>
+          <p className="text-[13px] text-slate-400">{photoBusy ? t('pcommon.uploading') : t('px.profile.photoHint')}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -174,7 +174,7 @@ function EditProfileModal({ patient, onClose, onSaved }) {
           <div className="mt-1 flex items-center gap-2 sm:col-span-2">
             <Fingerprint className="h-4 w-4 text-brand-green" />
             <span className="text-[13px] font-bold text-brand-navy">{t('ppage.abhaSection')}</span>
-            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10.5px] font-semibold text-slate-500">{t('ppage.abhaOptional')}</span>
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500">{t('ppage.abhaOptional')}</span>
           </div>
           <TextInput
             label={t('ppage.abhaNumber')}
@@ -233,9 +233,9 @@ function Profile() {
         <div className="leading-tight">
           <p className="text-[18px] font-extrabold text-brand-navy">{translitName(patient.name, lang)}</p>
           <p className="text-[13px] text-slate-500">{realEmail(patient) || patient.phone}</p>
-          <p className="text-[12.5px] text-slate-400">{patient.phone}</p>
+          <p className="text-[13.5px] text-slate-400">{patient.phone}</p>
         </div>
-        <span className={`ml-auto rounded-full px-3 py-1 text-[12px] font-semibold ${patient.is_registered ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+        <span className={`ml-auto rounded-full px-3 py-1 text-[13px] font-semibold ${patient.is_registered ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
           {patient.is_registered ? t('ppage.verifiedPatient') : t('ppage.unverified')}
         </span>
       </Card>

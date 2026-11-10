@@ -86,7 +86,7 @@ function HospitalSidebar({ open = false, onClose }) {
         </span>
         <div className="leading-tight">
           <h4 className="text-[13px] font-bold text-white">Need Help?</h4>
-          <Link to="/contact" className="text-[12px] font-semibold text-teal-200/70 hover:text-teal-100">
+          <Link to="/contact" className="text-[13px] font-semibold text-teal-200/70 hover:text-teal-100">
             Contact Support
           </Link>
         </div>

@@ -66,9 +66,9 @@ function AssistantSidebar({ open = false, onClose }) {
                     }
                   >
                     <Icon className="h-[18px] w-[18px] shrink-0" />
-                    <span className="flex-1 truncate">{label}</span>
+                    <span className="min-w-0 flex-1 leading-snug">{label}</span>
                     {soon && (
-                      <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[9px] font-semibold text-teal-100">soon</span>
+                      <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[13px] font-semibold text-teal-100">soon</span>
                     )}
                   </NavLink>
                 )
@@ -86,9 +86,9 @@ function AssistantSidebar({ open = false, onClose }) {
             <Headphones className="h-4 w-4" />
           </span>
           <div className="leading-tight">
-            <p className="text-[12px] font-bold text-white">Need Help?</p>
+            <p className="text-[13px] font-bold text-white">Need Help?</p>
             {/* Was plain text — it looked clickable but did nothing. */}
-            <Link to="/contact" className="text-[10px] text-teal-200/70 hover:text-teal-100">
+            <Link to="/contact" className="text-[13px] text-teal-200/70 hover:text-teal-100">
               Contact Support
             </Link>
           </div>

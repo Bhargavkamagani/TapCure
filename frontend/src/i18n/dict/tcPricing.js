@@ -21,9 +21,11 @@ export const tcPricingT = {
   'tc.price.perYear': { en: '/ year', te: '/ సంవత్సరం', hi: '/ साल' },
   'tc.price.plusGst': { en: '+ GST', te: '+ GST', hi: '+ GST' },
   'tc.price.popular': { en: 'Most popular', te: 'ఎక్కువ మంది ఎంచుకునేది', hi: 'सबसे लोकप्रिय' },
-  'tc.price.choose': { en: 'Get started', te: 'ప్రారంభించండి', hi: 'शुरू करें' },
+  'tc.price.choose': { en: 'Get Started', te: 'ప్రారంభించండి', hi: 'शुरू करें' },
+  'tc.price.more': { en: 'See details', te: 'వివరాలు చూడండి', hi: 'विवरण देखें' },
+  'tc.price.less': { en: 'Hide details', te: 'వివరాలు దాచండి', hi: 'विवरण छिपाएँ' },
 
-  'tc.price.pilot.name': { en: 'Pilot', te: 'పైలట్', hi: 'पायलट' },
+  'tc.price.pilot.name': { en: 'Free Trial', te: 'ఉచిత ట్రయల్', hi: 'फ़्री ट्रायल' },
   'tc.price.pilot.price': { en: 'Free', te: 'ఉచితం', hi: 'मुफ़्त' },
   'tc.price.pilot.term': { en: 'for 30 days', te: '30 రోజుల పాటు', hi: '30 दिन के लिए' },
   'tc.price.pilot.tag': {
@@ -31,11 +33,12 @@ export const tcPricingT = {
     te: 'మీ మొదటి OPD రోజున ప్రారంభం.',
     hi: 'आपके पहले OPD दिन से शुरू।',
   },
-  'tc.price.pilot.cta': { en: 'Start free pilot', te: 'ఉచిత పైలట్ ప్రారంభించండి', hi: 'मुफ़्त पायलट शुरू करें' },
+  'tc.price.pilot.cta': { en: 'Start Free Trial', te: 'ఉచిత ట్రయల్ ప్రారంభించండి', hi: 'फ़्री ट्रायल शुरू करें' },
   'tc.price.starter.name': { en: 'Starter', te: 'స్టార్టర్', hi: 'स्टार्टर' },
-  'tc.price.starter.tag': { en: 'For a doctor just going online.', te: 'ఇప్పుడే ఆన్‌లైన్‌కు వస్తున్న డాక్టర్ కోసం.', hi: 'अभी ऑनलाइन आ रहे डॉक्टर के लिए।' },
+  'tc.price.starter.tag': { en: 'For a small clinic with 1 doctor.', te: '1 డాక్టర్ ఉన్న చిన్న క్లినిక్ కోసం.', hi: '1 डॉक्टर वाले छोटे क्लिनिक के लिए।' },
   'tc.price.smart.name': { en: 'Smart Hospital', te: 'స్మార్ట్ ఆసుపత్రి', hi: 'स्मार्ट अस्पताल' },
-  'tc.price.smart.tag': { en: 'For a busy single-doctor hospital.', te: 'రద్దీగా ఉండే ఒక్క-డాక్టర్ ఆసుపత్రి కోసం.', hi: 'व्यस्त एक-डॉक्टर अस्पताल के लिए।' },
+  // Previous: 'For a busy single-doctor hospital.' (Smart was 1 doctor until 2026-11-03)
+  'tc.price.smart.tag': { en: 'For a small hospital with 2 doctors.', te: 'ఇద్దరు డాక్టర్లు ఉన్న చిన్న ఆసుపత్రి కోసం.', hi: '2 डॉक्टरों वाले छोटे अस्पताल के लिए।' },
   'tc.price.pro.name': { en: 'Pro', te: 'ప్రో', hi: 'प्रो' },
   'tc.price.pro.tag': { en: 'For hospitals with a team of doctors.', te: 'డాక్టర్ల బృందం ఉన్న ఆసుపత్రుల కోసం.', hi: 'डॉक्टरों की टीम वाले अस्पताल के लिए।' },
 
@@ -49,11 +52,12 @@ export const tcPricingT = {
   'tc.price.h.every': { en: 'Every feature unlocked', te: 'అన్ని ఫీచర్లు అందుబాటులో', hi: 'हर सुविधा उपलब्ध' },
   'tc.price.h.noPay': { en: 'No payment to start', te: 'ప్రారంభించడానికి చెల్లింపు అవసరం లేదు', hi: 'शुरू करने के लिए कोई भुगतान नहीं' },
   'tc.price.h.core': { en: 'All core features', te: 'అన్ని ముఖ్య ఫీచర్లు', hi: 'सभी मुख्य सुविधाएँ' },
+  'tc.price.h.freeRevisit': { en: "Free revisits don't use your bookings", te: 'ఉచిత రీవిజిట్‌లు మీ బుకింగ్‌లలో లెక్కించబడవు', hi: 'मुफ़्त दोबारा विज़िट आपकी बुकिंग में नहीं गिनी जातीं' },
   'tc.price.h.upgrade': { en: 'Upgrade anytime', te: 'ఎప్పుడైనా అప్‌గ్రేడ్ చేయండి', hi: 'कभी भी अपग्रेड करें' },
   'tc.price.h.whatsapp': { en: 'WhatsApp queue alerts', te: 'WhatsApp క్యూ అలర్ట్‌లు', hi: 'WhatsApp कतार अलर्ट' },
   'tc.price.h.noWhatsapp': { en: 'WhatsApp alerts from Smart Hospital', te: 'WhatsApp అలర్ట్‌లు స్మార్ట్ ఆసుపత్రి నుండి', hi: 'WhatsApp अलर्ट स्मार्ट अस्पताल से' },
   // Shown as X's for now (2026-10-27). Previous: ₹599/mo each.
-  'tc.price.h.addDoc': { en: 'Add doctors at ₹0xx/mo each', te: 'ఒక్కో డాక్టర్‌కు ₹0xx/నెల', hi: 'हर डॉक्टर ₹0xx/माह पर जोड़ें' },
+  'tc.price.h.addDoc': { en: 'Add doctors at ₹599/mo each', te: 'ఒక్కో డాక్టర్‌కు ₹599/నెల', hi: 'हर डॉक्टर ₹599/माह पर जोड़ें' },
 
   /* the small "Also included" list at the bottom of each card */
   'tc.price.allTitle': { en: 'Also included', te: 'ఇవి కూడా ఉన్నాయి', hi: 'यह भी शामिल' },
@@ -72,17 +76,20 @@ export const tcPricingT = {
 
   'tc.price.hosp.name': { en: 'Hospital', te: 'హాస్పిటల్', hi: 'हॉस्पिटल' },
   // Previous: 'tc.price.hosp.price': { en: 'from ₹4,999 / month', te: '₹4,999 / నెల నుండి', hi: '₹4,999 / महीना से' },
-  'tc.price.hosp.price': { en: 'from ₹0,xxx / month', te: '₹0,xxx / నెల నుండి', hi: '₹0,xxx / महीना से' },
+  'tc.price.hosp.price': { en: 'from ₹4,999 / month', te: '₹4,999 / నెల నుండి', hi: '₹4,999 / महीना से' },
   'tc.price.hosp.body': {
     en: 'Unlimited doctors and bookings, every department, set up with you by our team.',
     te: 'అపరిమిత డాక్టర్లు, బుకింగ్‌లు, అన్ని విభాగాలు — మా బృందం మీతో కలిసి సెటప్ చేస్తుంది.',
     hi: 'असीमित डॉक्टर और बुकिंग, हर विभाग — हमारी टीम आपके साथ सेटअप करती है।',
   },
-  'tc.price.hosp.cta': { en: 'Talk to us', te: 'మాతో మాట్లాడండి', hi: 'हमसे बात करें' },
+  'tc.price.hosp.cta': { en: 'Talk to Us', te: 'మాతో మాట్లాడండి', hi: 'हमसे बात करें' },
 
   'tc.price.fine': {
-    en: 'Prices exclude 18% GST. Pick or change your plan anytime from your hospital dashboard. Your data is always kept safe.',
-    te: 'ధరలలో 18% GST కలపలేదు. మీ ఆసుపత్రి డాష్‌బోర్డ్ నుండి ఎప్పుడైనా ప్లాన్ ఎంచుకోండి లేదా మార్చండి. మీ డేటా ఎప్పుడూ సురక్షితంగా ఉంటుంది.',
-    hi: 'कीमतों में 18% GST शामिल नहीं है। अपने अस्पताल डैशबोर्ड से कभी भी प्लान चुनिए या बदलिए। आपका डेटा हमेशा सुरक्षित रहता है।',
+    en: 'Prices exclude 18% GST. Pick or change your plan anytime from your hospital dashboard. We protect your data: see our Privacy Policy.',
+    te: 'ధరలకు 18% GST అదనం. మీ హాస్పిటల్ డాష్‌బోర్డ్ నుండి ఎప్పుడైనా ప్లాన్ ఎంచుకోండి లేదా మార్చండి. మేము మీ డేటాను కాపాడతాం: మా గోప్యతా విధానం చూడండి.',
+    hi: 'कीमतों में 18% GST अलग से। अपने हॉस्पिटल डैशबोर्ड से कभी भी प्लान चुनें या बदलें। हम आपके डेटा की सुरक्षा करते हैं: हमारी प्राइवेसी पॉलिसी देखें।',
   },
+  /* 2026-11-08: who the plans are for, and that patients never pay to book */
+  'tc.price.forHosp': { en: 'For hospitals and clinics', te: 'ఆసుపత్రులు మరియు క్లినిక్‌ల కోసం', hi: 'अस्पतालों और क्लिनिकों के लिए' },
+  'tc.price.patientsFree': { en: 'For patients, booking is always free.', te: 'రోగులకు బుకింగ్ ఎప్పుడూ ఉచితం.', hi: 'मरीज़ों के लिए बुकिंग हमेशा मुफ़्त है।' },
 }

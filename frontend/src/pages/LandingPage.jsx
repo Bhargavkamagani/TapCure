@@ -13,13 +13,13 @@ import { LedgerProvider, LedgerHeroCard } from '../components/landing/TcLedger.j
 /**
  * TapCure landing — "Leave-Now" direction, LIGHT.
  *
- * PHASE 1: nav + hero + partner marquee, ported from the supplied reference
+ * PHASE 1: nav + hero, ported from the supplied reference
  * (tapcure.zip). The remaining sections — Leave-Now engine, how-it-works,
  * specialties, doctors, stats, testimonials, app, FAQ, CTA — land in phase 2.
  *
- * Layout, type and motion are the reference's: Instrument Sans with
- * one typeface throughout, glassmorphism, aurora, film grain and a
- * cursor spotlight. The PALETTE is not — the reference is near-black #05070B
+ * Layout and motion are the reference's (type is Inter + Plus Jakarta Sans), with
+ * one typeface throughout, glassmorphism and aurora (film grain and the
+ * cursor spotlight were removed 2026-11-08). The PALETTE is not — the reference is near-black #05070B
  * and this is re-pitched onto light paper (#F6FBFA). See the token block for
  * what that costs: accents move darker to stay readable, and every
  * white-on-black translucency inverts rather than just losing alpha.
@@ -65,26 +65,17 @@ const DAY_LOCALE = { en: 'en-IN', te: 'te-IN', hi: 'hi-IN' }
    it is the search query — only what is shown is translated (lx.spec.*). */
 const specKey = (s) => `lx.spec.${s.toLowerCase().replace(/[^a-z]/g, '')}`
 
-/* This scrolled ten real hospital brands under a trusted-by framing. None of
-   them are TapCure partners, so it claimed an endorsement that does not exist.
-   Replaced with what the platform genuinely offers. */
-const PARTNERS = [
-  'General Physician', 'Cardiology', 'Pediatrics', 'Dermatology', 'Orthopedics',
-  'Gynecology', 'ENT', 'Dental', 'Ophthalmology', 'Neurology', 'Psychiatry', 'Nutrition',
-]
 
 const SPECIALTIES = [
   'General Physician', 'Cardiology', 'Dermatology', 'Paediatrics',
   'Orthopaedics', 'Dentistry', 'Gynaecology', 'Ophthalmology',
 ]
 
-const WHEN = ['Today', 'Tomorrow', 'This week']
-const WHEN_KEY = { Today: 'tc.doc.today', Tomorrow: 'pcommon.tomorrow', 'This week': 'lx.hero.thisWeek' }
 
-function PageStyles() {
+export function PageStyles() {
   return (
     <style>{`
-      @import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap');
+      /* Fonts load once in index.html (Inter + Plus Jakarta Sans + Noto). */
 
       /* LIGHT palette. The reference ships near-black; these are the same roles
          re-pitched for a light surface. Two rules kept it honest: accent colours
@@ -110,18 +101,16 @@ function PageStyles() {
         /* straight off the logo: teal from "Cure", blue from "Tap" */
         --mint:#0A9A96; --mint-fill:#00C9C5; --mint-dim:#0B8C88; --cyan:#2F58B7; --violet:#3369FF;
         --amber:#C97A16; --rose:#E14356;
-        /* Instrument SANS, because the page already sets its accents in
-           Instrument SERIF — the "before" in the headline, the BMI figure,
-           the leave-by time. They are one superfamily, so the two share
-           proportions and the pairing reads as designed rather than assembled. */
-        /* ONE face for the whole landing page. --serif and --mono are kept as
-           tokens because dozens of rules reference them, but they now resolve to
-           the same family — so the headline accents, the big numerals and the
-           small uppercase labels are all Instrument Sans. */
-        --sans:"Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-        --serif:"Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+        /* The app's one text style (2026-11-08): Inter for reading text,
+           Plus Jakarta Sans (--head) for headings, Noto for Telugu/Hindi.
+           --serif and --mono are kept as tokens because dozens of rules use
+           them: the headline accents and big numerals (--serif) follow the
+           heading face, the small uppercase labels (--mono) the text face. */
+        --sans:Inter, "Noto Sans Telugu", "Noto Sans Devanagari", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+        --head:"Plus Jakarta Sans", "Noto Sans Telugu", "Noto Sans Devanagari", Inter, ui-sans-serif, system-ui, sans-serif;
+        --serif:var(--head);
         --r-xs:8px; --r-sm:12px; --r-md:18px; --r-lg:26px; --r-xl:34px;
-        --mono:"Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+        --mono:var(--sans);
         /* The reference caps content at 1240px. On a 1600px+ viewport that
            leaves ~180px of dead margin each side and the page stops feeling
            fitted to the screen. Widened so it keeps filling; at 1280 and below
@@ -130,6 +119,8 @@ function PageStyles() {
         --ease:cubic-bezier(.22,.61,.36,1); --ease-out:cubic-bezier(.16,1,.3,1);
 
         position:relative; min-height:100vh; width:100%; overflow-x:hidden;
+        /* clip, not hidden: hidden stops the How-it-works phone from staying in place (sticky) */
+        overflow-x:clip;
         color:var(--ink);
         background-color:var(--bg);
         background-image:
@@ -168,26 +159,12 @@ function PageStyles() {
       .tcx .aurora .a4{ width:58vw; height:44vw; right:-10vw; bottom:-14vw;
         background:radial-gradient(circle at 50% 50%, rgba(0,201,197,.34), transparent 70%); }
 
-      .tcx .grain{
-        position:fixed; inset:-200%; z-index:1; pointer-events:none; opacity:.018;
-        background-image:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
-        animation:tcxGrain 8s steps(6) infinite;
-      }
-      @keyframes tcxGrain{
-        0%{transform:translate(0,0)} 16%{transform:translate(-3%,2%)} 33%{transform:translate(2%,-3%)}
-        50%{transform:translate(-2%,-2%)} 66%{transform:translate(3%,1%)} 83%{transform:translate(-1%,3%)} 100%{transform:translate(0,0)}
-      }
-      .tcx .spotlight{
-        position:fixed; z-index:1; pointer-events:none; width:620px; height:620px; left:0; top:0;
-        margin:-310px 0 0 -310px; border-radius:50%; opacity:0; transition:opacity .6s var(--ease);
-        background:radial-gradient(circle, rgba(0,201,197,.16), transparent 62%);
-      }
-      .tcx.pointer-fine .spotlight{ opacity:1; }
 
       /* ---------- layout ---------- */
       .tcx .wrap{ width:100%; max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad); position:relative; z-index:2; }
       .tcx section{ position:relative; z-index:2; }
       .tcx h1{ margin:0; letter-spacing:-.02em; line-height:1.06; font-weight:700; font-size:clamp(42px,6.4vw,82px); }
+      .tcx :is(h1,h2,h3,h4){ font-family:var(--head); }
       .tcx .serif{ font-family:var(--serif); font-weight:400; font-style:normal; letter-spacing:-.01em; }
       .tcx .grad{
         background:linear-gradient(100deg, var(--mint) 0%, var(--cyan) 42%, var(--violet) 92%);
@@ -344,7 +321,7 @@ function PageStyles() {
       /* ---------- hero ---------- */
       .tcx .hero{ padding:clamp(130px,15vw,180px) 0 clamp(50px,6vw,80px); position:relative; }
       .tcx .hero-grid{ display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr); gap:clamp(30px,4vw,56px); align-items:center; }
-      .tcx .hero h1{ margin:22px 0 20px; }
+      .tcx .hero h1{ margin:22px 0 20px; font-size:clamp(38px,5.6vw,70px); }
       .tcx .hero-actions{ display:flex; flex-wrap:wrap; gap:12px; margin:28px 0 24px; }
       /* Hero tagline: typed out letter by letter, erased, typed again (TypeLoop).
          min-height keeps the headline from jumping while the line is empty. */
@@ -381,7 +358,9 @@ function PageStyles() {
          bottom inset lifts its centre of mass into that gap, where it reads as
          a backdrop to the headline instead of a smudge behind the cards. */
       .tcx .hero-photo{
-        position:absolute; inset:-30% -6% 20% -8%; z-index:0; pointer-events:none;
+        /* 2026-11-08: shifted left so the doctor's face is no longer under the
+           Leave-home card and the family fills the gap beside the headline. */
+        position:absolute; inset:-30% 12% 20% -28%; z-index:0; pointer-events:none;
         background-image:url("/hero.png"); background-size:cover; background-position:52% 40%; background-repeat:no-repeat;
         /* No grey and no horizontal fade — every face in this one is sharp, so
            there is nothing to hide. Contrast only, to keep the white coat from
@@ -390,8 +369,8 @@ function PageStyles() {
         /* Strong through the middle, dissolving well before the boundary: the
            solid core stops at 26% and the falloff runs all the way to 84%, so
            the edges melt into the page instead of ending. */
-        -webkit-mask-image:radial-gradient(72% 70% at 50% 50%, #000 26%, rgba(0,0,0,.45) 58%, transparent 84%);
-                mask-image:radial-gradient(72% 70% at 50% 50%, #000 26%, rgba(0,0,0,.45) 58%, transparent 84%);
+        -webkit-mask-image:radial-gradient(62% 60% at 56% 46%, #000 32%, rgba(0,0,0,.45) 64%, transparent 84%);
+                mask-image:radial-gradient(62% 60% at 56% 46%, #000 32%, rgba(0,0,0,.45) 64%, transparent 84%);
       }
       .tcx .glass{
         border:1px solid var(--stroke); background:linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.66));
@@ -399,9 +378,9 @@ function PageStyles() {
         box-shadow:0 26px 60px -30px rgba(15,39,66,.32), inset 0 1px 0 rgba(255,255,255,.9);
       }
       .tcx .float{ position:absolute; will-change:transform; }
-      .tcx .card-leave{ right:0; top:4%; width:min(340px,88%); padding:20px; z-index:3; }
+      .tcx .card-leave{ right:-4%; top:14%; width:min(340px,88%); padding:20px; z-index:3; }
       .tcx .card-doc{ left:-2%; top:36%; width:min(300px,80%); padding:16px; z-index:4; }
-      .tcx .card-vitals{ right:6%; bottom:0; width:min(300px,80%); padding:16px 18px; z-index:2; }
+      .tcx .card-vitals{ right:6%; bottom:-7%; width:min(300px,80%); padding:16px 18px; z-index:2; }
 
       .tcx .kicker{ font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
       .tcx .leave-time{ font-size:42px; font-weight:800; letter-spacing:-.04em; line-height:1; margin:8px 0 4px; }
@@ -448,11 +427,11 @@ function PageStyles() {
       .tcx .vitals-row b i{ font-size:12px; font-style:normal; color:var(--muted); font-weight:600; }
 
       /* ---------- booking bar ---------- */
-      .tcx .bookbar{ display:grid; grid-template-columns:1.25fr 1fr 1fr auto; gap:6px; align-items:center; padding:8px; border-radius:100px; }
+      .tcx .bookbar{ display:grid; grid-template-columns:1.2fr 1fr auto; gap:6px; align-items:center; padding:8px; border-radius:100px; }
       .tcx .bookbar .fld{ padding:8px 16px; border-radius:100px; transition:background .25s; min-width:0; }
       /* White at 5% over white glass is invisible — the hover has to darken. */
       .tcx .bookbar .fld:hover{ background:rgba(15,39,66,.05); }
-      .tcx .bookbar label{ display:block; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+      .tcx .bookbar label{ display:block; font-size:11.5px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
       .tcx .bookbar input,.tcx .bookbar select{
         width:100%; background:transparent; border:0; outline:none; font-size:14.5px; font-weight:600;
         letter-spacing:-.01em; padding:2px 0; min-width:0; cursor:pointer;
@@ -460,16 +439,6 @@ function PageStyles() {
       .tcx .bookbar select option{ background:var(--card); color:var(--ink); }
       .tcx .bookbar input::placeholder{ color:var(--faint); }
 
-      /* ---------- marquee ---------- */
-      .tcx .marquee{ margin:clamp(40px,6vw,70px) 0 0; border-block:1px solid var(--stroke); padding:22px 0; overflow:hidden;
-        -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
-                mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent); }
-      .tcx .marquee-track{ display:flex; gap:56px; width:max-content; animation:tcxSlide 40s linear infinite; }
-      .tcx .marquee:hover .marquee-track{ animation-play-state:paused; }
-      @keyframes tcxSlide{ to{ transform:translateX(-50%); } }
-      .tcx .marquee-item{ display:flex; align-items:center; gap:10px; color:var(--faint); font-weight:700;
-        font-size:16px; letter-spacing:-.02em; white-space:nowrap; transition:color .3s; }
-      .tcx .marquee-item:hover{ color:var(--ink-2); }
 
 
       /* ============================================================
@@ -496,7 +465,7 @@ function PageStyles() {
         --lnl-spine:clamp(10px,3.5vw,64px); --lnl-gap:clamp(22px,3.2vw,54px);
         --lnl-content:calc(var(--lnl-spine) + var(--lnl-gap));
         --lnl-pad:clamp(38px,5vw,74px);
-        --lnl-serif:"Instrument Sans",ui-sans-serif,system-ui,sans-serif; }
+        --lnl-serif:var(--head); }
 
       .tcx .lnl-spine{ position:absolute; left:var(--lnl-spine); top:0; bottom:0; width:1px;
         background:rgba(11,33,80,.10); z-index:0; }
@@ -643,6 +612,32 @@ function PageStyles() {
       .tcx .tl-dur{ font-size:12px; color:var(--muted); font-weight:600; white-space:nowrap; }
       .tcx .lnl .ln-note{ max-width:52ch; margin:24px 0 0; font-size:12.5px; color:var(--muted); line-height:1.6; }
       .tcx .lnl .ln-note b{ color:var(--ink-2); font-weight:600; }
+      /* 2026-11-08 leave-time fixes: clock + appointment card side by side, times
+         that add up (start + "to end"), minute chips next to each step. */
+      .tcx .lnl-openGrid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,400px); gap:clamp(24px,4vw,56px); align-items:center; }
+      @media (max-width:900px){ .tcx .lnl-openGrid{ grid-template-columns:1fr; } }
+      .tcx .lnl-cd{ font-family:var(--sans); font-size:17px; }
+      .tcx .lnl-chips{ display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; }
+      .tcx .ln-chip{ font-style:normal; font-size:13.5px; font-weight:600; border-radius:999px; padding:3px 11px; background:rgba(10,154,150,.12); color:var(--mint); white-space:nowrap; letter-spacing:0; }
+      .tcx .ln-chip.warn{ background:rgba(201,122,22,.14); color:#B86E10; }
+      .tcx .ln-chip.plain{ background:var(--card); color:var(--ink-2); box-shadow:inset 0 0 0 1px var(--stroke); }
+      .tcx .ln-appt{ padding:20px; border-radius:var(--r-md); display:grid; gap:14px; }
+      .tcx .ln-appt-row{ display:flex; gap:12px; align-items:center; }
+      .tcx .ln-appt-row b{ display:block; font-family:var(--head); font-size:17px; }
+      .tcx .ln-appt-row .who{ display:block; font-size:14px; color:var(--muted); }
+      .tcx .ln-appt-facts{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0; padding-top:14px; border-top:1px dashed var(--stroke); }
+      .tcx .ln-appt-facts dt{ font-size:12.5px; color:var(--muted); }
+      .tcx .ln-appt-facts dd{ margin:0; font-family:var(--head); font-weight:700; font-size:17px; color:var(--ink); }
+      .tcx .lnl .timeline{ max-width:680px; }
+      .tcx .tl-item{ grid-template-columns:112px 26px 1fr; align-items:start; padding:13px 0; }
+      .tcx .tl-time{ font-family:var(--head); font-size:16px; font-weight:700; color:var(--ink); white-space:nowrap; }
+      .tcx .tl-time small{ display:block; font-family:var(--sans); font-size:13px; font-weight:500; color:var(--muted); }
+      .tcx .tl-rail{ padding-top:6px; }
+      .tcx .tl-item.turn .tl-dot{ background:var(--cyan); border-color:var(--cyan); }
+      .tcx .tl-label .tl-title{ display:flex !important; flex-wrap:wrap; align-items:center; gap:6px 10px; font-family:var(--head); font-size:18px; font-weight:700; color:var(--ink) !important; }
+      .tcx .tl-label > span:last-child{ font-size:15px; color:var(--ink-2); font-weight:400; margin-top:2px; }
+      .tcx .lnl .ln-note{ max-width:60ch; font-size:15px; color:var(--ink-2); padding:13px 16px; border-radius:14px; background:rgba(10,154,150,.10); }
+      @media (max-width:560px){ .tcx .tl-item{ grid-template-columns:84px 20px 1fr; gap:10px; } }
       .tcx .lnl-acts{ display:flex; gap:10px; flex-wrap:wrap; margin-top:32px; }
 
       .tcx .ln-feats{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:20px; }
@@ -678,9 +673,11 @@ function PageStyles() {
         background:radial-gradient(120% 100% at 50% 0%, rgba(0,201,197,.20), transparent 65%); }
       .tcx .spec:hover{ transform:translateY(-6px); border-color:var(--stroke-2); }
       .tcx .spec:hover::after{ opacity:1; }
-      .tcx .spec .em{ font-size:20px; line-height:1; margin-bottom:7px; display:block; position:relative; }
-      .tcx .spec b{ display:block; font-size:14.5px; letter-spacing:-.015em; position:relative; }
-      .tcx .spec > span:last-child{ font-size:11.5px; color:var(--muted); position:relative; }
+      /* Icon on the left, name + "Book today" beside it (was stacked under the icon). */
+      .tcx .spec{ display:grid; grid-template-columns:auto 1fr; column-gap:12px; align-items:center; }
+      .tcx .spec .em{ grid-column:1; grid-row:1 / span 2; font-size:26px; line-height:1; display:block; position:relative; }
+      .tcx .spec b{ grid-column:2; display:block; font-size:14.5px; letter-spacing:-.015em; position:relative; padding-right:18px; }
+      .tcx .spec > span:last-child{ grid-column:2; font-size:11.5px; color:var(--muted); position:relative; }
       .tcx .spec .go{ position:absolute; right:12px; top:13px; opacity:0; transform:translateX(-6px);
         transition:.4s var(--ease); color:var(--mint); z-index:1; }
       .tcx .spec:hover .go{ opacity:1; transform:none; }
@@ -868,6 +865,8 @@ function PageStyles() {
       .tcx .pr{ --sky:#38BDF8; --sky-soft:rgba(56,189,248,.16); --sky-wash:rgba(186,230,253,.55); }
       .tcx .pr-h2{ margin:0 0 14px; }
       .tcx .pr-lede{ margin:0 auto; max-width:62ch; color:var(--ink-2); font-size:clamp(15px,1.2vw,17px); line-height:1.6; }
+      .tcx .pr-for{ display:block; text-align:center; margin-bottom:10px; }
+      .tcx .pr-patfree{ display:table; margin:14px auto 0; padding:8px 16px; border-radius:999px; background:rgba(10,154,150,.12); color:var(--ink); font-weight:600; font-size:15px; }
       .tcx .pr-toggle{ display:inline-flex; gap:4px; margin-top:26px; padding:4px; border-radius:999px;
         background:var(--panel-2); border:1px solid var(--stroke-2); box-shadow:0 10px 30px -22px var(--shadow); }
       .tcx .pr-toggle button{ display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border:0; border-radius:999px;
@@ -964,6 +963,20 @@ function PageStyles() {
       .tcx .pr-inc .pr-mark{ width:15px; height:15px; background:transparent; border-color:rgba(10,154,150,.25); }
       .tcx .pr-inc .pr-mark svg{ width:8px; height:8px; }
 
+      /* "See details": one switch opens every card together, so they stay level */
+      .tcx .pr-more-btn{ display:inline-flex; align-items:center; justify-content:center; gap:6px; width:100%;
+        margin:14px 0 0; padding:9px 0 2px; border:0; border-top:1px dashed var(--stroke-2); background:none;
+        cursor:pointer; font:inherit; font-size:13px; font-weight:650; color:var(--mint); }
+      .tcx .pr-more-btn:hover{ color:var(--ink); }
+      .tcx .pr-more-btn svg{ transition:transform .3s var(--ease); }
+      .tcx .pr-more-btn.on svg{ transform:rotate(180deg); }
+      .tcx .pr-more{ display:grid; grid-template-rows:0fr; margin-bottom:16px; transition:grid-template-rows .4s var(--ease); }
+      .tcx .pr-more.open{ grid-template-rows:1fr; }
+      .tcx .pr-more-in{ min-height:0; overflow:hidden; }
+      .tcx .pr-more .pr-tiles{ margin-top:8px; }
+      .tcx .pr-more .pr-inc{ margin-bottom:0; }
+      @media (prefers-reduced-motion:reduce){ .tcx .pr-more, .tcx .pr-more-btn svg{ transition:none; } }
+
       .tcx .pr-hosp{ display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; margin-top:18px;
         padding:20px 22px; border-radius:var(--r-lg); text-align:left; border:1.5px solid var(--stroke-2);
         background:linear-gradient(100deg, rgba(56,189,248,.14), rgba(51,105,255,.05) 60%, transparent), var(--panel-2); }
@@ -1056,7 +1069,7 @@ function PageStyles() {
          becomes dark-on-white, and the accent moves to the readable mint.
          ============================================================ */
       .tcx .hx-sec{ padding-top:0; padding-bottom:clamp(36px,4vw,52px); }
-      .tcx .hx{ display:block; margin-top:0; --hx-serif:"Instrument Sans",ui-sans-serif,system-ui,sans-serif; }
+      .tcx .hx{ display:block; margin-top:0; --hx-serif:var(--head); }
       /* once the real number is out, the panel opens into two columns */
       .tcx .hx-sheet.revealed .hx{ display:grid; grid-template-columns:minmax(0,330px) minmax(0,1fr); gap:clamp(30px,4.5vw,74px); }
 
@@ -1595,7 +1608,6 @@ function PageStyles() {
         background:radial-gradient(circle at 50% 50%, rgba(142,124,255,.20), transparent 68%); }
       /* the reference has three blobs, not four */
       .tcx[data-theme="dark"] .aurora .a4{ display:none; }
-      .tcx[data-theme="dark"] .grain{ opacity:.035; }
 
       /* ---- the Leave-Now map ---- */
       /* leave-route-map.webp is a raster baked on a light ground, so no token
@@ -1680,7 +1692,7 @@ function PageStyles() {
         .tcx .spec-grid{ grid-template-columns:1fr; }
         .tcx .f-grid{ grid-template-columns:1fr; }
         .tcx .two{ grid-template-columns:1fr; }
-        .tcx .tl-item{ grid-template-columns:66px 20px 1fr; }
+        .tcx .tl-item{ grid-template-columns:84px 20px 1fr; }
         .tcx .tl-dur{ display:none; }
         .tcx .qa .ans p{ padding-right:8px; }
       }
@@ -1703,6 +1715,15 @@ function PageStyles() {
         .tcx .hero-grid{ grid-template-columns:1fr; }
         .tcx .hero-visual{ height:clamp(380px,80vw,460px); }
         .tcx .hero-photo{ inset:0 -6% 0 -8%; }
+        /* Line the doctor card up with the text edge above it (it hung 15-20px
+           past it on tablet/phone). */
+        .tcx .card-doc{ left:0; }
+      }
+      /* Phones: logo + theme + "Log In / Sign Up" + burger don't fit in the bar —
+         the login button poked out and pushed the burger off-screen. The burger
+         menu already lists every login role, so drop the separate button here. */
+      @media (max-width:480px){
+        .tcx .nav-login{ display:none; }
       }
       @media (max-width:700px){
         .tcx .bookbar{ grid-template-columns:1fr 1fr; border-radius:var(--r-lg); }
@@ -1710,11 +1731,146 @@ function PageStyles() {
         .tcx .bookbar .fld{ border-radius:var(--r-sm); }
         .tcx .nav-cta .btn-ghost{ display:none; }
       }
+
+      /* ---------- Telugu / Hindi text sizes ----------
+         Same px size looks much bigger in Telugu (marks above and below every
+         letter) and the sentences are longer, so the hero headline grew 33% taller
+         and pushed the search bar 110px down. Only text is resized here —
+         numbers (4:12, 121) stay as they are. English is untouched.
+         <html lang> is set by the i18n provider. Telugu ~25% smaller headings,
+         Hindi (milder) ~12%. Extra line-height keeps the marks from touching. */
+      html[lang="te"] .tcx .hero h1{ font-size:clamp(29px,4.2vw,52px); line-height:1.24; }
+      html[lang="te"] .tcx h2{ font-size:clamp(25px,3.5vw,44px); line-height:1.28; }
+      html[lang="te"] .tcx #specialties .sec-head h2,
+      html[lang="te"] .tcx .hx-teaser-copy h2{ font-size:clamp(21px,2.4vw,30px); }
+      html[lang="te"] .tcx h3{ font-size:clamp(17px,1.9vw,22px); line-height:1.38; }
+      html[lang="te"] .tcx .lnl-h{ font-size:clamp(22px,2.8vw,36px); line-height:1.3; }
+      html[lang="te"] .tcx .lnl-mode{ font-size:clamp(19px,2.5vw,32px); }
+      html[lang="te"] .tcx .hx-sheet h3{ font-size:clamp(22px,2.7vw,33px); line-height:1.3; }
+      html[lang="te"] .tcx .hx-next p,
+      html[lang="te"] .tcx .hx-guess-q{ font-size:clamp(17px,2vw,23px); line-height:1.4; }
+      html[lang="te"] .tcx .hx-verdict{ font-size:clamp(16px,1.8vw,21px); line-height:1.45; }
+      html[lang="te"] .tcx .lede{ font-size:clamp(15px,1.25vw,17.5px); line-height:1.75; }
+
+      html[lang="hi"] .tcx .hero h1{ font-size:clamp(33px,4.9vw,62px); line-height:1.18; }
+      html[lang="hi"] .tcx h2{ font-size:clamp(28px,3.9vw,49px); line-height:1.2; }
+      html[lang="hi"] .tcx #specialties .sec-head h2,
+      html[lang="hi"] .tcx .hx-teaser-copy h2{ font-size:clamp(23px,2.65vw,33px); }
+      html[lang="hi"] .tcx h3{ font-size:clamp(18px,2vw,23.5px); line-height:1.3; }
+      html[lang="hi"] .tcx .lnl-h{ font-size:clamp(24px,3.2vw,41px); line-height:1.2; }
+      html[lang="hi"] .tcx .lnl-mode{ font-size:clamp(21px,2.8vw,37px); }
+      html[lang="hi"] .tcx .hx-sheet h3{ font-size:clamp(24px,3vw,37px); line-height:1.22; }
+      html[lang="hi"] .tcx .hx-next p,
+      html[lang="hi"] .tcx .hx-guess-q{ font-size:clamp(19px,2.25vw,26px); line-height:1.35; }
+      html[lang="hi"] .tcx .hx-verdict{ font-size:clamp(17px,2vw,23.5px); line-height:1.4; }
+      html[lang="hi"] .tcx .lede{ font-size:clamp(15.5px,1.3vw,18px); line-height:1.7; }
+
       @media (prefers-reduced-motion: reduce){
         .tcx .rv{ opacity:1; transform:none; transition:none; }
-        .tcx .grain,.tcx .marquee-track,.tcx .ecg path,.tcx .eyebrow .dot,.tcx .live-dot{ animation:none !important; }
+        .tcx .ecg path,.tcx .eyebrow .dot,.tcx .live-dot{ animation:none !important; }
         .tcx .type-text{ animation:none; }
       }
+
+      /* ── 2026-11-08 readable text (comes last, so these win) ───────────────
+         1. Small labels: 13.5px in normal letters, darker — no tiny grey
+            CAPITALS with wide spacing.
+         2. Headings and big numbers: one bold weight everywhere.
+         3. Details: 13–15px, readable grey; nothing under 13px. */
+      .tcx .kicker, .tcx .route-mini .seg span, .tcx .bookbar label, .tcx .lnl-tag, .tcx .lnl-pre,
+      .tcx .lnl-day, .tcx .lnl-f label, .tcx .pr-inc-title, .tcx .f-col h4, .tcx .hx-f label, .tcx .hx-pre,
+      .tcx .hx-scale-name, .tcx .hx-ledger h4, .tcx .hx-diet-h span, .tcx .hx-diet-meal, .tcx .hx-s-top label,
+      .tcx .hx-play-q, .tcx .hx-tool-q, .tcx .hx-tool-lbl, .tcx .mm-lang-h{
+        font-family:var(--sans); font-size:13.5px; font-weight:650; letter-spacing:0; text-transform:none; color:var(--ink-2); }
+      .tcx .lnl-tag b{ font-weight:700; }
+      .tcx .route-mini .seg span{ font-size:13px; font-weight:500; }
+      .tcx .f-col h4{ font-size:14px; font-weight:700; color:var(--ink); }
+      .tcx .doc-free{ font-size:12.5px; letter-spacing:0; text-transform:none; }
+
+      .tcx .serif{ font-weight:inherit; }
+      .tcx .lnl-h, .tcx .hx-sheet h3{ font-weight:800; letter-spacing:-.025em; }
+      .tcx .lnl-big, .tcx .hx-big, .tcx .hx-teaser-num{ font-weight:700; }
+      .tcx .lnl .ln-panel h3{ font-weight:700; }
+
+      .tcx .doc-row .who, .tcx .dateline i, .tcx .hxc-cta, .tcx .spec > span:last-child, .tcx .doc-langs,
+      .tcx .quote-by span span, .tcx .pr-tile-l, .tcx .menu .sub, .tcx .hx-diet-alt, .tcx .hx-diet-safe,
+      .tcx .hx-score, .tcx .hx-tool-warn, .tcx .lnl-maptag, .tcx .pr-save, .tcx .pr-badge{ font-size:13px; }
+      .tcx .doc-meta span, .tcx .fee, .tcx .stat span, .tcx .cta .fine, .tcx .pr-inc li, .tcx .pr-per,
+      .tcx .hx-priv, .tcx .hx-diet-body > span, .tcx .hx-diet-why, .tcx .hx-guess-note, .tcx .hx-hint,
+      .tcx .ln-appt-facts dt{ font-size:14px; }
+      .tcx .feat b{ font-size:16.5px; }
+      .tcx .feat p{ font-size:15px; color:var(--ink-2); }
+      .tcx .spec > span:last-child, .tcx .doc-meta span, .tcx .doc-langs, .tcx .stat span, .tcx .feat p,
+      .tcx .pr-inc li, .tcx .hx-priv, .tcx .cta .fine{ color:var(--ink-2); }
+      .tcx .feat .ic{ color:var(--mint); }
+
+      .tcx .hx-trust b{ font-size:15px; }
+      .tcx .hx-trust i{ font-size:14px; color:var(--ink-2); }
+      .tcx .hx-teaser-num small{ font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:0; text-transform:none; color:var(--ink-2); }
+      .tcx .check b{ font-size:16px; }
+      .tcx .check span span{ font-size:15px; color:var(--ink-2); }
+
+      /* the phone picture: still small, but readable */
+      .tcx .ph-hello{ font-size:12.5px; }
+      .tcx .ph-card .kicker{ font-size:11.5px; color:var(--mint); }
+      .tcx .ph-card .s{ font-size:12px; }
+      .tcx .ph-row b{ font-size:12.5px; }
+      .tcx .ph-row span span{ font-size:11.5px; }
+
+      /* ── 2026-11-08 calm motion ────────────────────────────────────────────
+         One story that moves (the leave-time steps light up as you scroll, the
+         clock turns green → orange → red as leaving time gets close); quick,
+         one-time reveals; buttons that respond to a tap. Grain, the cursor light
+         and the moving specialty strip are gone. */
+      .tcx .rv{ transform:translateY(14px); transition:opacity .55s var(--ease-out), transform .55s var(--ease-out); }
+      .tcx .rv.d1{ transition-delay:.05s } .tcx .rv.d2{ transition-delay:.1s } .tcx .rv.d3{ transition-delay:.15s }
+      .tcx .rv.d4{ transition-delay:.2s } .tcx .rv.d5{ transition-delay:.25s }
+
+      .tcx .lnl-big{ color:var(--mint); transition:color .8s var(--ease); }
+      .tcx .lnl-cd b{ transition:color .8s var(--ease); }
+      .tcx .lnl-st.is-warn .lnl-cd b{ color:#C97A16; }
+      .tcx .lnl-st.is-bad .lnl-cd b{ color:#E14356; }
+
+      .tcx .tl-item{ opacity:.5; transition:opacity .5s var(--ease); }
+      .tcx .tl-item.on{ opacity:1; }
+      .tcx .tl-item .tl-dot{ transition:background .4s var(--ease), border-color .4s var(--ease), box-shadow .4s var(--ease); }
+      .tcx .tl-item.on .tl-dot{ background:var(--mint-fill); border-color:var(--mint); box-shadow:0 0 0 4px rgba(0,201,197,.18); }
+      .tcx .tl-item.turn.on .tl-dot{ background:var(--cyan); border-color:var(--cyan); box-shadow:0 0 0 4px rgba(47,88,183,.18); }
+      .tcx .tl-rail::before{ transition:background .5s var(--ease); }
+      .tcx .tl-item.on + .tl-item.on .tl-rail::before, .tcx .tl-item.on .tl-rail::before{ background:rgba(10,154,150,.45); }
+
+      .tcx .btn{ transition:transform .18s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease); }
+      .tcx .btn:hover{ transform:translateY(-1px); }
+      .tcx .btn:active{ transform:translateY(1px) scale(.98); }
+
+      @media (prefers-reduced-motion: reduce){
+        .tcx .tl-item{ opacity:1; transition:none; }
+        .tcx .lnl-big, .tcx .lnl-cd b, .tcx .tl-item .tl-dot, .tcx .btn{ transition:none; }
+        .tcx .btn:hover, .tcx .btn:active{ transform:none; }
+      }
+
+      /* ── 2026-11-08 two sides at every stop: the journey stays on the left along
+         the road; the right holds a card that sums the stop up, like the
+         appointment card at the clock stop. Phones stack them. */
+      .tcx .ln-two{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,380px); gap:clamp(32px,6vw,96px); align-items:center; }
+      .tcx .ln-card{ padding:22px; border-radius:var(--r-md); display:grid; gap:14px; }
+      .tcx .ln-card-big{ margin:0; font-family:var(--head); font-size:40px; font-weight:800; letter-spacing:-.03em; line-height:1; color:var(--ink); }
+      .tcx .ln-bar{ display:flex; gap:4px; height:12px; }
+      .tcx .ln-bar i{ border-radius:99px; background:var(--mint); }
+      .tcx .ln-bar i.warn{ background:#E0A04A; }
+      .tcx .ln-bar i.old{ background:rgba(225,67,86,.55); }
+      .tcx .ln-bar i.empty{ background:var(--stroke); }
+      .tcx .ln-card-rows{ display:grid; gap:8px; margin:0; }
+      .tcx .ln-card-rows div{ display:flex; justify-content:space-between; gap:12px; font-size:15px; }
+      .tcx .ln-card-rows dt{ display:flex; align-items:center; gap:8px; color:var(--ink-2); }
+      .tcx .ln-card-rows dd{ margin:0; font-weight:700; color:var(--ink); }
+      .tcx .ln-card-rows .sw{ width:10px; height:10px; border-radius:3px; background:var(--mint); }
+      .tcx .ln-card-rows .sw.warn{ background:#E0A04A; }
+      .tcx .lnl .ln-card .ln-note{ margin:0; }
+      .tcx .ln-cmp{ display:grid; gap:8px; }
+      .tcx .ln-cmp p{ margin:6px 0 0; display:flex; justify-content:space-between; gap:12px; font-size:15px; color:var(--ink-2); }
+      .tcx .ln-cmp b{ color:var(--ink); }
+      .tcx .ln-cmp b.good{ color:var(--mint); }
+      @media (max-width:900px){ .tcx .ln-two{ grid-template-columns:1fr; gap:24px; } }
     `}</style>
   )
 }
@@ -1740,7 +1896,6 @@ function LandingPage() {
 
 function LandingShell() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [pointerFine, setPointerFine] = useState(false)
   const [theme, setTheme] = useState(readTheme)
 
   /* Persist the choice. Storage can throw outright in a locked-down browser,
@@ -1749,20 +1904,6 @@ function LandingShell() {
     try { localStorage.setItem(THEME_KEY, theme) } catch { /* not fatal */ }
   }, [theme])
   const rootRef = useRef(null)
-  const spotRef = useRef(null)
-
-  // Cursor spotlight — pointer devices only, and skipped entirely on touch so a
-  // phone never pays for a 620px blurred layer it can't move.
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-    if (!window.matchMedia('(pointer: fine)').matches) return undefined
-    setPointerFine(true)
-    const move = (e) => {
-      if (spotRef.current) spotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`
-    }
-    window.addEventListener('pointermove', move, { passive: true })
-    return () => window.removeEventListener('pointermove', move)
-  }, [])
 
   // Scroll reveals. One observer for the whole page; each element unobserves
   // itself once shown, so nothing keeps firing as the page scrolls.
@@ -1788,12 +1929,10 @@ function LandingShell() {
     <div
       ref={rootRef}
       data-theme={theme}
-      className={`tcx ${pointerFine ? 'pointer-fine' : ''} ${menuOpen ? 'menu-open' : ''}`}
+      className={`tcx ${menuOpen ? 'menu-open' : ''}`}
     >
       <PageStyles />
       <div className="aurora" aria-hidden="true"><i className="a1" /><i className="a2" /><i className="a3" /><i className="a4" /></div>
-      <div className="grain" aria-hidden="true" />
-      <div className="spotlight" ref={spotRef} aria-hidden="true" />
 
       <Nav menuOpen={menuOpen} setMenuOpen={setMenuOpen} theme={theme} setTheme={setTheme} />
       <main>
@@ -1905,7 +2044,7 @@ function Nav({ menuOpen, setMenuOpen, theme, setTheme }) {
             </div>
 
             {/* login */}
-            <div style={{ position: 'relative' }}>
+            <div className="nav-login" style={{ position: 'relative' }}>
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() => { setRoleOpen((o) => !o); setLangOpen(false) }}
@@ -1978,7 +2117,6 @@ function Hero() {
   const { t, lang } = useI18n()
   const { openAuth } = useAuthModal()
   const [spec, setSpec] = useState(SPECIALTIES[0])
-  const [when, setWhen] = useState(WHEN[0])
   const [city, setCity] = useState(() => {
     try { return localStorage.getItem('tapcure.search-city') || '' } catch { return '' }
   })
@@ -2053,7 +2191,8 @@ function Hero() {
               </button>
               <button className="btn btn-ghost btn-lg" onClick={() => navigate('/search')}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M8 5v14l11-7z" fill="currentColor" />
+                  <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2.2" />
+                  <path d="m20 20-3.5-3.5" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
                 </svg>
                 {t('tc.hero.browse')}
               </button>
@@ -2082,12 +2221,6 @@ function Hero() {
                   {cities.map((c) => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-              <div className="fld">
-                <label htmlFor="qWhen">{t('tc.hero.when')}</label>
-                <select id="qWhen" value={when} onChange={(e) => setWhen(e.target.value)}>
-                  {WHEN.map((w) => <option key={w} value={w}>{t(WHEN_KEY[w])}</option>)}
-                </select>
-              </div>
               <button className="btn btn-primary" onClick={findSlots}>{t('tc.hero.findSlots')}</button>
             </div>
           </div>
@@ -2106,9 +2239,9 @@ function Hero() {
                 {t('tc.hero.ammaCheckup')} · <b style={{ color: 'var(--ink)' }}>5:00 PM</b> {t('tc.hero.with')} {t('lx.demo.Dr. Anaya Rao')}
               </div>
               <div className="route-mini">
-                <div className="seg"><b>{t('lx.hero.minShort', { n: 26 })}</b><span>{t('tc.hero.drive')}</span></div>
+                <div className="seg"><b>{t('lx.hero.minShort', { n: 18 })}</b><span>{t('tc.hero.drive')}</span></div>
                 <span className="arrow">›</span>
-                <div className="seg"><b>{t('lx.hero.minShort', { n: 5 })}</b><span>{t('tc.hero.checkIn')}</span></div>
+                <div className="seg"><b>{t('lx.hero.minShort', { n: 30 })}</b><span>{t('tc.hero.checkIn')}</span></div>
               </div>
             </div>
 
@@ -2138,20 +2271,6 @@ function Hero() {
                 marker move as the check is filled in, exactly as the reference's
                 paintEntry() does. */}
             <LedgerHeroCard />
-          </div>
-        </div>
-
-        {/* marquee — the track is duplicated because the keyframe translates -50% */}
-        <div className="marquee rv">
-          <div className="marquee-track">
-            {[...PARTNERS, ...PARTNERS].map((p, i) => (
-              <span className="marquee-item" key={`${p}-${i}`}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="M12 4v16M4 12h16" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" />
-                </svg>
-                {t(specKey(p))}
-              </span>
-            ))}
           </div>
         </div>
       </div>

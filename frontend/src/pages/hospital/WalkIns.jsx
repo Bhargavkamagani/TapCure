@@ -18,7 +18,7 @@ const PRIORITIES = [
 function Field({ label, required, children }) {
   return (
     <div>
-      <label className="mb-1 block text-[12px] font-semibold text-slate-600">
+      <label className="mb-1 block text-[13px] font-semibold text-slate-600">
         {label}{required && <span className="text-red-500">*</span>}
       </label>
       {children}
@@ -112,7 +112,7 @@ function WalkIns() {
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <PageHeading title="Walk-in Patients" subtitle="Register walk-ins and manage the live walk-in queue.">
         <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3">
-          {doc && <Avatar name={doc.name} className="h-6 w-6 text-[9px]" />}
+          {doc && <Avatar name={doc.name} className="h-6 w-6 text-[13px]" />}
           <select value={form.doctor_id} onChange={set('doctor_id')} className="bg-transparent py-2 text-sm font-semibold text-brand-navy outline-none">
             {doctors.map((d) => (
               <option key={d.doctor_id} value={d.doctor_id}>{d.name}</option>
@@ -187,12 +187,12 @@ function WalkIns() {
         <Card className="flex min-h-0 flex-col">
           <div className="mb-3 flex items-center justify-between">
             <h3 className="text-[15px] font-bold text-brand-navy">Today's Queue — {doc?.name || '—'}</h3>
-            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-[11px] font-semibold text-amber-700">{waiting.length} in queue</span>
+            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-[13px] font-semibold text-amber-700">{waiting.length} in queue</span>
           </div>
           <div className="min-h-0 flex-1 overflow-auto">
             <table className="w-full text-left">
               <thead className="sticky top-0 bg-white">
-                <tr className="whitespace-nowrap text-[12px] font-semibold text-slate-400">
+                <tr className="whitespace-nowrap text-[13px] font-semibold text-slate-400">
                   <th className="pb-2 pr-4">Token</th>
                   <th className="pb-2 pr-4">Patient</th>
                   <th className="pb-2 pr-4">Pos</th>
@@ -207,7 +207,7 @@ function WalkIns() {
                     <td className="whitespace-nowrap py-2.5 pr-4 text-slate-600">{current.patient_name || 'Patient'}</td>
                     <td className="py-2.5 pr-4 text-slate-500">—</td>
                     <td className="py-2.5 pr-4 capitalize text-slate-500">{current.priority}</td>
-                    <td className="py-2.5"><span className="rounded-full bg-green-100 px-2 py-0.5 text-[11px] font-semibold text-green-700">In consultation</span></td>
+                    <td className="py-2.5"><span className="rounded-full bg-green-100 px-2 py-0.5 text-[13px] font-semibold text-green-700">In consultation</span></td>
                   </tr>
                 )}
                 {waiting.map((w) => (
@@ -217,7 +217,7 @@ function WalkIns() {
                     <td className="py-2.5 pr-4 text-slate-500">{w.queue_position}</td>
                     <td className="py-2.5 pr-4 capitalize text-slate-500">{w.priority}</td>
                     <td className="py-2.5">
-                      <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${w.is_walkin ? 'bg-slate-100 text-slate-600' : 'bg-blue-100 text-blue-700'}`}>
+                      <span className={`rounded-full px-2 py-0.5 text-[13px] font-semibold ${w.is_walkin ? 'bg-slate-100 text-slate-600' : 'bg-blue-100 text-blue-700'}`}>
                         {w.is_walkin ? 'Walk-in' : 'Booked'}
                       </span>
                     </td>

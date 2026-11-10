@@ -128,9 +128,9 @@ export default function AssistantVitals() {
         <div className="flex flex-wrap items-center gap-3 rounded-xl border border-red-100 bg-red-50 px-4 py-2.5 text-sm text-red-600">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span className="font-semibold">{error}</span>
-          <span className="text-[12.5px] text-red-500">The list below is empty because of this error, not because nothing was recorded.</span>
+          <span className="text-[13.5px] text-red-500">The list below is empty because of this error, not because nothing was recorded.</span>
           <button type="button" onClick={loadRecent}
-            className="ml-auto rounded-lg border border-red-200 bg-white px-3 py-1 text-[12.5px] font-semibold text-red-600 hover:bg-red-50">
+            className="ml-auto rounded-lg border border-red-200 bg-white px-3 py-1 text-[13.5px] font-semibold text-red-600 hover:bg-red-50">
             Retry
           </button>
         </div>
@@ -143,7 +143,7 @@ export default function AssistantVitals() {
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-brand-blue"><ClipboardPlus className="h-5 w-5" /></span>
             <div>
               <p className="text-[24px] font-extrabold leading-none text-brand-blue"><AnimatedNumber value={stats.today} /></p>
-              <p className="mt-1 text-[12px] font-medium text-slate-500">Recorded Today</p>
+              <p className="mt-1 text-[13px] font-medium text-slate-500">Recorded Today</p>
             </div>
           </div>
         </motion.div>
@@ -152,7 +152,7 @@ export default function AssistantVitals() {
             <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${stats.attention ? 'bg-red-100 text-red-500' : 'bg-emerald-100 text-emerald-600'}`}><AlertTriangle className="h-5 w-5" /></span>
             <div>
               <p className={`text-[24px] font-extrabold leading-none ${stats.attention ? 'text-red-500' : 'text-emerald-600'}`}><AnimatedNumber value={stats.attention} /></p>
-              <p className="mt-1 text-[12px] font-medium text-slate-500">Need Attention</p>
+              <p className="mt-1 text-[13px] font-medium text-slate-500">Need Attention</p>
             </div>
           </div>
         </motion.div>
@@ -161,7 +161,7 @@ export default function AssistantVitals() {
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-100 text-purple-600"><Users className="h-5 w-5" /></span>
             <div>
               <p className="text-[24px] font-extrabold leading-none text-purple-600"><AnimatedNumber value={stats.patients} /></p>
-              <p className="mt-1 text-[12px] font-medium text-slate-500">Patients</p>
+              <p className="mt-1 text-[13px] font-medium text-slate-500">Patients</p>
             </div>
           </div>
         </motion.div>
@@ -173,7 +173,7 @@ export default function AssistantVitals() {
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-rose-100 text-rose-500"><HeartPulse className="h-5 w-5" /></span>
           <div>
             <h3 className="text-[15px] font-bold text-brand-navy">Record Vitals</h3>
-            <p className="text-[12px] text-slate-400">Search a patient to capture a new reading.</p>
+            <p className="text-[13px] text-slate-400">Search a patient to capture a new reading.</p>
           </div>
         </div>
         <div className="p-5">
@@ -206,16 +206,16 @@ export default function AssistantVitals() {
                     {results.map((p) => (
                       <li key={p.patient_id} className="flex items-center justify-between gap-3 px-4 py-2.5 hover:bg-slate-50/70">
                         <div className="flex min-w-0 items-center gap-2.5">
-                          <Avatar name={p.name} className="h-9 w-9 text-[11px]" />
+                          <Avatar name={p.name} className="h-9 w-9 text-[13px]" />
                           <div className="min-w-0 leading-tight">
                             <p className="truncate text-[13.5px] font-bold text-brand-navy">{p.name}</p>
-                            <p className="text-[11.5px] text-slate-400">{[p.uhid, p.phone].filter(Boolean).join(' · ')}</p>
+                            <p className="text-[13px] text-slate-400">{[p.uhid, p.phone].filter(Boolean).join(' · ')}</p>
                           </div>
                         </div>
                         <motion.button
                           whileTap={{ scale: 0.95 }}
                           onClick={() => setRecordFor(p)}
-                          className="shrink-0 rounded-lg bg-brand-blue px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark"
+                          className="shrink-0 rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark"
                         >
                           <Activity className="mr-1 inline h-3.5 w-3.5" /> Record
                         </motion.button>
@@ -236,7 +236,7 @@ export default function AssistantVitals() {
             Recently Recorded {cards ? <span className="font-semibold text-slate-400">· {cards.length}</span> : null}
           </h3>
           {truncated && (
-            <span className="rounded-lg bg-amber-50 px-2.5 py-1 text-[11.5px] font-semibold text-amber-700">
+            <span className="rounded-lg bg-amber-50 px-2.5 py-1 text-[13px] font-semibold text-amber-700">
               Showing the latest {FEED_LIMIT} readings — older ones aren't listed, and the counters
               above cover this window only.
             </span>
@@ -252,7 +252,7 @@ export default function AssistantVitals() {
                 key={key}
                 type="button"
                 onClick={() => setView(key)}
-                className={`rounded-lg px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                className={`rounded-lg px-3 py-1.5 text-[13.5px] font-semibold transition-colors ${
                   view === key ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
@@ -275,7 +275,7 @@ export default function AssistantVitals() {
           <Card className="flex flex-col items-center justify-center gap-2 py-14 text-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-300"><HeartPulse className="h-7 w-7" /></span>
             <p className="text-sm font-semibold text-slate-500">No vitals recorded yet</p>
-            <p className="text-[12.5px] text-slate-400">Search a patient above to capture their first reading.</p>
+            <p className="text-[13.5px] text-slate-400">Search a patient above to capture their first reading.</p>
           </Card>
         ) : (
           <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 gap-3 lg:grid-cols-2">
@@ -307,19 +307,19 @@ export default function AssistantVitals() {
                         <p className="flex items-center gap-2 truncate text-[14.5px] font-bold text-brand-navy">
                           {seenName(v)}
                           {bookedBy(v) && (
-                            <span className="shrink-0 rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-600">by {bookedBy(v)}</span>
+                            <span className="shrink-0 rounded-full bg-purple-100 px-2 py-0.5 text-[13px] font-semibold text-purple-600">by {bookedBy(v)}</span>
                           )}
                           {v.earlier > 0 && (
-                            <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-500">+{v.earlier} earlier</span>
+                            <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500">+{v.earlier} earlier</span>
                           )}
                         </p>
-                        <p className="flex items-center gap-1 text-[11px] text-slate-400">
+                        <p className="flex items-center gap-1 text-[13px] text-slate-400">
                           <Clock className="h-3 w-3" /> {fmtTime(v.recorded_at)}{v.recorded_by_name ? ` · ${v.recorded_by_name}` : ''}
                         </p>
                       </div>
                     </div>
                     {/* status pill */}
-                    <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[10.5px] font-bold ${v.abnormal ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
+                    <span className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[13px] font-bold ${v.abnormal ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}`}>
                       <span className={`h-1.5 w-1.5 rounded-full ${v.abnormal ? 'bg-red-500' : 'bg-emerald-500'}`} />
                       {v.abnormal ? 'Needs attention' : 'Stable'}
                     </span>
@@ -334,7 +334,7 @@ export default function AssistantVitals() {
                     </div>
                     {v.series.length >= 2 && (
                       <div className="shrink-0 text-right">
-                        <p className="mb-0.5 flex items-center justify-end gap-1 text-[9.5px] font-semibold uppercase tracking-wide text-slate-400">
+                        <p className="mb-0.5 flex items-center justify-end gap-1 text-[12px] font-semibold uppercase tracking-wide text-slate-400">
                           <TrendingUp className="h-3 w-3" /> BP trend
                         </p>
                         <VitalsSparkline data={v.series} color={v.abnormal ? '#ef4444' : '#2563eb'} />
@@ -342,19 +342,19 @@ export default function AssistantVitals() {
                     )}
                   </div>
 
-                  {v.notes && <p className="mt-2.5 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[11.5px] text-slate-500">{v.notes}</p>}
+                  {v.notes && <p className="mt-2.5 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[13px] text-slate-500">{v.notes}</p>}
 
                   {/* quick actions — slide in on hover */}
                   <div className="mt-3 grid grid-cols-2 gap-2 border-t border-slate-100 pt-3 opacity-100 transition-all md:max-h-0 md:overflow-hidden md:border-0 md:pt-0 md:opacity-0 md:group-hover:max-h-20 md:group-hover:border-t md:group-hover:pt-3 md:group-hover:opacity-100">
                     <button
                       onClick={(e) => { e.stopPropagation(); setRecordFor({ patient_id: v.patient_id, name: seenName(v), uhid: v.patient_uhid }) }}
-                      className="flex items-center justify-center gap-1.5 rounded-lg bg-brand-blue py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark"
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-brand-blue py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark"
                     >
                       <Activity className="h-3.5 w-3.5" /> Re-record
                     </button>
                     <button
                       onClick={(e) => { e.stopPropagation(); setViewPatient({ patient_id: v.patient_id, name: seenName(v), uhid: v.patient_uhid }) }}
-                      className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-1.5 text-[12px] font-semibold text-brand-blue hover:bg-brand-blueLight/40"
+                      className="flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 py-1.5 text-[13px] font-semibold text-brand-blue hover:bg-brand-blueLight/40"
                     >
                       <Eye className="h-3.5 w-3.5" /> History
                     </button>

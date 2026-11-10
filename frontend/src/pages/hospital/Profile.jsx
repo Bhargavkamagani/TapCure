@@ -101,7 +101,7 @@ function OpeningHoursCard({ hospitalId, onSaved }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-[16px] font-bold text-brand-navy">Opening Days & Hours</h3>
-          <p className="mt-1 text-[12.5px] text-slate-500">
+          <p className="mt-1 text-[13.5px] text-slate-500">
             {always
               ? 'Open around the clock — each doctor’s own sessions decide when patients can book.'
               : 'Doctors can only add consulting sessions inside these times.'}
@@ -169,7 +169,7 @@ function OpeningHoursCard({ hospitalId, onSaved }) {
       )}
 
       {note && (
-        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[12.5px] font-medium ${
+        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[13.5px] font-medium ${
           note.type === 'error' ? 'border-red-200 bg-red-50 text-red-600'
             : note.type === 'warn' ? 'border-amber-200 bg-amber-50 text-amber-700'
             : 'border-green-200 bg-green-50 text-green-700'
@@ -179,7 +179,7 @@ function OpeningHoursCard({ hospitalId, onSaved }) {
             {note.text}
           </p>
           {note.conflicts?.length > 0 && (
-            <ul className="mt-2 space-y-0.5 border-t border-amber-200/70 pt-2 text-[12px] font-normal">
+            <ul className="mt-2 space-y-0.5 border-t border-amber-200/70 pt-2 text-[13px] font-normal">
               {note.conflicts.map((c) => <li key={c}>• {c}</li>)}
             </ul>
           )}
@@ -248,7 +248,7 @@ function FreeRevisitCard({ hospitalId }) {
       <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-[16px] font-bold text-brand-navy">Free Revisit</h3>
-          <p className="mt-1 text-[12.5px] text-slate-500">
+          <p className="mt-1 text-[13.5px] text-slate-500">
             After a paid consultation, a patient may see the same doctor again free of
             charge within this many days. They walk in — no booking needed. Leave blank
             to switch the offer off.
@@ -269,14 +269,14 @@ function FreeRevisitCard({ hospitalId }) {
             onChange={(e) => { setDays(e.target.value.replace(/[^0-9]/g, '')); setNote(null) }}
             className="w-32 rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm text-brand-navy outline-none focus:border-brand-blue"
           />
-          <span className="text-[12.5px] text-slate-400">
+          <span className="text-[13.5px] text-slate-400">
             {days.trim() === '' ? 'not offered' : 'days from the consultation date'}
           </span>
         </div>
       </div>
 
       {note && (
-        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[12.5px] font-medium ${
+        <div className={`mt-4 rounded-xl border px-3.5 py-2.5 text-[13.5px] font-medium ${
           note.type === 'error'
             ? 'border-rose-200 bg-rose-50 text-rose-700'
             : 'border-emerald-200 bg-emerald-50 text-emerald-700'
@@ -318,7 +318,7 @@ function HospitalPhotoField({ hospital, setHospital }) {
         <div className="relative aspect-[16/7] w-full">
           {hospital.photo_url && !broken
             ? <img src={fileUrl(hospital.photo_url)} alt="Hospital" onError={() => setBroken(true)} className="h-full w-full object-cover" />
-            : <div className="grid h-full w-full place-items-center text-center text-[12.5px] text-slate-400">No photo yet. Patients see this photo when they browse hospitals.</div>}
+            : <div className="grid h-full w-full place-items-center text-center text-[13.5px] text-slate-400">No photo yet. Patients see this photo when they browse hospitals.</div>}
         </div>
         <div className="flex flex-wrap items-center gap-2 border-t border-slate-200 bg-white px-3 py-2">
           <label className={`inline-flex cursor-pointer items-center rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-bold text-white hover:bg-brand-blueDark ${busy ? 'pointer-events-none opacity-60' : ''}`}>
@@ -328,7 +328,7 @@ function HospitalPhotoField({ hospital, setHospital }) {
           {hospital.photo_url && (
             <button type="button" disabled={busy} onClick={remove} className="rounded-lg border border-slate-200 px-3 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60">Remove</button>
           )}
-          <span className="text-[11.5px] text-slate-400">JPG or PNG, up to 3 MB. A wide photo of the building or reception works best.</span>
+          <span className="text-[13px] text-slate-400">JPG or PNG, up to 3 MB. A wide photo of the building or reception works best.</span>
         </div>
       </div>
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
@@ -343,7 +343,7 @@ function LetterheadCard({ hospital, setHospital }) {
   return (
     <Card className="p-5">
       <h3 className="text-[16px] font-bold text-brand-navy">Prescription Letterhead</h3>
-      <p className="mt-1 text-[12.5px] text-slate-500">
+      <p className="mt-1 text-[13.5px] text-slate-500">
         Printed on every prescription PDF your doctors give patients. Have a printed letterhead? Upload a scan or design of
         its top and bottom. If you skip this, we make one from your logo, hospital name, address and phone.
       </p>
@@ -502,7 +502,7 @@ function HospitalProfile() {
           <div className="flex items-start justify-between gap-3">
             <div>
               <h3 className="text-[16px] font-bold text-brand-navy">Hospital Address</h3>
-              <p className="mt-1 text-[12.5px] text-slate-500">
+              <p className="mt-1 text-[13.5px] text-slate-500">
                 What patients see, and where their travel time is measured to.
               </p>
             </div>
@@ -516,7 +516,7 @@ function HospitalProfile() {
             <p className="text-[13.5px] font-medium leading-snug text-brand-navy">
               {form.address || <span className="text-slate-400">No address set yet.</span>}
               {[form.city, form.state, form.pincode].filter(Boolean).length > 0 && (
-                <span className="mt-0.5 block text-[12.5px] font-normal text-slate-500">
+                <span className="mt-0.5 block text-[13.5px] font-normal text-slate-500">
                   {[form.city, form.state, form.pincode].filter(Boolean).join(', ')}
                 </span>
               )}
@@ -531,14 +531,14 @@ function HospitalProfile() {
             className="mt-4 overflow-hidden rounded-xl"
           />
 
-          <div className={`mt-3 flex items-center gap-2 rounded-xl border px-3 py-2 text-[12.5px] font-semibold ${
+          <div className={`mt-3 flex items-center gap-2 rounded-xl border px-3 py-2 text-[13.5px] font-semibold ${
             hasLocation ? 'border-green-200 bg-green-50 text-green-700' : 'border-amber-200 bg-amber-50 text-amber-700'
           }`}>
             <Navigation className="h-4 w-4" />
             {hasLocation ? 'Location set — travel estimates enabled.' : 'No location yet — patients won’t get a leave-by time.'}
           </div>
 
-          <p className="mt-3 flex items-start gap-1.5 text-[11.5px] text-slate-400">
+          <p className="mt-3 flex items-start gap-1.5 text-[13px] text-slate-400">
             <Stethoscope className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             Changing this updates the practice location of every doctor at this hospital.
           </p>

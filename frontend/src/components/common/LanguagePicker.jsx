@@ -52,7 +52,7 @@ export default function LanguagePicker({ value = '', onChange, label = 'Language
               className="h-4 w-4 rounded border-slate-300 text-brand-blue focus:ring-brand-blue"
             />
             <span className={isOn(l) ? 'font-semibold text-brand-navy' : ''}>{l}</span>
-            {!known(l) && <span className="text-[10px] text-slate-400">(existing)</span>}
+            {!known(l) && <span className="text-[13px] text-slate-400">(existing)</span>}
           </label>
         ))}
       </div>

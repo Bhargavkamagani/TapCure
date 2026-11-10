@@ -179,7 +179,7 @@ export default function EditFamilyMemberModal({ member, patientId, accountPhone,
               <input type="file" accept="image/*" className="hidden" onChange={onPhoto} disabled={photoBusy} />
             </label>
           </div>
-          <p className="text-[12px] text-slate-400">
+          <p className="text-[13px] text-slate-400">
             {photoBusy ? t('pcommon.uploading') : t('ppage.memberPhotoHint')}
           </p>
         </div>
@@ -222,7 +222,7 @@ export default function EditFamilyMemberModal({ member, patientId, accountPhone,
                   <span className="flex items-center gap-1.5 text-[13px] font-semibold text-brand-navy">
                     <Bell className="h-3.5 w-3.5 text-slate-400" /> {t('ppage.notifyOwn')}
                   </span>
-                  <span className="block text-[11.5px] text-slate-400">
+                  <span className="block text-[13px] text-slate-400">
                     {!phoneValid ? t('ppage.notifyNeedsPhone') : t('ppage.notifyOwnHint', { phone: accountPhone || '—' })}
                   </span>
                 </span>

@@ -22,14 +22,14 @@ function HeroCard({ icon: Icon, label, value, sub, gradient, live }) {
           <Icon className="h-6 w-6" />
         </span>
         {live && (
-          <span className="flex items-center gap-1.5 rounded-full bg-white/20 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide">
+          <span className="flex items-center gap-1.5 rounded-full bg-white/20 px-2 py-0.5 text-[12px] font-bold uppercase tracking-wide">
             <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> Live
           </span>
         )}
       </div>
       <div className="relative mt-4 text-[36px] font-extrabold leading-none">{value}</div>
       <div className="relative mt-1.5 text-[14.5px] font-semibold text-white/90">{label}</div>
-      {sub && <div className="relative mt-1 text-[12.5px] text-white/75">{sub}</div>}
+      {sub && <div className="relative mt-1 text-[13.5px] text-white/75">{sub}</div>}
     </div>
   )
 }
@@ -58,7 +58,7 @@ function SplitBar({ title, icon: Icon, segments, note }) {
           </span>
         ))}
       </div>
-      {note && <p className="mt-2 text-[12px] text-slate-400">{note}</p>}
+      {note && <p className="mt-2 text-[13px] text-slate-400">{note}</p>}
     </div>
   )
 }
@@ -264,7 +264,7 @@ function Dashboard() {
                     <tr key={d.doctor_id} className="border-t border-slate-50">
                       <td className="py-2.5 pr-4">
                         <div className="flex items-center gap-2.5">
-                          <Avatar name={d.name} className="h-8 w-8 shrink-0 text-[12px]" />
+                          <Avatar name={d.name} className="h-8 w-8 shrink-0 text-[13px]" />
                           <div className="min-w-0 flex-1">
                             <span className="block truncate font-semibold text-brand-navy">{d.name}</span>
                             <div className="mt-1 h-1.5 w-full max-w-[140px] overflow-hidden rounded-full bg-slate-100">

@@ -66,7 +66,7 @@ export default function QualificationPicker({
           {selected.map((q) => (
             <span
               key={q}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blueLight px-2.5 py-1 text-[12.5px] font-semibold text-brand-blue"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blueLight px-2.5 py-1 text-[13.5px] font-semibold text-brand-blue"
             >
               {q}
               <button

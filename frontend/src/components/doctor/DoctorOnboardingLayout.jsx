@@ -61,7 +61,7 @@ function RailStep({ step, index, state, onJump, last }) {
         onClick={onJump || undefined}
         className={`min-w-0 flex-1 pb-8 text-left ${clickable ? 'cursor-pointer' : 'cursor-default'}`}
       >
-        <span className={`block text-[10.5px] font-bold uppercase tracking-[0.16em] ${
+        <span className={`block text-[12px] font-bold uppercase tracking-[0.16em] ${
           state === 'todo' ? 'text-white/35' : 'text-emerald-300/90'
         }`}>
           {index < INPUT_STEPS ? `Step ${index + 1}` : 'Finish'}
@@ -71,7 +71,7 @@ function RailStep({ step, index, state, onJump, last }) {
         } ${clickable ? 'hover:text-emerald-200' : ''}`}>
           {step.title}
         </span>
-        <span className={`mt-0.5 block text-[12.5px] ${state === 'todo' ? 'text-white/25' : 'text-white/50'}`}>
+        <span className={`mt-0.5 block text-[13.5px] ${state === 'todo' ? 'text-white/25' : 'text-white/50'}`}>
           {step.sub}
         </span>
       </button>
@@ -148,7 +148,7 @@ function SetupShell() {
           </div>
 
           <div className="mt-4 shrink-0">
-            <p className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-emerald-300/80">Account setup</p>
+            <p className="text-[12px] font-bold uppercase tracking-[0.22em] text-emerald-300/80">Account setup</p>
             <h1 className="mt-1 font-display text-[30px] font-semibold leading-[1.05] text-white">
               {finished ? 'Your practice is live.' : (
                 <>Welcome{firstName ? <>, <span className="whitespace-nowrap">Dr. {firstName}</span></> : ''}</>
@@ -187,8 +187,8 @@ function SetupShell() {
               rail gets, so the log-out button is never the thing that's cut. */}
           <div className="mt-6 shrink-0">
             <div className="mb-2 flex items-baseline justify-between">
-              <span className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-white/40">Progress</span>
-              <span className="text-[12px] font-bold text-emerald-300">{completed} of {INPUT_STEPS}</span>
+              <span className="text-[12px] font-bold uppercase tracking-[0.16em] text-white/40">Progress</span>
+              <span className="text-[13px] font-bold text-emerald-300">{completed} of {INPUT_STEPS}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
               <motion.div
@@ -200,7 +200,7 @@ function SetupShell() {
             </div>
 
             <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-5">
-              <span className="flex items-center gap-1.5 text-[11.5px] font-semibold text-white/50">
+              <span className="flex items-center gap-1.5 text-[13px] font-semibold text-white/50">
                 <BadgeCheck className="h-4 w-4 text-emerald-300" /> Credentials verified
               </span>
               {/* Red rather than white/40 — at that opacity on the dark teal it
@@ -227,7 +227,7 @@ function SetupShell() {
               <Wordmark className="text-[16px]" />
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-[12px] font-bold text-teal-700">{completed} of {INPUT_STEPS} done</span>
+              <span className="text-[13px] font-bold text-teal-700">{completed} of {INPUT_STEPS} done</span>
               <button type="button" onClick={logout} className="text-red-500 hover:text-red-600">
                 <LogOut className="h-[18px] w-[18px]" />
               </button>
@@ -241,7 +241,7 @@ function SetupShell() {
                 animate={{ width: `${pct}%` }}
               />
             </div>
-            <span className="shrink-0 text-[11.5px] font-bold text-slate-400">
+            <span className="shrink-0 text-[13px] font-bold text-slate-400">
               {finished ? 'Finish' : `Step ${STEPS.findIndex((s) => s.key === stepKey) + 1}`} · {STEPS.find((s) => s.key === stepKey)?.title}
             </span>
           </div>

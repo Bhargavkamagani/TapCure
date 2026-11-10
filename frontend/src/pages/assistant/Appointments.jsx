@@ -126,7 +126,7 @@ export default function AssistantAppointments() {
     <div className="flex flex-col gap-5">
       <PageHeading title="Appointments" subtitle={`Today and the next ${HORIZON_DAYS} days — check in patients and generate their queue tokens.`}>
         <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3">
-          {doc && <Avatar name={doc.name} className="h-6 w-6 text-[9px]" />}
+          {doc && <Avatar name={doc.name} className="h-6 w-6 text-[13px]" />}
           <select value={doctorId} onChange={(e) => setDoctorId(e.target.value)} className="bg-transparent py-2 text-sm font-semibold text-brand-navy outline-none">
             {doctors.map((d) => (
               <option key={d.doctor_id} value={d.doctor_id}>{d.name}</option>
@@ -137,7 +137,7 @@ export default function AssistantAppointments() {
             knows a patient just booked assumes the page is broken. */}
         {updatedAt && (
           <span
-            className="hidden items-center gap-1.5 text-[11.5px] font-semibold text-slate-400 sm:flex"
+            className="hidden items-center gap-1.5 text-[13px] font-semibold text-slate-400 sm:flex"
             title={`Updates automatically every ${REFRESH_MS / 1000} seconds`}
           >
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-teal-500" />
@@ -172,7 +172,7 @@ export default function AssistantAppointments() {
                   key={v.key}
                   type="button"
                   onClick={() => setView(v.key)}
-                  className={`rounded-lg px-3 py-1.5 text-[12.5px] font-semibold transition-colors ${
+                  className={`rounded-lg px-3 py-1.5 text-[13.5px] font-semibold transition-colors ${
                     view === v.key ? 'bg-white text-brand-navy shadow-sm' : 'text-slate-500 hover:text-slate-700'
                   }`}
                 >
@@ -198,7 +198,7 @@ export default function AssistantAppointments() {
           <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-slate-50 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+              <tr className="border-b border-slate-50 text-[12px] font-semibold uppercase tracking-wide text-slate-400">
                 <th className="px-5 py-2.5">When</th>
                 <th className="px-3 py-2.5">Patient</th>
                 <th className="px-3 py-2.5">Type</th>
@@ -219,19 +219,19 @@ export default function AssistantAppointments() {
                     {/* The day matters now that the list spans a month — a bare
                         "10:30" told the desk nothing about which day it was. */}
                     <td className="whitespace-nowrap px-5 py-2.5">
-                      <span className={`block text-[12px] font-bold ${a.appointment_date === today ? 'text-brand-blue' : 'text-slate-500'}`}>
+                      <span className={`block text-[13px] font-bold ${a.appointment_date === today ? 'text-brand-blue' : 'text-slate-500'}`}>
                         {dayLabel(a.appointment_date)}
                       </span>
-                      <span className="inline-flex items-center gap-1.5 text-[12px] text-slate-500">
+                      <span className="inline-flex items-center gap-1.5 text-[13px] text-slate-500">
                         <Clock className="h-3.5 w-3.5 text-slate-300" /> {a.slot_time || '—'}
                       </span>
                     </td>
                     <td className="px-3 py-2.5">
                       <div className="flex items-center gap-2.5">
-                        <Avatar name={seenName(a)} className="h-8 w-8 text-[10px]" />
+                        <Avatar name={seenName(a)} className="h-8 w-8 text-[13px]" />
                         <div className="leading-tight">
                           <p className="font-bold text-brand-navy">{seenName(a)}</p>
-                          <p className="text-[11px] text-slate-400">
+                          <p className="text-[13px] text-slate-400">
                             #{shortId(a.appointment_id)}{bookedBy(a) ? ` · booked by ${bookedBy(a)}` : ''}
                           </p>
                           {a.free_revisit && <div className="mt-1"><FreeRevisitChip info={a.free_revisit} /></div>}
@@ -245,16 +245,16 @@ export default function AssistantAppointments() {
                         <motion.button
                           whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                           onClick={() => genToken(a)} disabled={busy === a.appointment_id}
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-3 py-1.5 text-[12px] font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60"
+                          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60"
                         >
                           <Ticket className="h-3.5 w-3.5" /> {busy === a.appointment_id ? 'Issuing…' : 'Generate Token'}
                         </motion.button>
                       ) : ['confirmed', 'in_progress'].includes(a.status) ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-2.5 py-1.5 text-[12px] font-semibold text-green-600">
+                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-green-50 px-2.5 py-1.5 text-[13px] font-semibold text-green-600">
                           <Ticket className="h-3.5 w-3.5" /> Token issued
                         </span>
                       ) : (
-                        <span className="text-[12px] text-slate-300">—</span>
+                        <span className="text-[13px] text-slate-300">—</span>
                       )}
                     </td>
                   </motion.tr>

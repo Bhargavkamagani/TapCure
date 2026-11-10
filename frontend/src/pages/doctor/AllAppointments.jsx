@@ -169,7 +169,7 @@ function AllAppointments() {
         <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="text-[12px] font-semibold text-slate-400">
+            <tr className="text-[13px] font-semibold text-slate-400">
               <th className="pb-3 pr-4">Date</th><th className="pb-3 pr-4">Token</th><th className="pb-3 pr-4">Slot</th>
               <th className="pb-3 pr-4">Patient</th><th className="pb-3 pr-4">Practice</th><th className="pb-3 pr-4">Type</th>
               <th className="pb-3 pr-4">Seen</th><th className="pb-3 pr-4">Waited</th><th className="pb-3">Status</th>
@@ -195,11 +195,11 @@ function AllAppointments() {
                   </td>
                   <td className="py-3 pr-4">
                     {r.practice_name && (
-                      <span className="text-[12px] text-slate-400">{r.practice_name}</span>
+                      <span className="text-[13px] text-slate-400">{r.practice_name}</span>
                     )}
                   </td>
                   <td className="py-3 pr-4">
-                    <span className={`rounded-md px-2 py-0.5 text-[11.5px] font-semibold ${typeTone(r.type)}`}>
+                    <span className={`rounded-md px-2 py-0.5 text-[13px] font-semibold ${typeTone(r.type)}`}>
                       {typeLabel(r.type)}
                     </span>
                   </td>

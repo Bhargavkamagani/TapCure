@@ -53,23 +53,23 @@ export default function FamilyMemberDrawer({ member, patientId, onClose, onBook,
                 <PersonAvatar person={member} isSelf={!member.member_id} className="h-12 w-12 text-sm" />
                 <div className="min-w-0 leading-tight">
                   <p className="truncate text-[16px] font-bold text-brand-navy">{translitName(member.name, lang)}</p>
-                  <p className="truncate text-[12px] text-slate-400">
+                  <p className="truncate text-[13px] text-slate-400">
                     {[relLabel(t, member.relation), age != null ? `${age} ${t('ppage.years')}` : null, genderLabel(t, member.gender)]
                       .filter(Boolean).join(' · ') || '—'}
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-1.5">
                     {member.blood_group && (
-                      <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-500">
+                      <span className="flex items-center gap-1 rounded-full bg-red-50 px-2 py-0.5 text-[13px] font-semibold text-red-500">
                         <Droplet className="h-3 w-3" /> {member.blood_group}
                       </span>
                     )}
                     {member.phone && (
-                      <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-500">
+                      <span className="flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-medium text-slate-500">
                         <Phone className="h-3 w-3" /> {member.phone}
                       </span>
                     )}
                     {member.notify_to === 'own' && member.phone && (
-                      <span className="flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[11px] font-semibold text-teal-600">
+                      <span className="flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[13px] font-semibold text-teal-600">
                         <Bell className="h-3 w-3" /> {t('ppage.ownReminders')}
                       </span>
                     )}
@@ -85,13 +85,13 @@ export default function FamilyMemberDrawer({ member, patientId, onClose, onBook,
             <div className="flex items-center gap-2 border-b border-slate-100 px-5 py-3">
               <button
                 onClick={() => onBook(member)}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-brand-blue px-3 py-2 text-[12.5px] font-semibold text-white transition-colors hover:bg-brand-blueDark"
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-brand-blue px-3 py-2 text-[13.5px] font-semibold text-white transition-colors hover:bg-brand-blueDark"
               >
                 <CalendarPlus className="h-4 w-4" /> {t('ppage.bookAppointment')}
               </button>
               <button
                 onClick={() => onEdit(member)}
-                className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-[12.5px] font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+                className="flex items-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2 text-[13.5px] font-semibold text-slate-600 transition-colors hover:bg-slate-50"
               >
                 <Pencil className="h-4 w-4" /> {t('pcommon.edit')}
               </button>

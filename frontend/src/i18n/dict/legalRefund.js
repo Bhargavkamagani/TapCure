@@ -218,4 +218,13 @@ export const legalRefundT = {
   'lcon.modalPrivacy': { en: 'Privacy Policy', te: 'గోప్యతా విధానం', hi: 'गोपनीयता नीति' },
   'lcon.modalRefund': { en: 'Cancellation & Refund', te: 'రద్దు & రీఫండ్', hi: 'रद्दीकरण और रिफ़ंड' },
   'lcon.close': { en: 'Close', te: 'మూసివేయండి', hi: 'बंद करें' },
+  // "Simple words" lines for the policy reader (2026-11-07). Written only from each section's own text; English until translated.
+  'lcr.simple.1': { en: 'Booking on TapCure is free. You pay the doctor’s fee at the hospital, not to TapCure.' },
+  'lcr.simple.2': { en: 'There is no booking fee.' },
+  'lcr.simple.3': { en: 'You can cancel from the app any time before your visit. Your token goes back to the queue.' },
+  'lcr.simple.4': { en: 'If the hospital or doctor cancels, future bookings are cancelled for you and you are told.' },
+  'lcr.simple.5': { en: 'You can move your appointment once for free. The hospital may allow more. Changes made by the hospital do not count.' },
+  'lcr.simple.6': { en: 'There is nothing to refund for current bookings, because booking is free. For the doctor’s fee, ask the hospital.' },
+  'lcr.simple.7': { en: 'The doctor’s fee is between you and the hospital. Its refunds follow the hospital’s rules.' },
+  'lcr.simple.8': { en: 'Questions about an older booking? Email or call us with your token number, date and mobile number.' },
 }

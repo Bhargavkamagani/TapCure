@@ -42,7 +42,7 @@ function KpiCard({ value, isNum = true, label, sub, icon: Icon, tone, footer }) 
           the icon chip invert to white, matching the quick-action cards. */}
       <div className="spotlight-card group relative h-full rounded-xl border border-slate-100 bg-white p-3 shadow-card transition-colors duration-300 hover:border-white/30 hover:bg-gradient-to-br hover:from-emerald-500 hover:to-emerald-600">
         <div className="flex items-start justify-between gap-2">
-          <p className="text-[12px] font-semibold text-slate-500 transition-colors duration-300 group-hover:text-white/85">{label}</p>
+          <p className="text-[13px] font-semibold text-slate-500 transition-colors duration-300 group-hover:text-white/85">{label}</p>
           <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300 group-hover:bg-white/20 group-hover:text-white ${KPI_TONE[tone]}`}>
             <Icon className="h-4 w-4" />
           </span>
@@ -50,7 +50,7 @@ function KpiCard({ value, isNum = true, label, sub, icon: Icon, tone, footer }) 
         <p className="mt-1.5 text-[22px] font-extrabold leading-none text-brand-navy transition-colors duration-300 group-hover:text-white">
           {isNum ? <AnimatedNumber value={value} /> : value}
         </p>
-        {sub && <p className="mt-1 text-[11px] text-slate-400 transition-colors duration-300 group-hover:text-white/75">{sub}</p>}
+        {sub && <p className="mt-1 text-[13px] text-slate-400 transition-colors duration-300 group-hover:text-white/75">{sub}</p>}
         {footer}
       </div>
     </motion.div>
@@ -67,8 +67,8 @@ function HeroStat({ icon: Icon, tone, label, value }) {
         <Icon className="h-3 w-3" />
       </span>
       <div className="min-w-0 leading-tight">
-        <p className="text-[10px] text-white/50">{label}</p>
-        <p className="truncate text-[12px] font-semibold text-white">{value}</p>
+        <p className="text-[13px] text-white/50">{label}</p>
+        <p className="truncate text-[13px] font-semibold text-white">{value}</p>
       </div>
     </div>
   )
@@ -109,14 +109,14 @@ function KnownHistoryNote({ history, allergies }) {
         <div className={rows.length ? 'mb-2.5' : ''}>
           <div className="mb-1.5 flex items-center gap-1.5">
             <BellRing className="h-3.5 w-3.5 text-red-500" />
-            <h4 className="text-[11.5px] font-bold uppercase tracking-wide text-red-600">Allergies</h4>
+            <h4 className="text-[12px] font-bold uppercase tracking-wide text-red-600">Allergies</h4>
           </div>
           <ul className="flex flex-wrap gap-1.5">
             {algRows.map((a) => (
               <li
                 key={a.allergy_id}
                 title={[a.reaction, a.severity].filter(Boolean).join(' · ') || undefined}
-                className={`rounded-lg px-2 py-0.5 text-[11.5px] font-bold ${ALLERGY_TONE[a.severity] || 'bg-red-50 text-red-600'}`}
+                className={`rounded-lg px-2 py-0.5 text-[13px] font-bold ${ALLERGY_TONE[a.severity] || 'bg-red-50 text-red-600'}`}
               >
                 {a.allergen}{a.severity ? ` · ${a.severity}` : ''}
               </li>
@@ -129,14 +129,14 @@ function KnownHistoryNote({ history, allergies }) {
         <>
           <div className="mb-1.5 flex items-center gap-1.5">
             <History className="h-3.5 w-3.5 text-brand-blue" />
-            <h4 className="text-[11.5px] font-bold uppercase tracking-wide text-slate-500">Medical history</h4>
+            <h4 className="text-[12px] font-bold uppercase tracking-wide text-slate-500">Medical history</h4>
           </div>
           <ul className="flex flex-wrap gap-1.5">
             {rows.map((h) => (
               <li
                 key={h.history_id}
                 title={[h.notes, h.diagnosed_date && `diagnosed ${h.diagnosed_date}`].filter(Boolean).join(' · ') || undefined}
-                className={`rounded-lg px-2 py-0.5 text-[11.5px] font-semibold ${
+                className={`rounded-lg px-2 py-0.5 text-[13px] font-semibold ${
                   h.is_chronic ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'
                 }`}
               >
@@ -148,7 +148,7 @@ function KnownHistoryNote({ history, allergies }) {
       )}
 
       {failed && (
-        <p className={`text-[11px] font-medium text-amber-600 ${conds.length || algs.length ? 'mt-2' : ''}`}>
+        <p className={`text-[13px] font-medium text-amber-600 ${conds.length || algs.length ? 'mt-2' : ''}`}>
           {history === null && allergies === null
             ? 'History and allergies could not be loaded'
             : history === null ? 'Medical history could not be loaded' : 'Allergies could not be loaded'}
@@ -373,19 +373,19 @@ function Dashboard() {
                   <h4 className="mb-1.5 flex items-center gap-2 text-[14px] font-bold text-brand-navy">
                     <BellRing className="h-4 w-4 text-red-500" /> Send Delay Alert
                   </h4>
-                  <p className="mb-3 text-[12.5px] text-slate-500">
+                  <p className="mb-3 text-[13.5px] text-slate-500">
                     <span className="font-bold text-brand-navy">{inQueue} waiting</span> {inQueue === 1 ? 'patient' : 'patients'} will be notified.
                   </p>
                   <div className="mb-3 flex flex-wrap gap-1.5">
                     {[10, 15, 20, 30, 45].map((m) => (
                       <button key={m} onClick={() => { setDelayMin(m); setDelaySent(false) }}
-                        className={`rounded-lg border px-2.5 py-1 text-[12.5px] font-semibold transition-colors ${delayMin === m ? 'border-brand-blue bg-brand-blue text-white' : 'border-slate-200 text-brand-navy hover:border-slate-300'}`}>
+                        className={`rounded-lg border px-2.5 py-1 text-[13.5px] font-semibold transition-colors ${delayMin === m ? 'border-brand-blue bg-brand-blue text-white' : 'border-slate-200 text-brand-navy hover:border-slate-300'}`}>
                         +{m}m
                       </button>
                     ))}
                   </div>
                   {delaySent ? (
-                    <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 text-[12.5px] font-semibold text-green-700">
+                    <div className="flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2 text-[13.5px] font-semibold text-green-700">
                       <CheckCircle2 className="h-4 w-4" /> Alert sent (+{delayMin}m).
                     </div>
                   ) : (
@@ -418,7 +418,7 @@ function Dashboard() {
       {/* KPIs */}
       <motion.div variants={container} initial="hidden" animate="show" className="spotlight-grid grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-5">
         <KpiCard value={total} label="Today's Appointments" sub="Total" icon={CalendarDays} tone="blue"
-          footer={<button onClick={() => navigate('/doctor-dashboard/appointments')} className="mt-1.5 text-[12px] font-semibold text-brand-blue transition-colors duration-300 hover:underline group-hover:text-white">View details</button>} />
+          footer={<button onClick={() => navigate('/doctor-dashboard/appointments')} className="mt-1.5 text-[13px] font-semibold text-brand-blue transition-colors duration-300 hover:underline group-hover:text-white">View details</button>} />
         <KpiCard value={completedToday} label="Completed" sub={pct(completedToday, total)} icon={CheckCircle2} tone="green" />
         <KpiCard value={inQueue} label="In Queue" sub={pct(inQueue, total)} icon={Hourglass} tone="orange" />
         <KpiCard value={remaining} label="Remaining" sub={pct(remaining, total)} icon={Users} tone="purple" />
@@ -452,11 +452,11 @@ function Dashboard() {
             <div className="relative flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <h3 className="text-[17px] font-bold text-white">Live OP Queue</h3>
-                <span className="flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-300 ring-1 ring-emerald-400/30">
+                <span className="flex items-center gap-1.5 rounded-full bg-emerald-400/15 px-2.5 py-0.5 text-[12px] font-semibold uppercase tracking-wide text-emerald-300 ring-1 ring-emerald-400/30">
                   <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-300 opacity-80" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-300" /></span>Live
                 </span>
               </div>
-              <span className="rounded-full bg-white/[0.08] px-2.5 py-1 text-[11px] font-semibold text-white/80 ring-1 ring-white/10">{waiting.length} waiting</span>
+              <span className="rounded-full bg-white/[0.08] px-2.5 py-1 text-[13px] font-semibold text-white/80 ring-1 ring-white/10">{waiting.length} waiting</span>
             </div>
 
             <AnimatePresence mode="wait">
@@ -482,7 +482,7 @@ function Dashboard() {
 
                     {/* Now serving */}
                     <div className="flex flex-col items-center justify-center rounded-xl bg-white/[0.07] px-4 py-2 ring-1 ring-white/10 backdrop-blur">
-                      <span className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/55">Now Serving</span>
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/55">Now Serving</span>
                       <span className="text-[30px] font-extrabold leading-none tabular-nums text-white">
                         {String(current.token_number).padStart(2, '0')}
                       </span>
@@ -502,26 +502,26 @@ function Dashboard() {
                           </button>
                         )}
                       </div>
-                      <p className="truncate text-[11.5px] text-white/55">
+                      <p className="truncate text-[13px] text-white/55">
                         {patientMeta(current) || statusLabel(current.status)}
                         {bookedByOf(current) ? ` · booked by ${bookedByOf(current)}` : ''}
                       </p>
                       {current.reason && (
-                        <p className="mt-0.5 truncate text-[12px] font-medium text-teal-200" title={current.reason}>
+                        <p className="mt-0.5 truncate text-[13px] font-medium text-teal-200" title={current.reason}>
                           Here for: {current.reason}
                         </p>
                       )}
                       <p className="mt-1 flex items-center gap-1.5 text-[17px] font-bold tabular-nums text-emerald-300">
                         <Clock className="h-4 w-4" />{fmt(elapsed)}
                       </p>
-                      <p className="text-[10.5px] text-white/50">Consultation in progress</p>
+                      <p className="text-[13px] text-white/50">Consultation in progress</p>
                       {current.latest_vitals && (
                         <div className="mt-1.5 flex flex-wrap items-center gap-1">
                           {vitalChips(current.latest_vitals).map((c) => (
-                            <span key={c} className="rounded bg-white/[0.08] px-1.5 py-0.5 text-[10px] font-semibold text-white/80 ring-1 ring-white/10">{c}</span>
+                            <span key={c} className="rounded bg-white/[0.08] px-1.5 py-0.5 text-[13px] font-semibold text-white/80 ring-1 ring-white/10">{c}</span>
                           ))}
                           {current.latest_vitals.abnormal && (
-                            <span className="rounded bg-red-500/40 px-1.5 py-0.5 text-[10px] font-bold text-white ring-1 ring-red-300/40">⚠ Check</span>
+                            <span className="rounded bg-red-500/40 px-1.5 py-0.5 text-[13px] font-bold text-white ring-1 ring-red-300/40">⚠ Check</span>
                           )}
                         </div>
                       )}
@@ -539,7 +539,7 @@ function Dashboard() {
                   <div className="relative mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                       onClick={() => act(() => tokensApi.postpone(current.token_id))} disabled={busy}
-                      className="flex items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/[0.12] disabled:opacity-50">
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] px-3 py-2 text-[13px] font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/[0.12] disabled:opacity-50">
                       {/* Was `skip`, which only accepts a `waiting` token — so on
                           the patient being served it returned 409 every time.
                           The label follows the real behaviour: one patient goes
@@ -550,7 +550,7 @@ function Dashboard() {
                         the room, so vitals get taken here when there's no desk. */}
                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                       onClick={() => setVitalsFor(current)} disabled={busy || !current.patient_id}
-                      className="flex items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/[0.12] disabled:opacity-50">
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] px-3 py-2 text-[13px] font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/[0.12] disabled:opacity-50">
                       <Activity className="h-3.5 w-3.5" /> Record Vitals
                     </motion.button>
                     {/* Same three-state fee rule the queue rows use: unpaid with a
@@ -558,7 +558,7 @@ function Dashboard() {
                     {current.consultation_fee > 0 && !current.consultation_paid ? (
                       <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                         onClick={() => setCollectFor(current)} disabled={busy}
-                        className="flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-[12px] font-bold text-white shadow-[0_5px_14px_-6px_rgba(245,158,11,0.9)] transition-colors hover:bg-amber-400 disabled:opacity-50">
+                        className="flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-[13px] font-bold text-white shadow-[0_5px_14px_-6px_rgba(245,158,11,0.9)] transition-colors hover:bg-amber-400 disabled:opacity-50">
                         Collect ₹{current.consultation_fee}
                       </motion.button>
                     ) : current.free_revisit ? (
@@ -566,7 +566,7 @@ function Dashboard() {
                     ) : null}
                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
                       onClick={() => setRxFor(current)} disabled={busy || !current.patient_id}
-                      className="flex items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] px-3 py-2 text-[12px] font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/[0.12] disabled:opacity-50">
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-white/[0.06] px-3 py-2 text-[13px] font-semibold text-white ring-1 ring-white/15 transition-colors hover:bg-white/[0.12] disabled:opacity-50">
                       <Pill className="h-3.5 w-3.5" /> Write Prescription
                     </motion.button>
                     <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
@@ -577,7 +577,7 @@ function Dashboard() {
                         if (done.patient_id) setJustDone(done)
                       }}
                       disabled={busy}
-                      className="flex items-center justify-center gap-1.5 rounded-lg bg-teal-500 px-3 py-2 text-[12px] font-bold text-white shadow-[0_5px_14px_-6px_rgba(20,184,166,0.9)] transition-colors hover:bg-teal-400 disabled:opacity-50">
+                      className="flex items-center justify-center gap-1.5 rounded-lg bg-teal-500 px-3 py-2 text-[13px] font-bold text-white shadow-[0_5px_14px_-6px_rgba(20,184,166,0.9)] transition-colors hover:bg-teal-400 disabled:opacity-50">
                       <CheckCircle2 className="h-3.5 w-3.5" /> Complete
                     </motion.button>
                   </div>
@@ -587,7 +587,7 @@ function Dashboard() {
                   <Radio className="h-9 w-9 text-white/40" />
                   <div>
                     <p className="text-[16px] font-bold">No active consultation</p>
-                    <p className="text-[12px] text-white/60">{next ? 'Call the next patient to begin.' : 'Queue is clear.'}</p>
+                    <p className="text-[13px] text-white/60">{next ? 'Call the next patient to begin.' : 'Queue is clear.'}</p>
                   </div>
                 </motion.div>
               )}
@@ -601,12 +601,12 @@ function Dashboard() {
                   className="relative mt-4 flex flex-wrap items-center gap-2 rounded-xl bg-white/[0.08] px-3 py-2 text-white ring-1 ring-white/15"
                 >
                   <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-300" />
-                  <span className="text-[12.5px]">
+                  <span className="text-[13.5px]">
                     Consultation with <span className="font-bold">{nameOf(justDone)}</span> completed.
                   </span>
                   <button
                     onClick={() => setRxFor(justDone)}
-                    className="ml-auto flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-[12px] font-bold text-teal-900 hover:bg-emerald-50"
+                    className="ml-auto flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-[13px] font-bold text-teal-900 hover:bg-emerald-50"
                   >
                     <Pill className="h-3.5 w-3.5" /> Write Prescription
                   </button>
@@ -626,23 +626,23 @@ function Dashboard() {
           <div className="flex flex-wrap items-center gap-2.5 bg-[#0f3f3b] px-4 py-2.5">
             {next ? (
               <>
-                <Avatar name={nameOf(next)} tone="bg-teal-500/30" className="h-8 w-8 shrink-0 text-[11px]" />
+                <Avatar name={nameOf(next)} tone="bg-teal-500/30" className="h-8 w-8 shrink-0 text-[13px]" />
                 <div className="min-w-0">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.12em] text-white/45">Next Patient</p>
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.12em] text-white/45">Next Patient</p>
                   <p className="truncate text-[13px] font-semibold text-white">
                     <span className="text-white/70">#{next.token_number}</span> {nameOf(next)}
                   </p>
                 </div>
-                <span className="text-[11.5px] text-white/55">
+                <span className="text-[13px] text-white/55">
                   ETA: {next.estimated_time ? prettyTime(next.estimated_time) : '—'}
                 </span>
               </>
             ) : (
-              <p className="text-[12px] text-white/50">No one waiting in the queue.</p>
+              <p className="text-[13px] text-white/50">No one waiting in the queue.</p>
             )}
             <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
               onClick={() => act(() => tokensApi.next(doctorId))} disabled={busy || !next}
-              className="ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3.5 py-2 text-[12px] font-bold text-teal-900 shadow-sm transition-colors hover:bg-emerald-50 disabled:opacity-40">
+              className="ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3.5 py-2 text-[13px] font-bold text-teal-900 shadow-sm transition-colors hover:bg-emerald-50 disabled:opacity-40">
               <PhoneCall className="h-3.5 w-3.5" /> Call Next Patient
             </motion.button>
           </div>
@@ -651,7 +651,7 @@ function Dashboard() {
           <div className="flex-1 overflow-auto px-5 py-4">
             <table className="w-full text-left">
               <thead>
-                <tr className="text-[12px] font-semibold text-slate-400">
+                <tr className="text-[13px] font-semibold text-slate-400">
                   <th className="pb-3 pr-2">Token</th><th className="pb-3 pr-2">Patient</th><th className="pb-3 pr-2">Status</th><th className="pb-3 pr-2">Est.</th><th className="pb-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -659,7 +659,7 @@ function Dashboard() {
                 <AnimatePresence initial={false}>
                   {visibleQueue.map((r, i) => (
                     <motion.tr key={r.token_id} initial={{ opacity: 0, x: -14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ delay: Math.min(0.08 + i * 0.04, 0.5) }} className={`border-t border-slate-50 ${r.status === 'current' ? 'bg-brand-blueLight/50' : 'hover:bg-slate-50/70'}`}>
-                      <td className="py-2.5 pr-2"><span className={`inline-flex h-7 min-w-7 items-center justify-center rounded-lg px-1.5 text-[12px] font-extrabold ${r.status === 'current' ? 'bg-brand-blue text-white' : 'bg-slate-100 text-brand-navy'}`}>{r.token_number}</span></td>
+                      <td className="py-2.5 pr-2"><span className={`inline-flex h-7 min-w-7 items-center justify-center rounded-lg px-1.5 text-[13px] font-extrabold ${r.status === 'current' ? 'bg-brand-blue text-white' : 'bg-slate-100 text-brand-navy'}`}>{r.token_number}</span></td>
                       <td className="py-2.5 pr-2 font-medium text-slate-600">
                         {/* Width-capped: a table cell grows to fit no-wrap content,
                             so a long start address or reason used to widen this
@@ -668,7 +668,7 @@ function Dashboard() {
                             hover). */}
                         <div className="min-w-0 max-w-[15rem] xl:max-w-[20rem]">
                           <span className="block truncate" title={nameOf(r)}>
-                            {nameOf(r)}{bookedByOf(r) ? <span className="ml-1 text-[11px] font-semibold text-purple-600">· by {bookedByOf(r)}</span> : null}
+                            {nameOf(r)}{bookedByOf(r) ? <span className="ml-1 text-[13px] font-semibold text-purple-600">· by {bookedByOf(r)}</span> : null}
                           </span>
                           {/* Travel recorded at booking: a patient still hours away
                               explains a token that hasn't shown up yet. */}
@@ -676,7 +676,7 @@ function Dashboard() {
                           {/* Why they came, as typed at booking (or by the desk for
                               a walk-in). Read from the appointment, carried onto
                               the queue row by the API. */}
-                          {r.reason && <span className="mt-0.5 block truncate text-[11.5px] font-normal text-slate-400" title={r.reason}>{r.reason}</span>}
+                          {r.reason && <span className="mt-0.5 block truncate text-[13px] font-normal text-slate-400" title={r.reason}>{r.reason}</span>}
                         </div>
                       </td>
                       <td className="py-2.5 pr-2"><StatusBadge status={statusLabel(r.status)} /></td>
@@ -685,7 +685,7 @@ function Dashboard() {
                       <td className="py-2.5">
                         {r.status === 'current' ? (
                           <div className="flex items-center justify-end gap-2">
-                            <span className="text-[12px] font-semibold text-green-600">Active</span>
+                            <span className="text-[13px] font-semibold text-green-600">Active</span>
                             {r.patient_id && (
                               <button onClick={() => setVitalsFor(r)} title="Record vitals" className="flex h-8 w-8 items-center justify-center rounded-lg border border-rose-200 text-rose-500 hover:bg-rose-50">
                                 <Activity className="h-4 w-4" />
@@ -702,16 +702,16 @@ function Dashboard() {
                             {/* Three states, not two: a doctor with no fee set must
                                 not see every patient marked "Paid". */}
                             {r.consultation_fee > 0 && !r.consultation_paid ? (
-                              <button onClick={() => setCollectFor(r)} disabled={busy} className="rounded-lg bg-amber-500 px-2 py-0.5 text-[11px] font-bold text-white hover:bg-amber-600 disabled:opacity-60">Collect ₹{r.consultation_fee}</button>
+                              <button onClick={() => setCollectFor(r)} disabled={busy} className="rounded-lg bg-amber-500 px-2 py-0.5 text-[13px] font-bold text-white hover:bg-amber-600 disabled:opacity-60">Collect ₹{r.consultation_fee}</button>
                             ) : r.free_revisit ? (
                               <FreeRevisitChip info={r.free_revisit} />
                             ) : r.consultation_paid ? (
-                              <span className="rounded-full bg-green-100 px-2 py-0.5 text-[11px] font-semibold text-green-700">Paid{r.consultation_payment_method ? ` · ${paymentModeLabel(r.consultation_payment_method)}` : ''}</span>
+                              <span className="rounded-full bg-green-100 px-2 py-0.5 text-[13px] font-semibold text-green-700">Paid{r.consultation_payment_method ? ` · ${paymentModeLabel(r.consultation_payment_method)}` : ''}</span>
                             ) : (
-                              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500" title="No consultation fee is set for this doctor">No fee</span>
+                              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500" title="No consultation fee is set for this doctor">No fee</span>
                             )}
-                            <button onClick={() => act(() => tokensApi.recall(r.token_id))} disabled={busy} title="Call this token back" className="flex items-center gap-1 text-[12px] font-semibold text-brand-blue hover:underline disabled:opacity-60"><RotateCcw className="h-3.5 w-3.5" /> Recall</button>
-                            <button onClick={() => act(() => tokensApi.missed(r.token_id))} disabled={busy} title="Mark as no-show" className="flex items-center gap-1 text-[12px] font-semibold text-red-500 hover:underline disabled:opacity-60"><UserX className="h-3.5 w-3.5" /> No-show</button>
+                            <button onClick={() => act(() => tokensApi.recall(r.token_id))} disabled={busy} title="Call this token back" className="flex items-center gap-1 text-[13px] font-semibold text-brand-blue hover:underline disabled:opacity-60"><RotateCcw className="h-3.5 w-3.5" /> Recall</button>
+                            <button onClick={() => act(() => tokensApi.missed(r.token_id))} disabled={busy} title="Mark as no-show" className="flex items-center gap-1 text-[13px] font-semibold text-red-500 hover:underline disabled:opacity-60"><UserX className="h-3.5 w-3.5" /> No-show</button>
                           </div>
                         )}
                       </td>
@@ -725,21 +725,21 @@ function Dashboard() {
               {hiddenQueue > 0 ? (
                 <button
                   onClick={() => setQueueExpanded(true)}
-                  className="flex items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[12px] font-semibold text-brand-navy transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[13px] font-semibold text-brand-navy transition-colors hover:bg-slate-100"
                 >
                   See {hiddenQueue} more <ChevronDown className="h-3.5 w-3.5" />
                 </button>
               ) : queueExpanded && queueRows.length > PREVIEW_ROWS ? (
                 <button
                   onClick={() => setQueueExpanded(false)}
-                  className="flex items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[12px] font-semibold text-brand-navy transition-colors hover:bg-slate-100"
+                  className="flex items-center gap-1 rounded-lg bg-slate-50 px-2.5 py-1.5 text-[13px] font-semibold text-brand-navy transition-colors hover:bg-slate-100"
                 >
                   Show less <ChevronUp className="h-3.5 w-3.5" />
                 </button>
               ) : <span />}
               {/* The whole queue lives here now — the old "View Full Queue" link
                   pointed at the Live OP Queue page, which this screen replaced. */}
-              <span className="shrink-0 text-[12px] font-semibold text-slate-400">
+              <span className="shrink-0 text-[13px] font-semibold text-slate-400">
                 {queueRows.length} in queue
               </span>
             </div>
@@ -752,7 +752,7 @@ function Dashboard() {
           <Card className="flex h-full max-h-[460px] flex-col !p-0 xl:max-h-none">
             <div className="flex items-center justify-between border-b border-slate-100 px-5 py-3.5">
               <h3 className="text-[16px] font-bold text-brand-navy">Today's Schedule</h3>
-              <button onClick={() => navigate('/doctor-dashboard/today')} className="text-[12px] font-semibold text-brand-blue hover:underline">View Full</button>
+              <button onClick={() => navigate('/doctor-dashboard/today')} className="text-[13px] font-semibold text-brand-blue hover:underline">View Full</button>
             </div>
             <ul className="flex-1 divide-y divide-slate-50 overflow-auto px-5">
               {appts.length === 0 && <li className="py-6 text-center text-sm text-slate-400">Nothing scheduled today.</li>}
@@ -770,7 +770,7 @@ function Dashboard() {
                 <li className="py-2.5">
                   <button
                     onClick={() => setApptsExpanded((v) => !v)}
-                    className="flex w-full items-center justify-center gap-1 rounded-lg bg-slate-50 py-1.5 text-[12px] font-semibold text-brand-navy transition-colors hover:bg-slate-100"
+                    className="flex w-full items-center justify-center gap-1 rounded-lg bg-slate-50 py-1.5 text-[13px] font-semibold text-brand-navy transition-colors hover:bg-slate-100"
                   >
                     {hiddenAppts > 0
                       ? <>See {hiddenAppts} more <ChevronDown className="h-3.5 w-3.5" /></>

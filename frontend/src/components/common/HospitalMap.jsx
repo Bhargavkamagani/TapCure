@@ -21,7 +21,7 @@ function OpenInMapsButton({ hospital, origin }) {
       target="_blank"
       rel="noreferrer"
       onClick={(e) => e.stopPropagation()}
-      className="absolute bottom-2.5 right-2.5 z-[1200] inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-2.5 py-1.5 text-[12px] font-bold text-brand-blue shadow-md ring-1 ring-slate-200 backdrop-blur hover:bg-white"
+      className="absolute bottom-2.5 right-2.5 z-[1200] inline-flex items-center gap-1.5 rounded-lg bg-white/95 px-2.5 py-1.5 text-[13px] font-bold text-brand-blue shadow-md ring-1 ring-slate-200 backdrop-blur hover:bg-white"
     >
       <Navigation className="h-3.5 w-3.5" /> {t('cmn.openInMaps')}
     </a>

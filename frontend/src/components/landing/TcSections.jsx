@@ -4,11 +4,14 @@ import { Instagram, Facebook, Linkedin, Youtube, Mail, Phone, MapPin, Clock, Arr
 import { useAuthModal } from '../../context/AuthModalContext.jsx'
 import { useI18n } from '../../i18n/index.jsx'
 import TcLedger from './TcLedger.jsx'
-import TcLeaveNow from './TcLeaveNow.jsx'
+import TcHowItWorks from './TcHowItWorks.jsx'
 import TypeLoop from './TypeLoop.jsx'
 import TcPricing from './TcPricing.jsx'
 
 const pad = (n) => String(n).padStart(2, '0')
+
+// Footer social links: add the page address to show an icon.
+const SOCIAL = [['Instagram', Instagram, ''], ['Facebook', Facebook, ''], ['LinkedIn', Linkedin, ''], ['YouTube', Youtube, '']]
 
 /**
  * TapCure landing — everything below the hero.
@@ -194,14 +197,15 @@ function TcSections() {
 
   return (
     <>
-      <TcLeaveNow />
+      {/* the leave-time road moved to the Features page (2026-11-09) */}
+      <TcHowItWorks />
 
       {/* ── specialties ── */}
       <section className="sec" id="specialties">
         <div className="wrap">
           <div className="sec-head rv">
             <span className="eyebrow"><TypeLoop text={t('tc.spec.eyebrow')} /></span>
-            <h2>{t('tc.spec.h2a')}<br />{t('tc.spec.h2b')} <span className="serif grad">{t('tc.spec.h2c')}</span>.</h2>
+            <h2>{t('tc.spec.h2a')}<br />{t('tc.spec.h2b')} <span className="serif grad">{t('tc.spec.h2c')}</span></h2>
           </div>
           <div className="spec-grid">
             {SPECIALTIES.map(([em, key, query], i) => (
@@ -212,8 +216,8 @@ function TcSections() {
                   </svg>
                 </span>
                 <span className="em">{em}</span>
-                <b>{t(key)}</b>
-                <span>{t('tc.spec.bookToday')}</span>
+                <b>{t(`${key}.plain`)}</b>
+                <span>{t(`${key}.hint`)}</span>
               </button>
             ))}
           </div>
@@ -292,7 +296,7 @@ function TcSections() {
       {/* ── testimonials ── */}
       <section className="sec" id="voices" style={{ paddingTop: 0 }}>
         <div className="wrap">
-          <div className="sec-head center rv">
+          <div className="sec-head rv">
             <span className="eyebrow"><TypeLoop text={t('tc.quote.eyebrow')} /></span>
             <h2>{t('tc.quote.h2a')} <span className="serif grad">{t('tc.quote.h2b')}</span></h2>
           </div>
@@ -331,7 +335,7 @@ function TcSections() {
               </div>
               <div className="stores rv d3">
                 <button className="btn btn-primary btn-lg" onClick={() => openAuth('patient')}>{t('tc.cta.createAccount')}</button>
-                <a href="#leave" className="btn btn-ghost btn-lg">{t('tc.cta.seeTiming')}</a>
+                <a href="#how" className="btn btn-ghost btn-lg">{t('tc.cta.seeTiming')}</a>
               </div>
             </div>
             <PhoneMock />
@@ -436,8 +440,10 @@ function TcFooter() {
      with fallback colours. Styles live in LandingPage.jsx's <style> block. */
   const EXPLORE = [
     ['tc.foot.about', '/about'], ['tc.foot.features', '/features'], ['tc.foot.pricing', '/pricing'],
-    ['tc.foot.faq', '/faq'], ['tc.foot.help', '/contact'], ['tc.foot.resources', '/resources'],
-    ['tc.foot.articles', '/health-articles'], ['tc.foot.contact', '/contact'],
+    ['tc.foot.faq', '/faq'], ['tc.foot.articles', '/health-articles'], ['tc.foot.contact', '/contact'],
+    // 2026-11-02: removed "Help" (same /contact page as Contact) and "Resources"
+    // (its posts repeated /features; health content lives on /health-articles).
+    // The /resources route still exists in App.jsx for old links.
   ]
   /* Partner routes. "Become a Partner" is the hospital onboarding form; doctors
      running their own practice have a separate sign-up; and a hospital that has
@@ -448,7 +454,7 @@ function TcFooter() {
     ['tc.foot.hospitalLogin', '/hospital-login'],
   ]
   const LEGAL = [
-    ['tc.foot.policies', '/policies'], ['tc.foot.privacy', '/privacy'],
+    ['tc.foot.privacy', '/privacy'],
     ['tc.foot.terms', '/terms'], ['tc.foot.refund', '/cancellation-refund'],
     ['tc.foot.disclaimer', '/medical-disclaimer'],
   ]
@@ -474,11 +480,15 @@ function TcFooter() {
                 {t('tc.foot.becomePartner')} <ArrowRight className="fc-i" />
               </button>
             </div>
-            <div className="f-social">
-              {[['Instagram', Instagram], ['Facebook', Facebook], ['LinkedIn', Linkedin], ['YouTube', Youtube]].map(([n, Icon]) => (
-                <a key={n} href="#" aria-label={n}><Icon className="fs-i" /></a>
-              ))}
-            </div>
+            {/* An icon shows only once its page address is filled in; empty
+                links that went nowhere are hidden. */}
+            {SOCIAL.some(([, , href]) => href) && (
+              <div className="f-social">
+                {SOCIAL.filter(([, , href]) => href).map(([n, Icon, href]) => (
+                  <a key={n} href={href} target="_blank" rel="noreferrer" aria-label={n}><Icon className="fs-i" /></a>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="f-col">
@@ -506,9 +516,9 @@ function TcFooter() {
               so a patient never finds two ways to contact us that disagree. */}
           <div className="f-col f-reach">
             <h4>{t('tc.foot.reachUs')}</h4>
-            <a href="mailto:thetapcure@gmail.com">
+            <a href="mailto:hello@tapcure.in">
               <span className="f-ico"><Mail className="fr-i" /></span>
-              <span className="f-txt">thetapcure@gmail.com</span>
+              <span className="f-txt">hello@tapcure.in</span>
             </a>
             <a href="tel:+919346821621">
               <span className="f-ico"><Phone className="fr-i" /></span>

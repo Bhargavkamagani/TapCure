@@ -288,12 +288,12 @@ export default function DoseDueToaster() {
                     member's — look nearly identical and you have to guess which
                     is which. Absent means it is the account holder's own. */}
                 {group[0].family_member_name && (
-                  <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[11.5px] font-bold text-brand-blue">
+                  <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[13px] font-bold text-brand-blue">
                     <UserRound className="h-3 w-3" />
                     {t('pm.forPerson', { name: translitName(group[0].family_member_name, lang) })}
                   </span>
                 )}
-                <p className="mt-0.5 text-[12.5px] text-slate-600">{t('pm.newRxSub')}</p>
+                <p className="mt-0.5 text-[13.5px] text-slate-600">{t('pm.newRxSub')}</p>
               </div>
               <button
                 type="button"
@@ -311,7 +311,7 @@ export default function DoseDueToaster() {
                    depending on where you tapped yes. Nobody should be signed up
                    to a 9pm nudge without having seen "9:00 PM" first — and if it
                    is wrong, the card's times are editable in two taps. */
-                <li key={c.course_id} className="truncate text-[12.5px] text-brand-navy">
+                <li key={c.course_id} className="truncate text-[13.5px] text-brand-navy">
                   • <span className="font-semibold">{c.drug_name}</span>
                   {c.dosage ? ` ${c.dosage}` : ''}
                   {c.times_csv

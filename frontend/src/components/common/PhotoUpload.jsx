@@ -50,7 +50,7 @@ export default function PhotoUpload({ url, name, onUpload, label, size = 'h-24 w
           <input type="file" accept="image/*" className="hidden" onChange={onChange} disabled={busy} />
         </label>
       </div>
-      <p className="text-[12px] text-slate-400">{busy ? t('pcommon.uploading') : err || (label ?? t('cmn.photoHint'))}</p>
+      <p className="text-[13px] text-slate-400">{busy ? t('pcommon.uploading') : err || (label ?? t('cmn.photoHint'))}</p>
     </div>
   )
 }

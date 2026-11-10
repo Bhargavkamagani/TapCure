@@ -50,9 +50,9 @@ function BarChart({ data }) {
     <div className="flex h-44 items-end gap-3 pt-2">
       {data.map((d) => (
         <div key={d.day} className="flex h-full flex-1 flex-col items-center justify-end gap-1.5">
-          <span className="text-[11px] font-semibold text-slate-400">{d.value}</span>
+          <span className="text-[13px] font-semibold text-slate-400">{d.value}</span>
           <div className="w-full rounded-t-md bg-gradient-to-t from-brand-blue/50 to-brand-blue" style={{ height: `${(d.value / max) * 100}%` }} />
-          <span className="text-[11px] text-slate-400">{d.day}</span>
+          <span className="text-[13px] text-slate-400">{d.day}</span>
         </div>
       ))}
     </div>
@@ -184,9 +184,9 @@ function Reports() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {kpis.map((k) => (
               <Card key={k.label}>
-                <p className="text-[12.5px] font-medium text-slate-500">{k.label}</p>
+                <p className="text-[13.5px] font-medium text-slate-500">{k.label}</p>
                 <span className={`mt-1.5 block text-[26px] font-extrabold leading-none ${k.tone}`}>{k.value}</span>
-                {k.sub && <p className="mt-1.5 text-[11px] font-medium text-slate-400">{k.sub}</p>}
+                {k.sub && <p className="mt-1.5 text-[13px] font-medium text-slate-400">{k.sub}</p>}
               </Card>
             ))}
           </div>
@@ -199,7 +199,7 @@ function Reports() {
               {insights.map((metric) => (
                 <Card key={metric.label} className="text-center">
                   <p className="text-[21px] font-extrabold text-brand-navy">{metric.value}</p>
-                  <p className="mt-1 text-[12px] text-slate-500">{metric.label}</p>
+                  <p className="mt-1 text-[13px] text-slate-500">{metric.label}</p>
                 </Card>
               ))}
             </div>

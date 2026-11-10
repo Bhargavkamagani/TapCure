@@ -10,7 +10,7 @@ import { realEmail } from '../../lib/patientDisplay.js'
 const CONTACTS = [
   { icon: Phone, labelKey: 'ppage.callUs', value: '1800-123-4567', tone: 'bg-blue-100 text-brand-blue' },
   { icon: MessageCircle, labelKey: 'ppage.whatsapp', value: '+91 98765 00000', tone: 'bg-green-100 text-green-600' },
-  { icon: Mail, labelKey: 'ppage.email', value: 'thetapcure@gmail.com', tone: 'bg-purple-100 text-purple-600' },
+  { icon: Mail, labelKey: 'ppage.email', value: 'hello@tapcure.in', tone: 'bg-purple-100 text-purple-600' },
 ]
 
 // FAQ text lives in the dictionary; data file order maps to these keys 1:1.
@@ -73,7 +73,7 @@ function Help() {
               <c.icon className="h-5 w-5" />
             </span>
             <div className="leading-tight">
-              <p className="text-[12px] font-semibold text-slate-400">{t(c.labelKey)}</p>
+              <p className="text-[13px] font-semibold text-slate-400">{t(c.labelKey)}</p>
               <p className="text-[14px] font-bold text-brand-navy">{c.value}</p>
             </div>
           </Card>
@@ -110,7 +110,7 @@ function Help() {
           </div>
           {/* Reassure them we already know who they are. */}
           {(realEmail(patient) || patient?.phone) && (
-            <p className="mt-2 text-[11.5px] text-slate-400">
+            <p className="mt-2 text-[13px] text-slate-400">
               {t('ppage.helpRepliesTo', { contact: realEmail(patient) || `+91 ${patient?.phone}` })}
             </p>
           )}

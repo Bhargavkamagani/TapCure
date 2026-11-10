@@ -69,7 +69,7 @@ function PrescriptionsModal({ patient, onClose }) {
             </span>
             <div className="leading-tight">
               <h3 className="text-[15px] font-bold text-slate-800">Prescriptions</h3>
-              <p className="text-[12px] text-slate-500">
+              <p className="text-[13px] text-slate-500">
                 {patient.name}{patient.uhid ? ` · ${patient.uhid}` : ''}
               </p>
             </div>
@@ -98,7 +98,7 @@ function PrescriptionsModal({ patient, onClose }) {
                 <div key={rx.prescription_id}>
                   {/* An Rx written for a dependent must say so, or the desk
                       hands the wrong person's medicines over the counter. */}
-                  {rx.family_member_name && <p className="mb-1.5 text-[12px] font-semibold text-violet-700">For {rx.family_member_name}</p>}
+                  {rx.family_member_name && <p className="mb-1.5 text-[13px] font-semibold text-violet-700">For {rx.family_member_name}</p>}
                   <RxPaper rx={rx} />
                 </div>
               ))}
@@ -176,7 +176,7 @@ function AddPatientModal({ hospitalId, onClose, onAdded }) {
           </div>
           <TextInput icon={MapPin} placeholder="City / Village" value={form.city} onChange={set('city')} />
           <TextInput icon={Fingerprint} placeholder="ABHA Number (optional)" inputMode="numeric" maxLength={17} value={form.abha_number} onChange={set('abha_number')} error={errors.abha_number} />
-          <p className="-mt-1.5 px-1 text-[11px] text-slate-400">14-digit Ayushman Bharat health ID · leave blank if none</p>
+          <p className="-mt-1.5 px-1 text-[13px] text-slate-400">14-digit Ayushman Bharat health ID · leave blank if none</p>
           {err && <div className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{err}</div>}
           <button disabled={busy} className="w-full rounded-xl bg-brand-blue py-3 text-sm font-semibold text-white hover:bg-brand-blueDark disabled:opacity-60">
             {busy ? 'Saving…' : 'Register Patient'}
@@ -248,7 +248,7 @@ function EditPatientModal({ patient, onClose, onSaved }) {
           <h3 className="text-lg font-extrabold text-brand-navy">Edit Patient</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600"><X className="h-5 w-5" /></button>
         </div>
-        <p className="mb-4 font-mono text-[11.5px] font-semibold text-brand-blue">
+        <p className="mb-4 font-mono text-[13px] font-semibold text-brand-blue">
           {patient.uhid || `PID #${patient.patient_id}`} · +91 {patient.phone}
         </p>
         <form onSubmit={submit} className="space-y-3">
@@ -387,7 +387,7 @@ export default function AssistantPatients() {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-slate-50 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+                <tr className="border-b border-slate-50 text-[12px] font-semibold uppercase tracking-wide text-slate-400">
                   <th className="px-5 py-2.5">Patient</th>
                   <th className="px-3 py-2.5">Age / Gender</th>
                   <th className="px-3 py-2.5">Mobile</th>
@@ -410,21 +410,21 @@ export default function AssistantPatients() {
                     >
                       <td className="px-5 py-2.5">
                         <div className="flex items-center gap-2.5">
-                          <Avatar name={p.name} className="h-9 w-9 text-[11px]" />
+                          <Avatar name={p.name} className="h-9 w-9 text-[13px]" />
                           <div className="leading-tight">
                             <p className="font-bold text-brand-navy">{p.name}</p>
-                            <p className="font-mono text-[11px] font-semibold text-brand-blue">{p.uhid || `PID #${p.patient_id}`}</p>
+                            <p className="font-mono text-[13px] font-semibold text-brand-blue">{p.uhid || `PID #${p.patient_id}`}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-3 py-2.5 text-slate-500">{[p.age && `${p.age}y`, p.gender].filter(Boolean).join(' · ') || '—'}</td>
                       <td className="px-3 py-2.5 text-slate-500">{p.phone}</td>
                       <td className="px-3 py-2.5">
-                        {p.blood_group ? <span className="rounded-md bg-red-50 px-1.5 py-0.5 text-[11px] font-bold text-red-500">{p.blood_group}</span> : <span className="text-slate-300">—</span>}
+                        {p.blood_group ? <span className="rounded-md bg-red-50 px-1.5 py-0.5 text-[13px] font-bold text-red-500">{p.blood_group}</span> : <span className="text-slate-300">—</span>}
                       </td>
                       <td className="px-3 py-2.5 text-slate-500">{p.city || '—'}</td>
                       <td className="px-3 py-2.5">
-                        <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${SOURCE_PILL[p.registration_source] || 'bg-slate-100 text-slate-500'}`}>
+                        <span className={`rounded-full px-2 py-0.5 text-[13px] font-semibold ${SOURCE_PILL[p.registration_source] || 'bg-slate-100 text-slate-500'}`}>
                           {SOURCE_LABEL[p.registration_source] || p.registration_source}
                         </span>
                       </td>
@@ -434,7 +434,7 @@ export default function AssistantPatients() {
                           <motion.button
                             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                             onClick={() => setProfile(p)}
-                            className="inline-flex items-center gap-1 rounded-lg bg-brand-blueLight px-2.5 py-1.5 text-[12px] font-semibold text-brand-blue hover:bg-blue-100"
+                            className="inline-flex items-center gap-1 rounded-lg bg-brand-blueLight px-2.5 py-1.5 text-[13px] font-semibold text-brand-blue hover:bg-blue-100"
                           >
                             <Eye className="h-3.5 w-3.5" /> View
                           </motion.button>
@@ -442,7 +442,7 @@ export default function AssistantPatients() {
                             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                             onClick={() => setRxFor(p)}
                             title="Prescriptions written for this patient"
-                            className="inline-flex items-center gap-1 rounded-lg bg-teal-50 px-2.5 py-1.5 text-[12px] font-semibold text-teal-700 hover:bg-teal-100"
+                            className="inline-flex items-center gap-1 rounded-lg bg-teal-50 px-2.5 py-1.5 text-[13px] font-semibold text-teal-700 hover:bg-teal-100"
                           >
                             <Pill className="h-3.5 w-3.5" /> Prescriptions
                           </motion.button>
@@ -450,7 +450,7 @@ export default function AssistantPatients() {
                             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                             onClick={() => setEditing(p)}
                             title="Edit patient details"
-                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[12px] font-semibold text-slate-600 hover:bg-slate-50"
+                            className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[13px] font-semibold text-slate-600 hover:bg-slate-50"
                           >
                             <Pencil className="h-3.5 w-3.5" /> Edit
                           </motion.button>
@@ -465,7 +465,7 @@ export default function AssistantPatients() {
         )}
         {/* Pagination */}
         <div className="flex items-center justify-between border-t border-slate-100 px-5 py-3">
-          <span className="text-[12px] text-slate-400">Page {page}{rows.length < PAGE_SIZE ? ' · last' : ''}</span>
+          <span className="text-[13px] text-slate-400">Page {page}{rows.length < PAGE_SIZE ? ' · last' : ''}</span>
           <div className="flex gap-1.5">
             <button disabled={page === 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-40">
               <ChevronLeft className="h-4 w-4" />

@@ -128,7 +128,7 @@ function DoctorTopbar({ onMenu, dark, onToggleTheme }) {
           >
             <Bell className="h-6 w-6" />
             {unread > 0 && (
-              <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+              <span className="absolute -right-1.5 -top-1.5 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[13px] font-bold text-white">
                 {unread}
               </span>
             )}
@@ -139,7 +139,7 @@ function DoctorTopbar({ onMenu, dark, onToggleTheme }) {
               <div className="absolute right-0 z-40 mt-2 w-80 overflow-hidden rounded-2xl border border-slate-100 bg-white text-left shadow-xl">
                 <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                   <h4 className="text-[14px] font-bold text-brand-navy">Notifications</h4>
-                  {unread > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-600">{unread} new</span>}
+                  {unread > 0 && <span className="rounded-full bg-red-100 px-2 py-0.5 text-[13px] font-bold text-red-600">{unread} new</span>}
                 </div>
                 <ul className="max-h-96 overflow-auto p-1.5">
                   {visible.length === 0 ? (
@@ -153,8 +153,8 @@ function DoctorTopbar({ onMenu, dark, onToggleTheme }) {
                           <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${meta.tone}`}><Icon className="h-4 w-4" /></span>
                           <div className="min-w-0 flex-1 leading-tight">
                             <p className="text-[13px] font-bold text-brand-navy">{n.title}</p>
-                            <p className="truncate text-[12px] text-slate-500">{n.message}</p>
-                            <p className="mt-0.5 text-[11px] text-slate-400">{relativeTime(n.created_at)}</p>
+                            <p className="truncate text-[13px] text-slate-500">{n.message}</p>
+                            <p className="mt-0.5 text-[13px] text-slate-400">{relativeTime(n.created_at)}</p>
                           </div>
                         </li>
                       )
@@ -181,7 +181,7 @@ function DoctorTopbar({ onMenu, dark, onToggleTheme }) {
           <Avatar name={name} src={doctor?.profile_photo_url} tone="bg-brand-blue" className="h-10 w-10 text-sm" />
           <span className="text-left leading-tight">
             <span className="block text-[13px] font-bold text-brand-navy">{name}</span>
-            <span className="block text-[11px] text-slate-400">{specialty}</span>
+            <span className="block text-[13px] text-slate-400">{specialty}</span>
           </span>
         </button>
       </div>

@@ -96,8 +96,8 @@ function Notifications() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="text-[13.5px] font-semibold text-slate-700">{n.title}</p>
-                    {n.message && <p className="text-[12.5px] text-slate-500">{n.message}</p>}
-                    <p className="text-[11px] text-slate-400">{relativeTime(n.created_at)}</p>
+                    {n.message && <p className="text-[13.5px] text-slate-500">{n.message}</p>}
+                    <p className="text-[13px] text-slate-400">{relativeTime(n.created_at)}</p>
                   </div>
                   {unreadRow && <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-brand-blue" />}
                 </li>

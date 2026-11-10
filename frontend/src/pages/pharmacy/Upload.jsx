@@ -32,7 +32,7 @@ function Stepper({ step }) {
         return (
           <div key={label} className="flex items-center gap-2">
             <span
-              className={`flex h-7 w-7 items-center justify-center rounded-full text-[12px] font-bold ${
+              className={`flex h-7 w-7 items-center justify-center rounded-full text-[13px] font-bold ${
                 done ? 'bg-emerald-500 text-white' : current ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-400'
               }`}
             >
@@ -57,8 +57,8 @@ function Stat({ tone, value, label, sub }) {
   return (
     <div className={`rounded-2xl border p-3.5 ${tones[tone]}`}>
       <p className="text-[22px] font-extrabold leading-none">{value}</p>
-      <p className="mt-1 text-[12.5px] font-semibold">{label}</p>
-      {sub && <p className="mt-0.5 text-[11.5px] opacity-80">{sub}</p>}
+      <p className="mt-1 text-[13.5px] font-semibold">{label}</p>
+      {sub && <p className="mt-0.5 text-[13px] opacity-80">{sub}</p>}
     </div>
   )
 }
@@ -202,7 +202,7 @@ export default function PharmacyUpload() {
                   </span>
                   {m.title}
                 </p>
-                <p className="mt-1 text-[12px] text-slate-500">{m.hint}</p>
+                <p className="mt-1 text-[13px] text-slate-500">{m.hint}</p>
               </button>
             ))}
           </div>
@@ -227,9 +227,9 @@ export default function PharmacyUpload() {
             <p className="text-[15px] font-bold text-brand-navy">
               {busy ? `Reading ${file?.name || 'your sheet'}…` : 'Drop your stock sheet here, or click to choose'}
             </p>
-            <p className="text-[12.5px] text-slate-400">Excel (.xlsx) or CSV · up to 5 MB</p>
+            <p className="text-[13.5px] text-slate-400">Excel (.xlsx) or CSV · up to 5 MB</p>
           </label>
-          <div className="grid gap-2 text-[12.5px] text-slate-500 sm:grid-cols-3">
+          <div className="grid gap-2 text-[13.5px] text-slate-500 sm:grid-cols-3">
             <p className="flex gap-2"><Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" /> Use your own sheet — we'll match its columns. Only medicine name and quantity are required.</p>
             <p className="flex gap-2"><Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" /> Add a generic name column so doctors see substitutes when something is out of stock.</p>
             <p className="flex gap-2"><Info className="mt-0.5 h-4 w-4 shrink-0 text-teal-600" /> Add expiry dates and expired medicines are never shown to doctors as available.</p>
@@ -328,7 +328,7 @@ export default function PharmacyUpload() {
 
           {/* Which way this sheet is being applied — switchable here, and the
               preview is read again so the numbers above always match. */}
-          <Card className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[12.5px]">
+          <Card className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[13.5px]">
             <span className="font-semibold text-slate-600">Applying as:</span>
             {MODES.map((m) => (
               <button
@@ -361,7 +361,7 @@ export default function PharmacyUpload() {
             </div>
           )}
 
-          <Card className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[12.5px] text-slate-500">
+          <Card className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13.5px] text-slate-500">
             <span className="font-semibold text-slate-600">Columns used:</span>
             {Object.entries(preview.column_map).filter(([, col]) => col).map(([key, col]) => (
               <span key={key}>{fieldLabel(key)} ← <span className="font-semibold text-brand-navy">{col}</span></span>
@@ -374,13 +374,13 @@ export default function PharmacyUpload() {
           {preview.error_count > 0 && (
             <Card className="border-red-100">
               <p className="mb-2 text-[13px] font-bold text-red-600">Rows we'll skip — fix them in your sheet and upload again if needed</p>
-              <ul className="space-y-1 text-[12.5px] text-slate-600">
+              <ul className="space-y-1 text-[13.5px] text-slate-600">
                 {errorsShown.map((e, i) => (
                   <li key={i}><span className="font-semibold text-slate-800">Row {e.row}:</span> {e.message}</li>
                 ))}
               </ul>
               {preview.errors.length > 5 && (
-                <button onClick={() => setShowAllErrors((v) => !v)} className="mt-2 text-[12.5px] font-semibold text-brand-blue hover:underline">
+                <button onClick={() => setShowAllErrors((v) => !v)} className="mt-2 text-[13.5px] font-semibold text-brand-blue hover:underline">
                   {showAllErrors ? 'Show fewer' : `Show all ${preview.errors.length}${preview.error_count > preview.errors.length ? ` of ${preview.error_count}` : ''}`}
                 </button>
               )}
@@ -392,8 +392,8 @@ export default function PharmacyUpload() {
               First {preview.sample.length} of {preview.valid_count} medicines
             </p>
             <div className="max-h-[360px] overflow-auto">
-              <table className="w-full min-w-[760px] text-left text-[12.5px]">
-                <thead className="sticky top-0 bg-slate-50 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+              <table className="w-full min-w-[760px] text-left text-[13.5px]">
+                <thead className="sticky top-0 bg-slate-50 text-[12px] font-semibold uppercase tracking-wide text-slate-500">
                   <tr>
                     <th className="px-4 py-2">Row</th>
                     <th className="px-3 py-2">Medicine</th>
@@ -451,7 +451,7 @@ export default function PharmacyUpload() {
           <p className="text-[13px] text-slate-500">
             {done.active_count} medicines are now visible to doctors while they prescribe.
           </p>
-          <p className="text-[12.5px] text-slate-400">
+          <p className="text-[13.5px] text-slate-400">
             {done.added} new · {done.updated} updated · {done.removed} removed
             {done.skipped_rows ? ` · ${done.skipped_rows} rows skipped` : ''}
           </p>

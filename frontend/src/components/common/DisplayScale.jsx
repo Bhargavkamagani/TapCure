@@ -64,8 +64,19 @@ import { useLocation } from 'react-router-dom'
  * horizontally — no bars down the sides. A taller window simply reveals more of
  * the section below the hero, which reads naturally on a long scrolling page.
  */
-const LANDING = { width: 1280, height: 585, from: 1024 }
+// const LANDING = { width: 1280, height: 585, from: 1024 }
+const LANDING = { width: 1600, height: 735, from: 1024 }
 const CONSOLE = { width: 1440, height: null, from: 1024 }   // 1024 = Tailwind's `lg`
+
+// The redesigned footer pages (2026-11-07) pin to the landing's width so they look
+// the same on every laptop and monitor as the homepage does. Width only: they are
+// long scrolling pages, so a fixed height would clip them.
+const STATIC = { width: 1600, height: null, from: 1024 }
+const STATIC_ROUTES = [
+  '/about', '/features', '/pricing', '/faq', '/contact', '/health-articles',
+  // The four policies share one reader (PolicyReader, 2026-11-07).
+  '/privacy', '/terms', '/cancellation-refund', '/medical-disclaimer',
+]
 
 const CONSOLE_ROUTES = [
   '/patient-dashboard',
@@ -80,8 +91,9 @@ const CONSOLE_ROUTES = [
 function targetFor(pathname) {
   // Exact match: every path starts with '/', so a prefix test would pin the
   // entire site.
-  // Landing NOT pinned — renders fluid, exactly as deployed.
-  // To re-enable: return LANDING here.
+  // Landing pinned at the approved 80% view so every laptop shows the same layout.
+  if (pathname === '/') return LANDING
+  if (STATIC_ROUTES.includes(pathname)) return STATIC
   return CONSOLE_ROUTES.some((route) => pathname.startsWith(route)) ? CONSOLE : null
 }
 // Deliberately wide bounds: this is a backstop against a pathological window

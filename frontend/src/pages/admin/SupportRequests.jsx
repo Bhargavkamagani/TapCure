@@ -109,28 +109,28 @@ export default function SupportRequests() {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-[14px] font-bold text-brand-navy">{r.name}</span>
-                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-500">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[13px] font-semibold text-slate-500">
                       {r.role}
                     </span>
-                    <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${STATUS_TONE[r.status] || 'bg-slate-100 text-slate-500'}`}>
+                    <span className={`rounded-full px-2 py-0.5 text-[13px] font-semibold ${STATUS_TONE[r.status] || 'bg-slate-100 text-slate-500'}`}>
                       {r.status === 'in_progress' ? 'In progress' : r.status}
                     </span>
                     {!r.notified && (
                       <span
                         title="Saved here, but the notification email did not go out."
-                        className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-500"
+                        className="rounded-full bg-red-50 px-2 py-0.5 text-[13px] font-semibold text-red-500"
                       >
                         email not sent
                       </span>
                     )}
-                    <span className="text-[11.5px] text-slate-400">#{shortId(r.request_id)} · {relativeTime(r.created_at)}</span>
+                    <span className="text-[13px] text-slate-400">#{shortId(r.request_id)} · {relativeTime(r.created_at)}</span>
                   </div>
 
                   <p className="mt-1.5 whitespace-pre-wrap text-[13.5px] leading-relaxed text-slate-600">
                     {r.message}
                   </p>
 
-                  <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] text-slate-500">
+                  <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-slate-500">
                     <a href={`mailto:${r.email}`} className="flex items-center gap-1.5 hover:text-brand-blue">
                       <Mail className="h-3.5 w-3.5 text-slate-400" />{r.email}
                     </a>
@@ -151,7 +151,7 @@ export default function SupportRequests() {
                   {r.status !== 'in_progress' && r.status !== 'resolved' && (
                     <button
                       onClick={() => setStatus(r, 'in_progress')}
-                      className="rounded-xl border border-slate-200 px-3 py-2 text-[12.5px] font-semibold text-brand-navy hover:border-brand-blue hover:text-brand-blue"
+                      className="rounded-xl border border-slate-200 px-3 py-2 text-[13.5px] font-semibold text-brand-navy hover:border-brand-blue hover:text-brand-blue"
                     >
                       Start
                     </button>
@@ -159,14 +159,14 @@ export default function SupportRequests() {
                   {r.status !== 'resolved' ? (
                     <button
                       onClick={() => setStatus(r, 'resolved')}
-                      className="flex items-center gap-1.5 rounded-xl bg-green-600 px-3.5 py-2 text-[12.5px] font-bold text-white hover:bg-green-700"
+                      className="flex items-center gap-1.5 rounded-xl bg-green-600 px-3.5 py-2 text-[13.5px] font-bold text-white hover:bg-green-700"
                     >
                       <CheckCircle2 className="h-4 w-4" /> Resolve
                     </button>
                   ) : (
                     <button
                       onClick={() => setStatus(r, 'new')}
-                      className="rounded-xl border border-slate-200 px-3 py-2 text-[12.5px] font-semibold text-slate-500 hover:border-slate-300"
+                      className="rounded-xl border border-slate-200 px-3 py-2 text-[13.5px] font-semibold text-slate-500 hover:border-slate-300"
                     >
                       Reopen
                     </button>

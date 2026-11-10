@@ -49,7 +49,7 @@ export default function PharmacyCounter() {
             className="w-56 bg-transparent py-2 text-sm outline-none placeholder:text-slate-400"
           />
         </div>
-        <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 bg-white p-1 text-[12.5px] font-semibold">
+        <div className="grid grid-cols-3 gap-1 rounded-xl border border-slate-200 bg-white p-1 text-[13.5px] font-semibold">
           {RANGES.map(([n, label]) => (
             <button
               key={n}

@@ -68,7 +68,7 @@ function PatientUploadModal({ patient, onClose, onUploaded }) {
         <div className="mb-4 flex items-start justify-between">
           <div>
             <h3 className="text-[17px] font-bold text-brand-navy">{t('px.rx.uploadTitle')}</h3>
-            <p className="mt-0.5 text-[12px] text-slate-500">{t('px.rx.uploadPrivate')}</p>
+            <p className="mt-0.5 text-[13px] text-slate-500">{t('px.rx.uploadPrivate')}</p>
           </div>
           <button onClick={onClose} className="rounded-lg p-1 text-slate-400 hover:bg-slate-100"><X className="h-5 w-5" /></button>
         </div>
@@ -83,16 +83,16 @@ function PatientUploadModal({ patient, onClose, onUploaded }) {
           <input ref={cameraRef} type="file" accept="image/*" capture="environment" className="hidden"
             onChange={(e) => setFile(e.target.files?.[0] || null)} />
           <div className="grid grid-cols-2 gap-2">
-            <button type="button" onClick={() => cameraRef.current?.click()} className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2.5 text-[12.5px] font-semibold text-brand-blue">
+            <button type="button" onClick={() => cameraRef.current?.click()} className="flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2.5 text-[13.5px] font-semibold text-brand-blue">
               <Camera className="h-4 w-4" /> {t('px.takePhoto')}
             </button>
-            <label className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2.5 text-[12.5px] font-semibold text-brand-blue">
+            <label className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-slate-200 px-3 py-2.5 text-[13.5px] font-semibold text-brand-blue">
               <Upload className="h-4 w-4" /> {t('px.chooseFile')}
               <input type="file" className="hidden" accept=".pdf,.png,.jpg,.jpeg,.webp,.heic" onChange={(e) => setFile(e.target.files?.[0] || null)} />
             </label>
           </div>
-          {file && <p className="truncate rounded-lg bg-slate-50 px-3 py-2 text-[12px] text-slate-600">{t('px.selectedFile', { name: file.name })}</p>}
-          {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-[12px] text-red-600">{error}</p>}
+          {file && <p className="truncate rounded-lg bg-slate-50 px-3 py-2 text-[13px] text-slate-600">{t('px.selectedFile', { name: file.name })}</p>}
+          {error && <p className="rounded-lg bg-red-50 px-3 py-2 text-[13px] text-red-600">{error}</p>}
           <button type="button" onClick={submit} disabled={saving} className="w-full rounded-xl bg-brand-blue px-4 py-2.5 text-[13px] font-bold text-white disabled:opacity-60">
             {saving ? t('pcommon.saving') : t('px.rx.saveSecurely')}
           </button>
@@ -123,12 +123,12 @@ function RxModal({ rx, onClose, t }) {
       rx={rx}
       onClose={onClose}
       badge={rx.family_member_name ? (
-        <span className="inline-block rounded-full bg-purple-50 px-2.5 py-1 text-[11.5px] font-semibold text-purple-600">{t('pm.forPerson', { name: translitName(rx.family_member_name, lang) })}</span>
+        <span className="inline-block rounded-full bg-purple-50 px-2.5 py-1 text-[13px] font-semibold text-purple-600">{t('pm.forPerson', { name: translitName(rx.family_member_name, lang) })}</span>
       ) : null}
       actions={rx.follow_up_date ? (
         <button
           onClick={bookFollowUp}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-3 py-1.5 text-[12px] font-semibold text-white transition-colors hover:bg-brand-blueDark"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-brand-blueDark"
         >
           <CalendarPlus className="h-3.5 w-3.5" /> {t('ppage.bookFollowUp')}
         </button>
@@ -390,12 +390,12 @@ function Prescriptions() {
                     <p className="flex items-center gap-2 truncate text-[14px] font-bold text-brand-navy">
                       {p.title}
                       {p.forMember && (
-                        <span className="shrink-0 rounded-full bg-purple-50 px-2 py-0.5 text-[10px] font-semibold text-purple-600">{t('pm.forPerson', { name: translitName(p.forMember, lang) })}</span>
+                        <span className="shrink-0 rounded-full bg-purple-50 px-2 py-0.5 text-[13px] font-semibold text-purple-600">{t('pm.forPerson', { name: translitName(p.forMember, lang) })}</span>
                       )}
                     </p>
-                    <p className="truncate text-[12px] text-slate-400">{p.sub} · {TAB_KEYS[p.type] ? t(TAB_KEYS[p.type]) : p.type}</p>
+                    <p className="truncate text-[13px] text-slate-400">{p.sub} · {TAB_KEYS[p.type] ? t(TAB_KEYS[p.type]) : p.type}</p>
                   </div>
-                  <span className="hidden text-[12px] text-slate-400 sm:block">{fmtDate(p.date)}</span>
+                  <span className="hidden text-[13px] text-slate-400 sm:block">{fmtDate(p.date)}</span>
                   <div className="flex items-center gap-2">
                     {p.kind === 'rx' ? (
                       <>
@@ -407,7 +407,7 @@ function Prescriptions() {
                           <button
                             onClick={() => startRx(p.rx.prescription_id)}
                             disabled={startingRx === p.rx.prescription_id}
-                            className="flex items-center gap-1 rounded-lg border border-teal-200 bg-teal-50 px-2.5 py-1 text-[12px] font-semibold text-teal-700 hover:bg-teal-100 disabled:opacity-60"
+                            className="flex items-center gap-1 rounded-lg border border-teal-200 bg-teal-50 px-2.5 py-1 text-[13px] font-semibold text-teal-700 hover:bg-teal-100 disabled:opacity-60"
                           >
                             <BellRing className="h-3.5 w-3.5" />
                             {startingRx === p.rx.prescription_id ? '…' : t('pm.setReminders')}
@@ -417,7 +417,7 @@ function Prescriptions() {
                           <button
                             onClick={() => startNew(p.rx.prescription_id)}
                             disabled={startingRx === p.rx.prescription_id}
-                            className="flex items-center gap-1 rounded-lg border border-teal-200 bg-teal-50 px-2.5 py-1 text-[12px] font-semibold text-teal-700 hover:bg-teal-100 disabled:opacity-60"
+                            className="flex items-center gap-1 rounded-lg border border-teal-200 bg-teal-50 px-2.5 py-1 text-[13px] font-semibold text-teal-700 hover:bg-teal-100 disabled:opacity-60"
                           >
                             <BellRing className="h-3.5 w-3.5" />
                             {startingRx === p.rx.prescription_id ? '…' : t('pm.startNewReminders', { n: newCourses(p.rx.prescription_id).length })}
@@ -428,7 +428,7 @@ function Prescriptions() {
                             <button
                               onClick={() => openTimes(p.rx.prescription_id)}
                               title={t('pm.changeTimes')}
-                              className={`flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[12px] font-semibold transition-colors ${
+                              className={`flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[13px] font-semibold transition-colors ${
                                 timesFor === p.rx.prescription_id
                                   ? 'border-brand-blue bg-brand-blueLight text-brand-blue'
                                   : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -440,24 +440,24 @@ function Prescriptions() {
                               onClick={() => stopRx(p.rx.prescription_id)}
                               disabled={startingRx === p.rx.prescription_id}
                               title={t('pm.stopRxTitle')}
-                              className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[12px] font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-60"
+                              className="flex items-center gap-1 rounded-lg border border-slate-200 bg-white px-2.5 py-1 text-[13px] font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-60"
                             >
                               <BellOff className="h-3.5 w-3.5" />
                               {startingRx === p.rx.prescription_id ? '…' : t('pm.stop')}
                             </button>
                           </>
                         )}
-                        <button onClick={() => setActive(p.rx)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-brand-blue hover:bg-brand-blueLight/40">
+                        <button onClick={() => setActive(p.rx)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-brand-blue hover:bg-brand-blueLight/40">
                           <Eye className="h-3.5 w-3.5" /> {t('pcommon.view')}
                         </button>
                         <DownloadRxPdf rxId={p.rx.prescription_id} compact />
                       </>
                     ) : (
                       <>
-                        <a href={fileUrl(p.url)} target="_blank" rel="noreferrer" className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-brand-blue hover:bg-brand-blueLight/40">
+                        <a href={fileUrl(p.url)} target="_blank" rel="noreferrer" className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-brand-blue hover:bg-brand-blueLight/40">
                           <Eye className="h-3.5 w-3.5" /> {t('pcommon.view')}
                         </a>
-                        <a href={fileUrl(p.url)} download className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[12px] font-semibold text-slate-600 hover:bg-slate-50">
+                        <a href={fileUrl(p.url)} download className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1 text-[13px] font-semibold text-slate-600 hover:bg-slate-50">
                           <Download className="h-3.5 w-3.5" /> {t('pcommon.download')}
                         </a>
                       </>
@@ -472,7 +472,7 @@ function Prescriptions() {
                     <div className="mt-3 border-t border-slate-100 pt-3">
                       {runningCourses(p.rx.prescription_id).map((c) => (
                         <div key={c.course_id} className="mb-2 flex flex-wrap items-center gap-2">
-                          <span className="min-w-[7rem] text-[12.5px] font-semibold text-brand-navy">
+                          <span className="min-w-[7rem] text-[13.5px] font-semibold text-brand-navy">
                             {c.drug_name}
                           </span>
                           {(timeDraft[c.course_id] || []).map((val, i) => (
@@ -486,33 +486,33 @@ function Prescriptions() {
                                   [c.course_id]: d[c.course_id].map((x, j) => (j === i ? e.target.value : x)),
                                 }))
                               }
-                              className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[12.5px] font-semibold text-brand-navy outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/10"
+                              className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-[13.5px] font-semibold text-brand-navy outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/10"
                             />
                           ))}
-                          {c.food_note && <span className="text-[11.5px] text-slate-400">{c.food_note}</span>}
+                          {c.food_note && <span className="text-[13px] text-slate-400">{c.food_note}</span>}
                         </div>
                       ))}
                       {newCourses(p.rx.prescription_id).map((c) => (
                         <div key={c.course_id} className="mb-2 flex flex-wrap items-center gap-2">
-                          <span className="min-w-[7rem] text-[12.5px] font-semibold text-brand-navy">{c.drug_name}</span>
-                          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">{t('pm.notStartedYet')}</span>
+                          <span className="min-w-[7rem] text-[13.5px] font-semibold text-brand-navy">{c.drug_name}</span>
+                          <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[13px] font-semibold text-amber-700">{t('pm.notStartedYet')}</span>
                         </div>
                       ))}
                       <div className="mt-2 flex items-center gap-2">
                         <button
                           onClick={() => saveTimes(p.rx.prescription_id)}
                           disabled={startingRx === p.rx.prescription_id}
-                          className="rounded-lg bg-brand-blue px-3 py-1.5 text-[12px] font-bold text-white hover:bg-brand-blueDark disabled:opacity-60"
+                          className="rounded-lg bg-brand-blue px-3 py-1.5 text-[13px] font-bold text-white hover:bg-brand-blueDark disabled:opacity-60"
                         >
                           {startingRx === p.rx.prescription_id ? '…' : t('pm.save')}
                         </button>
                         <button
                           onClick={() => setTimesFor(null)}
-                          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-semibold text-slate-500 hover:bg-slate-50"
+                          className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[13px] font-semibold text-slate-500 hover:bg-slate-50"
                         >
                           {t('pm.cancel')}
                         </button>
-                        <span className="text-[11px] text-slate-400">{t('pm.timesHint')}</span>
+                        <span className="text-[13px] text-slate-400">{t('pm.timesHint')}</span>
                       </div>
                     </div>
                   )}
@@ -527,7 +527,7 @@ function Prescriptions() {
           </ul>
         )}
 
-        <div className="mt-4 flex items-center gap-2 rounded-xl bg-green-50 px-3 py-2.5 text-[12.5px] text-green-700">
+        <div className="mt-4 flex items-center gap-2 rounded-xl bg-green-50 px-3 py-2.5 text-[13.5px] text-green-700">
           <ShieldCheck className="h-4 w-4 shrink-0" />
           {t('ppage.dataSecure')}
         </div>

@@ -105,7 +105,7 @@ export default function ChangeAddressModal({ hospital, onClose, onConfirm }) {
           <h3 className="text-[17px] font-bold text-brand-navy">Change Hospital Address</h3>
           <button type="button" onClick={onClose} className="text-slate-400 hover:text-slate-600"><X className="h-5 w-5" /></button>
         </div>
-        <p className="mb-4 text-[12.5px] text-slate-500">
+        <p className="mb-4 text-[13.5px] text-slate-500">
           Search for your hospital or use your current location. Every doctor practising here gets the
           new address, and patients see it on search and booking.
         </p>
@@ -160,7 +160,7 @@ export default function ChangeAddressModal({ hospital, onClose, onConfirm }) {
             height={220}
             className="overflow-hidden rounded-xl"
           />
-          <div className={`mt-2 flex items-center gap-2 rounded-xl border px-3 py-2 text-[12.5px] font-semibold ${
+          <div className={`mt-2 flex items-center gap-2 rounded-xl border px-3 py-2 text-[13.5px] font-semibold ${
             pinned ? 'border-green-200 bg-green-50 text-green-700' : 'border-amber-200 bg-amber-50 text-amber-700'
           }`}>
             <Navigation className="h-4 w-4" />
